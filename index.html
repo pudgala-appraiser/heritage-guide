@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1f3354">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="감정 안내">
+<title>문화유산 감정 현장 다국어 안내</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='10' fill='%231f3354'/><text x='32' y='46' font-size='38' fill='%23a8843a' text-anchor='middle' font-family='serif' font-weight='600'>鑑</text></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='32' fill='%231f3354'/><text x='90' y='128' font-size='108' fill='%23a8843a' text-anchor='middle' font-family='serif' font-weight='600'>鑑</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;500;700&family=Noto+Serif+SC:wght@400;500;700&family=Cormorant+Garamond:wght@400;500;600&family=EB+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fbf8f1;
+    --bg-alt: #f3ecdd;
+    --paper: #ffffff;
+    --ink: #1a1f2e;
+    --ink-soft: #4a5266;
+    --primary: #1f3354;
+    --primary-light: #324b7a;
+    --primary-bg: #e8edf5;
+    --accent: #8b3a3a;
+    --accent-light: #c97676;
+    --accent-bg: #f5e7e7;
+    --gold: #a8843a;
+    --line: #d8cfb9;
+    --line-soft: #e8e1d0;
+    --shadow: 0 1px 3px rgba(20, 30, 50, 0.06), 0 4px 16px rgba(20, 30, 50, 0.04);
+    --shadow-lg: 0 4px 12px rgba(20, 30, 50, 0.08), 0 16px 32px rgba(20, 30, 50, 0.06);
+    --font-display: 'Noto Serif KR', 'Cormorant Garamond', serif;
+    --font-body: 'Noto Sans KR', system-ui, -apple-system, sans-serif;
+    --font-jp: 'Noto Serif JP', 'Noto Serif KR', serif;
+    --font-zh: 'Noto Serif SC', 'Noto Serif KR', serif;
+    --font-en: 'Cormorant Garamond', 'Noto Serif KR', serif;
+    --font-eu: 'EB Garamond', 'Cormorant Garamond', serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { font-size: 16px; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(circle at 20% 0%, rgba(31, 51, 84, 0.03) 0%, transparent 50%),
+      radial-gradient(circle at 80% 100%, rgba(168, 132, 58, 0.04) 0%, transparent 50%);
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(180deg, var(--primary) 0%, #182841 100%);
+    color: #f5f0e0;
+    padding: 1.5rem 2rem 1.25rem;
+    border-bottom: 3px solid var(--gold);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(20, 30, 50, 0.15);
+  }
+  .header-inner {
+    max-width: 1500px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .title-group { display: flex; flex-direction: column; gap: 0.15rem; }
+  .title-kor {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.35rem;
+    letter-spacing: -0.01em;
+    color: #faf5e6;
+  }
+  .title-sub {
+    font-family: var(--font-en);
+    font-style: italic;
+    font-size: 0.95rem;
+    color: rgba(245, 240, 224, 0.7);
+    letter-spacing: 0.02em;
+  }
+  .title-deco { color: var(--gold); margin: 0 0.5rem; font-style: normal; }
+
+  /* LANGUAGE TOGGLE */
+  .lang-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.35rem;
+  }
+  .lang-helper {
+    font-family: var(--font-en);
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: rgba(245, 240, 224, 0.55);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding-right: 0.3rem;
+  }
+  .lang-deco {
+    color: var(--gold);
+    margin: 0 0.3rem;
+    font-style: normal;
+    opacity: 0.7;
+  }
+  .lang-toggle {
+    display: flex;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    padding: 4px;
+    border: 1px solid rgba(168, 132, 58, 0.3);
+    flex-wrap: wrap;
+  }
+  .lang-btn {
+    background: transparent;
+    color: rgba(245, 240, 224, 0.7);
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+    min-width: 44px;
+  }
+  .lang-btn:hover { color: #faf5e6; }
+  .lang-btn.active {
+    background: var(--gold);
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* LAYOUT */
+  .container {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 1.25rem 1.5rem;
+    display: grid;
+    grid-template-columns: minmax(340px, 420px) 1fr;
+    gap: 1.5rem;
+  }
+
+  /* DISPLAY PANEL */
+  .display-panel {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 2rem;
+    box-shadow: var(--shadow-lg);
+    min-height: 420px;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 130px;
+    align-self: start;
+  }
+  @media (max-width: 880px) {
+    .container { grid-template-columns: 1fr; padding: 0.85rem; gap: 0.85rem; }
+    .display-panel { position: static; min-height: 0; padding: 1.25rem; }
+    .display-empty { padding: 1rem; }
+    .display-empty-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .display-empty-text { font-size: 0.95rem; }
+    .display-foreign { font-size: 1.3rem !important; line-height: 1.55 !important; }
+    .header { padding: 1rem 1rem 0.85rem; }
+    .title-kor { font-size: 1.1rem; }
+    .title-sub { font-size: 0.8rem; }
+  }
+
+  .display-empty {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--ink-soft);
+    padding: 2rem;
+  }
+  .display-empty-icon {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    opacity: 0.6;
+  }
+  .display-empty-text {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--ink-soft);
+  }
+
+  .display-content { flex: 1; display: flex; flex-direction: column; }
+
+  .display-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--line-soft);
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .display-cat {
+    font-family: var(--font-en);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--ink-soft);
+  }
+  .display-cat strong {
+    color: var(--gold);
+    font-weight: 600;
+    margin-right: 0.4rem;
+  }
+  .display-label {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    color: var(--primary);
+    font-weight: 500;
+  }
+
+  .display-foreign {
+    font-size: 1.5rem;
+    line-height: 1.7;
+    color: var(--ink);
+    font-weight: 400;
+    margin-bottom: 1.25rem;
+    flex: 1;
+    letter-spacing: -0.005em;
+  }
+  .display-foreign[data-lang="ja"] { font-family: var(--font-jp); }
+  .display-foreign[data-lang="zh"] { font-family: var(--font-zh); }
+  .display-foreign[data-lang="en"] { font-family: var(--font-en); font-size: 1.6rem; line-height: 1.5; font-weight: 500; }
+  .display-foreign[data-lang="de"] { font-family: var(--font-eu); font-size: 1.55rem; line-height: 1.5; font-weight: 500; }
+  .display-foreign[data-lang="fr"] { font-family: var(--font-eu); font-size: 1.55rem; line-height: 1.5; font-weight: 500; font-style: italic; }
+
+  .display-korean {
+    background: var(--bg-alt);
+    border-left: 3px solid var(--gold);
+    padding: 0.85rem 1rem;
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    border-radius: 0 4px 4px 0;
+    margin-bottom: 1.25rem;
+  }
+  .display-korean-label {
+    display: block;
+    font-family: var(--font-en);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+  }
+
+  .audio-controls {
+    display: flex;
+    gap: 0.6rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line-soft);
+    flex-wrap: wrap;
+  }
+  .audio-btn {
+    flex: 1;
+    min-width: 130px;
+    padding: 0.85rem 1rem;
+    background: var(--primary);
+    color: #faf5e6;
+    border: none;
+    border-radius: 4px;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  .audio-btn:hover {
+    background: var(--primary-light);
+    transform: translateY(-1px);
+  }
+  .audio-btn:active { transform: translateY(0); }
+  .audio-btn.secondary {
+    background: transparent;
+    color: var(--primary);
+    border: 1px solid var(--line);
+  }
+  .audio-btn.secondary:hover { background: var(--primary-bg); }
+  .audio-btn.playing {
+    background: var(--gold);
+    color: var(--ink);
+  }
+  .audio-icon { width: 18px; height: 18px; flex-shrink: 0; }
+
+  /* BUTTON PANEL */
+  .button-panel {
+    column-count: 2;
+    -webkit-column-count: 2;
+    column-gap: 0.75rem;
+    -webkit-column-gap: 0.75rem;
+    column-fill: balance;
+  }
+  @media (max-width: 360px) {
+    .button-panel {
+      column-count: 1;
+      -webkit-column-count: 1;
+    }
+  }
+  .group {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 1rem;
+    display: inline-block;
+    width: 100%;
+  }
+  .group-header {
+    background: var(--bg-alt);
+    padding: 0.6rem 0.95rem;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line-soft);
+    gap: 0.5rem;
+  }
+  .group-title {
+    font-family: var(--font-display);
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--primary);
+    letter-spacing: -0.01em;
+  }
+  .group-title-en {
+    font-family: var(--font-en);
+    font-style: italic;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+  }
+  .group.warning .group-header {
+    background: var(--accent-bg);
+    border-bottom-color: var(--accent-light);
+  }
+  .group.warning .group-title { color: var(--accent); }
+
+  .group-buttons { padding: 0.5rem; display: flex; flex-direction: column; gap: 0.35rem; }
+  .msg-btn {
+    text-align: left;
+    background: var(--paper);
+    border: 1px solid var(--line-soft);
+    border-radius: 4px;
+    padding: 0.6rem 0.8rem;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 0.86rem;
+    color: var(--ink);
+    transition: all 0.15s ease;
+    line-height: 1.35;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .msg-btn:hover {
+    background: var(--primary-bg);
+    border-color: var(--primary-light);
+    transform: translateX(2px);
+  }
+  .msg-btn.active {
+    background: var(--primary);
+    color: #faf5e6;
+    border-color: var(--primary);
+    font-weight: 500;
+  }
+  .msg-btn.active .msg-num { color: var(--gold); }
+  .msg-num {
+    font-family: var(--font-en);
+    font-weight: 600;
+    color: var(--gold);
+    flex-shrink: 0;
+    font-size: 0.85rem;
+    min-width: 1.2em;
+  }
+  .group.warning .msg-btn:hover {
+    background: var(--accent-bg);
+    border-color: var(--accent-light);
+  }
+  .group.warning .msg-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .group.warning .msg-btn.active .msg-num { color: #f5d4d4; }
+
+  .restricted-badge {
+    display: inline-block;
+    margin-left: 0.35rem;
+    padding: 0.08rem 0.4rem;
+    font-family: var(--font-body);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--accent);
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-light);
+    border-radius: 3px;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+  .msg-btn.active .restricted-badge {
+    color: var(--accent-bg);
+    background: var(--accent);
+    border-color: #faf5e6;
+  }
+  .conditional-badge {
+    display: inline-block;
+    margin-left: 0.35rem;
+    padding: 0.08rem 0.4rem;
+    font-family: var(--font-body);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--ink-soft);
+    background: var(--bg-alt);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+  .msg-btn.active .conditional-badge {
+    color: var(--bg-alt);
+    background: var(--ink-soft);
+    border-color: #faf5e6;
+  }
+
+  /* ACCESSIBILITY — 키보드 포커스 강조 */
+  *:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* MOBILE HOVER 처리 — 터치 기기에서 hover 잔상 제거 */
+  @media (hover: none) {
+    .msg-btn:hover {
+      background: var(--paper);
+      border-color: var(--line-soft);
+      transform: none;
+    }
+    .group.warning .msg-btn:hover {
+      background: var(--paper);
+      border-color: var(--line-soft);
+    }
+    .lang-btn:hover { color: rgba(245, 240, 224, 0.7); }
+    .audio-btn:hover { background: var(--primary); transform: none; }
+    .audio-btn.secondary:hover { background: transparent; }
+  }
+
+  /* VOICE NOTICE — 음성 미지원 알림 */
+  .voice-notice {
+    display: none;
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-light);
+    color: var(--accent);
+    padding: 0.65rem 0.85rem;
+    font-size: 0.82rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    line-height: 1.45;
+  }
+  .voice-notice.show { display: block; }
+  .voice-notice strong { font-weight: 600; }
+
+  /* FOOTER */
+  .footer {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 1rem 2rem 2rem;
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 0.78rem;
+    line-height: 1.5;
+  }
+  .footer-divider {
+    width: 60px;
+    height: 1px;
+    background: var(--line);
+    margin: 0 auto 0.75rem;
+  }
+  .footer strong { color: var(--primary); }
+
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg-alt); }
+  ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--ink-soft); }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="title-group">
+      <div class="title-kor">문화유산 감정 현장 <span class="title-deco">·</span> 다국어 안내</div>
+      <div class="title-sub">Multilingual On-site Guide for Cultural Heritage Appraisal</div>
+    </div>
+    <div class="lang-section">
+      <div class="lang-helper">Language <span class="lang-deco">·</span> 언어 선택</div>
+      <div class="lang-toggle" id="langToggle">
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="ja">日</button>
+        <button class="lang-btn" data-lang="zh">中</button>
+        <button class="lang-btn" data-lang="de">DE</button>
+        <button class="lang-btn" data-lang="fr">FR</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <section class="display-panel">
+    <div id="displayEmpty" class="display-empty">
+      <div class="display-empty-icon">❦</div>
+      <div class="display-empty-text">해당 버튼을 선택하면<br>이곳에 안내 멘트가 표시됩니다</div>
+    </div>
+    <div id="displayContent" class="display-content" style="display: none;">
+      <div class="display-meta">
+        <div class="display-cat"><strong id="catNum">A1</strong><span id="catName"></span></div>
+        <div class="display-label" id="msgLabel"></div>
+      </div>
+      <div class="display-foreign" id="foreignText" data-lang="en"></div>
+      <div class="display-korean">
+        <span class="display-korean-label">한국어 원문 (감정위원 참고용)</span>
+        <span id="koreanText"></span>
+      </div>
+      <div class="voice-notice" id="voiceNotice">
+        <strong>음성 미지원:</strong> 이 언어 음성이 시스템에 설치되어 있지 않습니다. 텍스트는 정상 표시됩니다. (안드로이드: 설정 → 일반 → TTS → Google 엔진 선택 후 언어 데이터 다운로드)
+      </div>
+      <div class="audio-controls">
+        <button class="audio-btn" id="playBtn">
+          <svg class="audio-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <span id="playLabel">Play Audio</span>
+        </button>
+        <button class="audio-btn secondary" id="stopBtn">
+          <svg class="audio-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h12v12H6z"/></svg>
+          Stop
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="button-panel" id="buttonPanel"></section>
+</main>
+
+<footer class="footer">
+  <div class="footer-divider"></div>
+  <div>
+    <strong>국가유산청 문화유산감정관실</strong> · 감정 현장 다국어 안내 도구<br>
+    근거: 문화유산의 보존 및 활용에 관한 법률 제60조·제90조 / 형사소송법 제212조·제211조 / 경찰범죄수사규칙 제23조<br>
+    <span style="font-size:0.75rem;opacity:0.85;">※ 일본어·중국어는 현지 자국 용어(文化財·文物)를 사용하되, 한국 법령 인용 시에는 정식 직역(文化遺産·文化遗产)을 유지함</span>
+  </div>
+</footer>
+
+<script>
+// ===== 멘트 데이터 =====
+// 일본어: 일반 안내는 「文化財」(현지 표준), 한국 법령 인용은 「文化遺産」 직역 유지
+// 중국어: 일반 안내는 「文物」(현지 표준), 한국 법령 인용은 「文化遗产」 직역 유지
+
+const groups = [
+  {
+    id: 'reassurance',
+    title: '① 도입',
+    titleEn: 'Introduction',
+    items: [
+      {
+        id: 'self_intro',
+        label: '자기소개',
+        ko: '저는 국가유산청 문화유산감정위원입니다.',
+        en: 'I am a Cultural Heritage Appraiser from the Korea Heritage Service.',
+        ja: '私は韓国・国家遺産庁の文化財鑑定委員です。',
+        zh: '我是韩国国家遗产厅文物鉴定委员。',
+        de: 'Ich bin Kulturgut-Sachverständiger des koreanischen Korea Heritage Service.',
+        fr: 'Je suis expert en biens culturels du Service du Patrimoine Coréen.'
+      },
+      {
+        id: 'reassure_no_issue',
+        label: '문제없음 안내',
+        ko: '이 물품은 문화유산이 아니어서 문제가 없습니다. 비문화유산임을 확인하는 신청서만 작성해 주시면 됩니다.',
+        en: 'There is no issue with this item — it is not a cultural heritage object. You only need to fill out a simple application form confirming it is not cultural heritage.',
+        ja: 'この物品は文化財ではありませんので、問題ございません。非文化財であることを確認する申請書をご記入いただくだけで結構です。',
+        zh: '此物品并非文物，没有问题。您只需填写一份确认其为非文物的申请书即可。',
+        de: 'Mit diesem Gegenstand gibt es kein Problem — er ist kein Kulturgut. Sie müssen lediglich ein einfaches Antragsformular zur Bestätigung ausfüllen.',
+        fr: 'Il n\'y a aucun problème avec cet objet — il ne s\'agit pas d\'un bien culturel. Vous n\'avez qu\'à remplir un simple formulaire de confirmation.'
+      }
+    ]
+  },
+  {
+    id: 'intro',
+    title: '② 절차 시작',
+    titleEn: 'Procedure Start',
+    items: [
+      {
+        id: 'procedure_intro',
+        label: '확인 절차 안내',
+        ko: '대한민국 문화유산법에 따라 문화유산 여부를 확인하는 절차입니다. 협조 부탁드립니다.',
+        en: 'This is a verification procedure under the Cultural Heritage Act of the Republic of Korea. Your cooperation is appreciated.',
+        ja: '大韓民国の法律に基づき、文化財該当性を確認する手続きでございます。ご協力をお願いいたします。',
+        zh: '根据大韩民国法律，我们正在进行文物确认手续，请您配合。',
+        de: 'Dies ist ein Überprüfungsverfahren gemäß dem Kulturgutschutzgesetz der Republik Korea. Wir bitten um Ihre Mitwirkung.',
+        fr: 'Il s\'agit d\'une procédure de vérification conformément à la loi sur le patrimoine culturel de la République de Corée. Nous vous remercions de votre coopération.'
+      },
+      {
+        id: 'application_form',
+        label: '신청서 작성 요청',
+        ko: '비문화유산 국외반출 확인신청서에 인적사항을 기재해 주십시오. 형광펜으로 표시한 부분(성명, 생년월일, 주소, 전화번호, 국적, 도착국, 서명)을 수기로 작성해 주시기 바랍니다.',
+        en: 'Please fill out the Application for Confirmation of Non-Cultural Heritage Export by hand. Please complete the highlighted fields: name, date of birth, address, phone number, nationality, destination country, and signature.',
+        ja: '非文化財国外搬出確認申請書に個人情報をご記入ください。蛍光ペンで印を付けた箇所(氏名、生年月日、住所、電話番号、国籍、到着国、署名)を手書きでお願いいたします。',
+        zh: '请填写非文物出境确认申请书。请用手书写荧光笔标注的部分(姓名、出生日期、地址、电话号码、国籍、到达国、签名)。',
+        de: 'Bitte füllen Sie den Antrag auf Bestätigung der Ausfuhr von Nicht-Kulturgut handschriftlich aus. Tragen Sie die markierten Felder ein: Name, Geburtsdatum, Adresse, Telefonnummer, Staatsangehörigkeit, Zielland und Unterschrift.',
+        fr: 'Veuillez remplir à la main le formulaire de demande de confirmation d\'exportation de bien non culturel. Veuillez compléter les champs surlignés : nom, date de naissance, adresse, numéro de téléphone, nationalité, pays de destination et signature.'
+      }
+    ]
+  },
+  {
+    id: 'appraisal',
+    title: '③ 감정 진행 / 대기',
+    titleEn: 'Appraisal / Standby',
+    items: [
+      {
+        id: 'appraisal_wait',
+        label: '감정 중 대기',
+        ko: '감정을 진행 중입니다. 잠시만 기다려 주십시오.',
+        en: 'The appraisal is in progress. Please wait a moment.',
+        ja: '現在、鑑定を進めております。少々お待ちください。',
+        zh: '正在进行鉴定，请稍候。',
+        de: 'Die Begutachtung läuft. Bitte warten Sie einen Moment.',
+        fr: 'L\'expertise est en cours. Veuillez patienter un instant.'
+      },
+      {
+        id: 'standby_for_paperwork',
+        label: '서류 작성 대기 (사후)',
+        ko: '잠시 기다려 주시기 바랍니다. 비문화유산 확인 신청서 작성에 협조 부탁드립니다.',
+        en: 'Please wait a moment. We kindly ask for your cooperation in completing the Non-Cultural Heritage Confirmation Application form.',
+        ja: '少々お待ちください。非文化財確認申請書の作成にご協力をお願いいたします。',
+        zh: '请稍候。请您协助填写非文物确认申请书。',
+        de: 'Einen Moment bitte. Wir bitten um Ihre Mitwirkung beim Ausfüllen des Antrags auf Bestätigung von Nicht-Kulturgut.',
+        fr: 'Veuillez patienter un instant. Nous sollicitons votre coopération pour remplir le formulaire de confirmation de bien non culturel.'
+      },
+      {
+        id: 'video_consultation',
+        label: '화상 감정 협의 중',
+        ko: '지금 다른 감정관실과 화상으로 협의하고 있습니다. 잠시 기다려 주세요.',
+        en: 'We are currently consulting with another appraisal office via video. Please wait a moment.',
+        ja: '現在、他の鑑定官室とテレビ会議で協議しております。少々お待ちください。',
+        zh: '我们正在与其他鉴定官室进行视频协商。请稍候。',
+        de: 'Wir konsultieren derzeit per Videoschaltung ein anderes Begutachtungsbüro. Bitte warten Sie einen Moment.',
+        fr: 'Nous consultons actuellement un autre bureau d\'expertise par visioconférence. Veuillez patienter un instant.'
+      }
+    ]
+  },
+  {
+    id: 'result',
+    title: '④ 감정 결과 통지',
+    titleEn: 'Appraisal Result',
+    items: [
+      {
+        id: 'non_heritage',
+        label: '비문화유산 — 반출 허용 (검색대)',
+        ko: '비문화유산으로 확인되었습니다. 그대로 반출하셔도 됩니다.',
+        en: 'The item has been confirmed as non-cultural heritage. You may take it abroad without any issue.',
+        ja: '非文化財として確認されました。そのままお持ち出しいただいて結構です。',
+        zh: '经鉴定，此物品为非文物。您可以正常携带出境，没有问题。',
+        de: 'Der Gegenstand wurde als Nicht-Kulturgut bestätigt. Sie können ihn ohne Weiteres mitnehmen.',
+        fr: 'L\'objet a été confirmé comme bien non culturel. Vous pouvez tout à fait l\'emporter avec vous.'
+      },
+      {
+        id: 'non_heritage_with_seal',
+        label: '비문화유산 — 표지 부착 (방문 감정)',
+        ko: '비문화유산으로 확인되었습니다. 물품 또는 포장 상자에 비문화유산 확인 표지를 부착해 드립니다. 출국 시까지 표지를 떼지 마십시오.',
+        en: 'The item has been confirmed as non-cultural heritage. A non-cultural heritage confirmation seal will be affixed to the item or its packaging. Please do not remove the seal until your departure.',
+        ja: '非文化財として確認されました。物品または包装にこれを示す確認シールを貼付いたします。ご出国までシールを剥がさないでください。',
+        zh: '经鉴定，此物品为非文物。我们将在物品或包装上贴附非文物确认标签。出境前请勿撕除标签。',
+        de: 'Der Gegenstand wurde als Nicht-Kulturgut bestätigt. Wir bringen einen Bestätigungsaufkleber auf dem Gegenstand oder dessen Verpackung an. Bitte entfernen Sie den Aufkleber nicht bis zu Ihrer Ausreise.',
+        fr: 'L\'objet a été confirmé comme bien non culturel. Une étiquette de confirmation de bien non culturel sera apposée sur l\'objet ou son emballage. Veuillez ne pas retirer l\'étiquette avant votre départ.'
+      },
+      {
+        id: 'heritage_confirmed',
+        label: '일반동산문화유산 — 반출 불허',
+        ko: '감정 결과 이 물품은 대한민국의 일반동산문화유산에 해당합니다. 「문화유산의 보존 및 활용에 관한 법률」 제60조에 따라 국외 반출이 금지됩니다.',
+        en: 'The appraisal result indicates that this item qualifies as General Movable Cultural Heritage of the Republic of Korea. Under Article 60 of the Act on the Protection and Use of Cultural Heritage, its export is prohibited.',
+        ja: '鑑定の結果、この物品は大韓民国の一般動産文化遺産(韓国法上の文化財に相当)に該当します。「文化遺産の保存および活用に関する法律」第60条により、国外への搬出は禁止されています。',
+        zh: '鉴定结果显示，此物品属于大韩民国一般动产文化遗产(韩国法律所称的文物)。根据《文化遗产的保存与活用相关法律》第60条规定，禁止携带出境。',
+        de: 'Das Begutachtungsergebnis zeigt, dass dieser Gegenstand als allgemeines bewegliches Kulturgut der Republik Korea einzustufen ist. Gemäß Artikel 60 des Gesetzes über den Schutz und die Nutzung des Kulturguts ist seine Ausfuhr verboten.',
+        fr: 'Le résultat de l\'expertise indique que cet objet est qualifié de bien culturel mobilier général de la République de Corée. Conformément à l\'article 60 de la loi sur la protection et l\'utilisation du patrimoine culturel, son exportation est interdite.'
+      },
+      {
+        id: 'unauthorized_export_violation',
+        label: '위법·몰수 안내',
+        ko: '이 물품을 허가 없이 반출하려 한 행위는 「문화유산법」상 위법에 해당합니다. 따라서 물품에 대한 몰수 절차를 진행하게 되며, 그 첫 단계로 임의제출 절차를 안내해 드리겠습니다. 협조 부탁드립니다.',
+        en: 'Attempting to export this item without authorization constitutes a violation under the Korean Cultural Heritage Act. Accordingly, a confiscation procedure will be initiated, beginning with the voluntary submission process as its first step. Your cooperation is requested.',
+        ja: '許可なくこの物品を国外へ搬出しようとした行為は、韓国の文化遺産関連法令に違反します。よって、物品に対する没収手続きを進めることとなり、その第一段階として任意提出の手続きをご案内いたします。ご協力をお願いいたします。',
+        zh: '试图未经许可将此物品携带出境的行为，违反了韩国文化遗产相关法律。因此，将对此物品启动没收程序，并以随意提交程序作为第一步。请您配合。',
+        de: 'Der Versuch, diesen Gegenstand ohne Genehmigung auszuführen, stellt einen Verstoß gegen das koreanische Kulturgutschutzgesetz dar. Daher wird ein Einziehungsverfahren eingeleitet, das mit der freiwilligen Übergabe als ersten Schritt beginnt. Wir bitten um Ihre Mitwirkung.',
+        fr: 'La tentative d\'exportation de cet objet sans autorisation constitue une infraction à la loi coréenne sur le patrimoine culturel. Par conséquent, une procédure de confiscation sera engagée, dont la première étape est la remise volontaire. Nous vous demandons votre coopération.'
+      }
+    ]
+  },
+  {
+    id: 'submission',
+    title: '⑤ 임의제출 절차 (검색대)',
+    titleEn: 'Voluntary Submission (Checkpoint)',
+    items: [
+      {
+        id: 'sjp_status',
+        label: '특사경 신분 고지',
+        restricted: true,
+        ko: '이 물품이 일반동산문화유산으로 확인되어, 지금부터는 특사경 자격으로 절차를 진행합니다. 협조 부탁드립니다.',
+        en: 'As this item has been confirmed as General Movable Cultural Heritage, I will now proceed with this matter in my capacity as a Special Judicial Police Officer. Your cooperation is requested.',
+        ja: 'この物品が一般動産文化財に該当することが確認されましたので、ここからは特別司法警察官として手続きを進めます。ご協力をお願いいたします。',
+        zh: '此物品已确认为一般动产文物，从现在起，我将以特别司法警察官的身份继续进行此程序。请您配合。',
+        de: 'Da dieser Gegenstand als allgemeines bewegliches Kulturgut bestätigt wurde, führe ich das Verfahren ab jetzt in meiner Eigenschaft als Sonderbeamter der Justizpolizei fort. Wir bitten um Ihre Mitwirkung.',
+        fr: 'Cet objet ayant été confirmé comme bien culturel mobilier général, je poursuis désormais la procédure en ma qualité d\'officier de police judiciaire spécial. Votre coopération est requise.'
+      },
+      {
+        id: 'await_police',
+        label: '경찰관 입회 대기',
+        conditional: true,
+        ko: '이후 절차는 법적 요건에 따라 경찰관 입회 하에 진행됩니다. 경찰관이 곧 도착하오니 이 자리에서 잠시 기다려 주시기 바랍니다. 협조 부탁드립니다.',
+        en: 'The subsequent procedure will be conducted in the presence of a police officer, as required by law. The officer will arrive shortly. Please wait here for a moment. Your cooperation is requested.',
+        ja: '以後の手続きは法的要件により、警察官の立ち会いのもとで進められます。警察官が間もなく到着いたしますので、こちらでしばらくお待ちください。ご協力をお願いいたします。',
+        zh: '接下来的程序根据法律规定，将在警察官在场的情况下进行。警察官即将到达，请您在此稍候。请您配合。',
+        de: 'Das weitere Verfahren wird, wie gesetzlich vorgeschrieben, in Anwesenheit eines Polizeibeamten durchgeführt. Der Beamte wird in Kürze eintreffen. Bitte warten Sie einen Moment hier. Wir bitten um Ihre Mitwirkung.',
+        fr: 'Conformément à la loi, la procédure suivante se déroulera en présence d\'un agent de police. L\'agent arrivera sous peu. Veuillez patienter ici un instant. Nous vous demandons votre coopération.'
+      },
+      {
+        id: 'submission_rights',
+        label: '권리 고지 (필수)',
+        ko: '임의제출에 앞서 다음 사항을 고지합니다. 귀하는 물품의 제출을 거부할 권리가 있으며, 제출 범위를 특정하여 제출할 수도 있습니다. 이 권리를 고지받았다는 사실에 서명해 주십시오.',
+        en: 'Before voluntary submission, you must be informed of the following: You have the right to refuse submission, and you may specify a limited scope of submission. Please sign to confirm that you have been informed of these rights.',
+        ja: '任意提出に先立ち、以下をご案内いたします。お客様には物品の提出を拒否する権利があり、提出の範囲を特定して提出することもできます。これらの権利についてご案内を受けた旨、ご署名をお願いいたします。',
+        zh: '在随意提交之前，请您了解以下事项。您有权拒绝提交物品，也可以指定特定范围进行提交。请您签字确认已收到上述权利告知。',
+        de: 'Vor der freiwilligen Übergabe sind Sie über Folgendes zu informieren: Sie haben das Recht, die Übergabe zu verweigern, und Sie können einen begrenzten Umfang der Übergabe festlegen. Bitte unterschreiben Sie, um zu bestätigen, dass Sie über diese Rechte informiert wurden.',
+        fr: 'Avant la remise volontaire, vous devez être informé de ce qui suit : vous avez le droit de refuser la remise et vous pouvez spécifier un champ limité de remise. Veuillez signer pour confirmer que vous avez été informé de ces droits.'
+      },
+      {
+        id: 'submission_form',
+        label: '임의제출서 작성',
+        ko: '임의제출서를 작성해 주시기 바랍니다. 성명, 직업, 연락처, 주거 정보를 기재하시고, 제출 물품과 처분 의견을 표시한 후 서명해 주십시오.',
+        en: 'Please complete the Voluntary Submission form. Fill in your name, occupation, contact, and address; indicate the submitted item and your disposition preference; then sign.',
+        ja: '任意提出書をご作成ください。氏名、職業、連絡先、住所をご記入のうえ、提出物品と処分のご意向をご記載いただき、ご署名をお願いいたします。',
+        zh: '请填写随意提交书。请填写姓名、职业、联系方式、地址，并标明提交物品及处置意见，然后签字。',
+        de: 'Bitte füllen Sie das Formular zur freiwilligen Übergabe aus. Tragen Sie Name, Beruf, Kontakt und Adresse ein, geben Sie den übergebenen Gegenstand und Ihre Verfügungsabsicht an und unterschreiben Sie dann.',
+        fr: 'Veuillez remplir le formulaire de remise volontaire. Indiquez votre nom, profession, coordonnées et adresse ; précisez l\'objet remis et votre intention de disposition ; puis signez.'
+      },
+      {
+        id: 'additional_docs',
+        label: '추가 자료 협조',
+        ko: '사건 처리를 위해 추가로 다음 자료를 협조해 주시기 바랍니다. 여권 사본, 연락처, 전자우편 주소, 거주지 주소, 그리고 물품 구입 영수증이 있다면 함께 제출 부탁드립니다.',
+        en: 'For case processing, please cooperate by providing the following: a copy of your passport, contact number, email address, residential address, and the purchase receipt of the item if available.',
+        ja: '事件処理のため、追加で以下のご協力をお願いいたします。旅券のコピー、連絡先、電子メールアドレス、ご住所、物品の購入領収書がある場合はあわせてご提出ください。',
+        zh: '为案件处理，请您额外配合提供以下资料：护照复印件、联系电话、电子邮箱、居住地址，以及如有物品购买凭证请一并提交。',
+        de: 'Für die Fallbearbeitung bitten wir Sie um Mitwirkung durch Bereitstellung von Folgendem: einer Passkopie, Telefonnummer, E-Mail-Adresse, Wohnadresse und gegebenenfalls der Kaufquittung des Gegenstands.',
+        fr: 'Pour le traitement du dossier, nous vous demandons de coopérer en fournissant les éléments suivants : une copie de votre passeport, votre numéro de contact, adresse e-mail, adresse de résidence et le reçu d\'achat de l\'objet si disponible.'
+      },
+      {
+        id: 'passport_photo',
+        label: '여권 촬영 동의',
+        ko: '여권 사본 확보를 위해 여권을 촬영하겠습니다. 협조 부탁드립니다.',
+        en: 'We will photograph your passport for our records. Please cooperate.',
+        ja: '旅券のコピー確保のため、旅券を撮影いたします。ご協力をお願いいたします。',
+        zh: '我们需要拍摄您的护照以便存档，请您配合。',
+        de: 'Wir werden Ihren Pass für unsere Unterlagen fotografieren. Wir bitten um Ihre Mitwirkung.',
+        fr: 'Nous allons photographier votre passeport pour nos archives. Nous vous remercions de votre coopération.'
+      },
+      {
+        id: 'judicial_notice',
+        label: '사법기관 출석 안내',
+        ko: '귀국 후 「문화유산의 보존 및 활용에 관한 법률」 제60조 및 제90조 위반 사항으로 사법기관에 출석하여 조사받으실 수 있음을 안내드립니다. 출국은 허용됩니다.',
+        en: 'Please be informed that after your return, you may be summoned by judicial authorities for investigation regarding violations of Articles 60 and 90 of the Act on the Protection and Use of Cultural Heritage. Your departure is permitted.',
+        ja: 'ご帰国後、「文化遺産の保存および活用に関する法律」第60条および第90条違反として、司法機関への出頭・調査が求められる可能性があることをご案内いたします。出国は許可されます。',
+        zh: '请您知悉，回国后您可能因违反《文化遗产的保存与活用相关法律》第60条及第90条规定，被司法机关传唤接受调查。允许您出境。',
+        de: 'Wir möchten Sie darauf hinweisen, dass Sie nach Ihrer Rückkehr wegen Verstößen gegen die Artikel 60 und 90 des Gesetzes über den Schutz und die Nutzung des Kulturguts von Justizbehörden zur Untersuchung vorgeladen werden können. Ihre Ausreise ist gestattet.',
+        fr: 'Veuillez noter qu\'après votre retour, vous pourriez être convoqué par les autorités judiciaires pour une enquête concernant les violations des articles 60 et 90 de la loi sur la protection et l\'utilisation du patrimoine culturel. Votre départ est autorisé.'
+      },
+      {
+        id: 'waiver_of_ownership',
+        label: '소유권 포기서 작성',
+        ko: '이 물품에 대한 소유권을 포기하시려면 소유권 포기서를 작성해 주시기 바랍니다. 본인의 자유로운 의사에 따른 결정이며, 작성 후에는 별도 절차가 필요하지 않습니다. 성명, 직업, 연락처, 주거 정보를 기재하고 서명해 주십시오.',
+        en: 'If you wish to relinquish ownership of this item, please complete the Waiver of Ownership form. This is a decision made by your own free will, and no further procedure is required after completion. Please fill in your name, occupation, contact, and address, then sign.',
+        ja: 'この物品の所有権を放棄される場合は、所有権放棄書をご作成ください。ご本人の自由な意思に基づくご決定であり、作成後に追加の手続きは必要ございません。氏名、職業、連絡先、住所をご記入のうえ、ご署名をお願いいたします。',
+        zh: '如您愿意放弃此物品的所有权，请填写所有权放弃书。这是您依自由意思作出的决定，填写后无需追加程序。请填写姓名、职业、联系方式、地址，然后签字。',
+        de: 'Wenn Sie auf das Eigentum an diesem Gegenstand verzichten möchten, füllen Sie bitte die Eigentumsverzichtserklärung aus. Dies ist eine Entscheidung aus Ihrem freien Willen, und nach dem Ausfüllen ist kein weiteres Verfahren erforderlich. Bitte tragen Sie Name, Beruf, Kontakt und Adresse ein und unterschreiben Sie.',
+        fr: 'Si vous souhaitez renoncer à la propriété de cet objet, veuillez remplir la déclaration de renonciation à la propriété. Il s\'agit d\'une décision prise de votre libre volonté, et aucune procédure supplémentaire n\'est requise après l\'établissement. Veuillez indiquer votre nom, profession, coordonnées et adresse, puis signer.'
+      }
+    ]
+  },
+  {
+    id: 'noncoop',
+    title: '⑥ 비협조 시 대응',
+    titleEn: 'Non-Cooperation Response',
+    warning: true,
+    items: [
+      {
+        id: 'noncoop_warning',
+        label: '비협조 경고',
+        ko: '여러 차례 위반 사항을 고지하였음에도 협조하지 않으실 경우, 형사소송법에 따라 현행범으로 체포될 수 있음을 알려드립니다. 협조 부탁드립니다.',
+        en: 'Despite repeated notifications of the violation, your continued non-cooperation may result in arrest as a flagrant offender under the Criminal Procedure Act. Your cooperation is requested.',
+        ja: '違反事項を繰り返しご案内したにもかかわらずご協力いただけない場合、刑事訴訟法に基づき現行犯として逮捕される可能性があることをお伝えいたします。ご協力をお願いいたします。',
+        zh: '在多次告知违法事项后，如您继续不配合，根据《刑事诉讼法》，您可能作为现行犯被逮捕。请您配合。',
+        de: 'Trotz wiederholter Hinweise auf den Verstoß kann Ihre fortgesetzte Verweigerung der Mitwirkung gemäß der Strafprozessordnung zur Festnahme als auf frischer Tat ergriffener Täter führen. Wir bitten um Ihre Mitwirkung.',
+        fr: 'Malgré des notifications répétées de l\'infraction, votre refus continu de coopérer peut entraîner votre arrestation en tant que délinquant flagrant en vertu du Code de procédure pénale. Nous vous demandons votre coopération.'
+      },
+      {
+        id: 'police_report',
+        label: '경찰 신고 안내',
+        ko: '관할 경찰서에 신고합니다. 경찰이 도착할 때까지 이 자리에서 대기해 주십시오.',
+        en: 'We are reporting this matter to the local police. Please remain here until the police arrive.',
+        ja: '管轄警察署に通報いたします。警察が到着するまで、こちらでお待ちください。',
+        zh: '我们将向辖区警察局报警。请在此等候警察到达。',
+        de: 'Wir melden diese Angelegenheit der örtlichen Polizei. Bitte bleiben Sie hier, bis die Polizei eintrifft.',
+        fr: 'Nous signalons cette affaire à la police locale. Veuillez rester ici jusqu\'à l\'arrivée de la police.'
+      }
+    ]
+  },
+  {
+    id: 'return',
+    title: '⑦ 감정관실 방문 — 반환·임시보관',
+    titleEn: 'Office Visit / Return',
+    items: [
+      {
+        id: 'return_to_owner',
+        label: '물품 반환 안내',
+        ko: '이 물품은 일반동산문화유산에 해당하여 국외 반출은 불허됩니다. 다만 물품은 반환해 드립니다. 한국 내 지인에게 맡기시거나 다른 보관 방법을 마련해 주시기 바랍니다.',
+        en: 'This item qualifies as General Movable Cultural Heritage; export is not permitted. However, the item will be returned to you. Please arrange to leave it with someone in Korea or find another storage solution.',
+        ja: 'この物品は韓国法上の文化財(一般動産文化遺産)に該当するため、国外搬出は許可されません。ただし、物品はご返却いたします。韓国内のお知り合いに預けるか、別の保管方法をご検討ください。',
+        zh: '此物品属于韩国法律所称的文物(一般动产文化遗产)，不允许出境携带。但物品将退还给您。请您托付给韩国境内的熟人，或自行安排其他保管方式。',
+        de: 'Dieser Gegenstand gilt als allgemeines bewegliches Kulturgut; die Ausfuhr ist nicht gestattet. Der Gegenstand wird Ihnen jedoch zurückgegeben. Bitte hinterlassen Sie ihn bei jemandem in Korea oder finden Sie eine andere Aufbewahrungslösung.',
+        fr: 'Cet objet est qualifié de bien culturel mobilier général ; l\'exportation n\'est pas autorisée. Cependant, l\'objet vous sera restitué. Veuillez le confier à quelqu\'un en Corée ou trouver une autre solution de conservation.'
+      },
+      {
+        id: 'temp_storage',
+        label: '임시보관 옵션',
+        ko: '맡기실 곳이 없으시면 감정관실에서 임시 보관해 드릴 수 있습니다. 보관 기일은 최대 6개월이며, 이후 직접 방문하여 수령하셔야 합니다. 임시보관증을 발급해 드립니다.',
+        en: 'If you have no one to leave the item with, our appraisal office can store it temporarily. The maximum storage period is six months, and you must visit in person to retrieve it. A Temporary Storage Certificate will be issued.',
+        ja: 'お預け先がない場合、鑑定官室にて一時保管が可能です。保管期間は最大6か月で、その後ご本人が直接お越しいただき受領していただく必要があります。臨時保管証書を発行いたします。',
+        zh: '如您无人可托付，鉴定官室可临时为您保管。保管期限最长为6个月，届时您须本人亲自前来领取。我们将为您出具临时保管证。',
+        de: 'Wenn Sie niemanden haben, bei dem Sie den Gegenstand hinterlegen können, kann unser Begutachtungsbüro ihn vorübergehend aufbewahren. Die maximale Aufbewahrungsdauer beträgt sechs Monate, und Sie müssen persönlich erscheinen, um ihn abzuholen. Eine Bescheinigung über die vorübergehende Aufbewahrung wird ausgestellt.',
+        fr: 'Si vous n\'avez personne à qui confier l\'objet, notre bureau d\'expertise peut le conserver temporairement. La durée maximale de conservation est de six mois et vous devez vous présenter en personne pour le récupérer. Un certificat de conservation temporaire sera délivré.'
+      },
+      {
+        id: 'temp_storage_notice',
+        label: '임시보관 후 유의 사항',
+        ko: '임시 보관 기간 내 직접 회수하시더라도 국외 반출은 여전히 불가합니다. 또한 보관 기간(최대 6개월) 내 회수하지 않으실 경우, 사전 통고 후 임의 처분될 수 있음을 안내드립니다.',
+        en: 'Please note that even if you retrieve the item within the storage period, its export remains prohibited. Furthermore, if the item is not retrieved within the storage period (maximum six months), it may be disposed of at the office\'s discretion after prior notice.',
+        ja: '一時保管期間内にご本人が回収されましても、国外搬出は依然として不可能です。また、保管期間(最大6か月)内に回収されない場合は、事前のご通知のうえ、規定により処分される可能性があることをご案内いたします。',
+        zh: '请您知悉，即使在临时保管期间内您本人前来领取，物品仍然不得出境。此外，如在保管期间（最长6个月）内未予领取，将在事先通知后按规定处理。',
+        de: 'Bitte beachten Sie, dass auch bei einer Abholung innerhalb der Aufbewahrungsfrist die Ausfuhr weiterhin untersagt bleibt. Wird der Gegenstand nicht innerhalb der Aufbewahrungsfrist (höchstens sechs Monate) abgeholt, kann er nach vorheriger Benachrichtigung nach Ermessen des Büros verwertet werden.',
+        fr: 'Veuillez noter que même si vous récupérez l\'objet pendant la période de conservation, son exportation reste interdite. De plus, si l\'objet n\'est pas récupéré dans le délai de conservation (six mois maximum), il pourra être disposé à la discrétion du bureau après notification préalable.'
+      }
+    ]
+  },
+  {
+    id: 'pending',
+    title: '⑧ 판정 보류',
+    titleEn: 'Appraisal Pending',
+    items: [
+      {
+        id: 'further_appraisal',
+        label: '추가 감정 안내',
+        ko: '정밀 감정이 필요한 사안입니다. 임시 보관에 동의해 주시면 추가 감정 후 결과를 통지해 드리겠습니다.',
+        en: 'This case requires further detailed appraisal. With your consent for temporary storage, we will conduct additional appraisal and notify you of the result.',
+        ja: '精密な鑑定が必要な事案でございます。一時保管にご同意いただければ、追加鑑定の上、結果をお知らせいたします。',
+        zh: '此案件需要进一步精密鉴定。如您同意临时保管，我们将进行追加鉴定后通知您结果。',
+        de: 'Dieser Fall erfordert eine eingehendere Begutachtung. Mit Ihrer Zustimmung zur vorübergehenden Aufbewahrung werden wir eine zusätzliche Begutachtung durchführen und Ihnen das Ergebnis mitteilen.',
+        fr: 'Ce cas nécessite une expertise plus approfondie. Avec votre accord pour la conservation temporaire, nous procéderons à une expertise complémentaire et vous notifierons le résultat.'
+      },
+      {
+        id: 'specialist_appraisal',
+        label: '전문분야 정밀 감정 필요',
+        ko: '전문 분야 감정위원의 정밀한 감정이 필요한 사안입니다. 국외 반출을 잠시 보류해 주시거나, 한국에 두고 출국하실 경우 감정관실에 임시 보관 후 추가 감정 결과를 통지해 드리겠습니다.',
+        en: 'This case requires a detailed appraisal by a specialist appraiser in the relevant field. Please either postpone your export, or, if you leave the item in Korea, our office can store it temporarily and notify you of the appraisal result.',
+        ja: '専門分野の鑑定委員による精密な鑑定が必要な事案でございます。国外搬出をしばらく見合わせていただくか、韓国にお預けのうえ出国される場合は、鑑定官室にて一時保管後、追加鑑定の結果をお知らせいたします。',
+        zh: '此案件需要专业领域鉴定委员进行精密鉴定。请您暂缓出境，或者如选择将物品留在韩国后出境，鉴定官室将临时保管，并在追加鉴定后通知您结果。',
+        de: 'Dieser Fall erfordert eine eingehende Begutachtung durch einen Sachverständigen des betreffenden Fachgebiets. Bitte verschieben Sie die Ausfuhr, oder wenn Sie den Gegenstand in Korea zurücklassen, kann unser Büro ihn vorübergehend aufbewahren und Sie über das Begutachtungsergebnis informieren.',
+        fr: 'Ce cas nécessite une expertise approfondie par un expert spécialiste du domaine concerné. Veuillez soit reporter votre exportation, soit, si vous laissez l\'objet en Corée, notre bureau peut le conserver temporairement et vous notifier le résultat de l\'expertise.'
+      }
+    ]
+  },
+  {
+    id: 'auxiliary',
+    title: '⑨ 보조 멘트',
+    titleEn: 'Auxiliary Phrases',
+    items: [
+      {
+        id: 'interpreter_check',
+        label: '통역 동행자 확인',
+        ko: '한국어로 도와주실 수 있는 동행자나 친구분이 함께 계십니까?',
+        en: 'Do you have a companion or friend with you who can assist in Korean?',
+        ja: '韓国語でお手伝いいただける同行者やお知り合いの方はいらっしゃいますか。',
+        zh: '您身边有可以协助进行韩语沟通的同行者或朋友吗？',
+        de: 'Haben Sie einen Begleiter oder Freund bei sich, der auf Koreanisch helfen kann?',
+        fr: 'Avez-vous un accompagnateur ou un ami avec vous qui pourrait nous aider en coréen ?'
+      },
+      {
+        id: 'unwrap_request_q',
+        label: '포장 개봉 — 확인 요청 (질문)',
+        ko: '포장된 물품을 풀어서 확인해도 되겠습니까?',
+        en: 'May we open the package to inspect the item?',
+        ja: '包装を開けて中の物品を確認してもよろしいでしょうか。',
+        zh: '我们可以打开包装查看物品吗？',
+        de: 'Dürfen wir die Verpackung öffnen, um den Gegenstand zu überprüfen?',
+        fr: 'Pouvons-nous ouvrir l\'emballage pour examiner l\'objet ?'
+      },
+      {
+        id: 'unwrap_request',
+        label: '포장 개봉 — 직접 요청',
+        ko: '포장을 풀어서 보여주시겠습니까?',
+        en: 'Could you unwrap it and show us the item?',
+        ja: '包装を開けて中の物品をお見せいただけますか。',
+        zh: '请您打开包装并展示物品。',
+        de: 'Könnten Sie es bitte auspacken und uns den Gegenstand zeigen?',
+        fr: 'Pourriez-vous le déballer et nous montrer l\'objet ?'
+      },
+      {
+        id: 'sign_here',
+        label: '여기 서명',
+        ko: '여기에 서명해 주십시오.',
+        en: 'Please sign here.',
+        ja: 'こちらにご署名をお願いいたします。',
+        zh: '请在这里签字。',
+        de: 'Bitte unterschreiben Sie hier.',
+        fr: 'Veuillez signer ici.'
+      },
+      {
+        id: 'souvenir',
+        label: '기념품 증정',
+        ko: '협조해 주셔서 감사합니다. 국가유산청에서 준비한 작은 기념품입니다. 받아주시기 바랍니다.',
+        en: 'Thank you for your cooperation. This is a small souvenir from the Korea Heritage Service. Please accept it with our appreciation.',
+        ja: 'ご協力ありがとうございました。国家遺産庁からのささやかな記念品でございます。どうぞお受け取りください。',
+        zh: '感谢您的配合。这是国家遗产厅准备的小礼品，请您收下。',
+        de: 'Vielen Dank für Ihre Mitwirkung. Dies ist ein kleines Geschenk vom Korea Heritage Service. Bitte nehmen Sie es als Zeichen unserer Wertschätzung entgegen.',
+        fr: 'Merci pour votre coopération. Voici un petit souvenir offert par le Service du Patrimoine Coréen. Veuillez l\'accepter en signe de notre reconnaissance.'
+      },
+      {
+        id: 'future_application_info',
+        label: '사전 확인 신청 안내',
+        ko: '참고로 안내드립니다. 본 물품과 같이 문화유산으로 오인될 수 있는 동산은 「문화유산법」 제60조에 따라 국외 반출 전 비문화유산 확인 신청이 의무 사항입니다. 다음 반출 시에는 출국 당일 물품과 항공권을 지참하여 감정관실을 방문하시거나, 반출 3일 전(화물·우편의 경우 4일 전)까지 국가유산청 홈페이지에서 사전예약 감정을 신청하실 수 있습니다.',
+        en: 'For your reference: items that may be mistaken for cultural heritage, like the present one, are subject to a mandatory pre-export confirmation under Article 60 of the Korean Cultural Heritage Act. For future exports, you may either visit the Appraisal Office on the day of departure with the item and your airline ticket, or apply online for advance appraisal through the Korea Heritage Service website at least 3 days in advance (4 days for cargo or postal shipment).',
+        ja: 'ご参考までにご案内いたします。本物品のように文化財と誤認される可能性のある動産は、韓国「文化遺産法」第60条により、国外搬出前に非文化財確認申請が義務付けられています。次回の搬出時には、出国当日に物品とご搭乗券をお持ちのうえ鑑定官室にお越しいただくか、搬出3日前(貨物・郵便の場合は4日前)までに国家遺産庁ホームページから事前予約鑑定をお申し込みいただけます。',
+        zh: '仅供参考。如本物品这样可能被误认为文化遗产的动产，根据韩国《文化遗产法》第60条规定，出境前必须申请非文物确认。下次出境时，您可以在出境当天携带物品和机票前往鉴定官室，或在出境3天前（货物·邮寄为4天前）通过国家遗产厅官网申请预约鉴定。',
+        de: 'Zur Information: Gegenstände, die wie der vorliegende mit Kulturgut verwechselt werden könnten, unterliegen gemäß Artikel 60 des koreanischen Kulturgutschutzgesetzes vor der Ausfuhr einer obligatorischen Bestätigung als Nicht-Kulturgut. Für künftige Ausfuhren können Sie entweder am Ausreisetag das Begutachtungsbüro mit dem Gegenstand und Ihrem Flugticket aufsuchen oder spätestens 3 Tage vor der Ausfuhr (bei Fracht und Postsendungen 4 Tage) eine Online-Voranmeldung über die Website des Korea Heritage Service vornehmen.',
+        fr: 'Pour votre information : les objets pouvant être confondus avec un bien culturel, comme le présent objet, sont soumis à une confirmation préalable obligatoire avant exportation, conformément à l\'article 60 de la loi coréenne sur le patrimoine culturel. Lors de futures exportations, vous pourrez soit vous rendre au bureau d\'expertise le jour de votre départ avec l\'objet et votre billet d\'avion, soit demander une expertise par réservation préalable sur le site du Service du Patrimoine Coréen au moins 3 jours avant l\'exportation (4 jours pour le fret ou l\'envoi postal).'
+      },
+      {
+        id: 'thank_you',
+        label: '감사 / 마무리',
+        ko: '협조해 주셔서 감사합니다. 좋은 여행 되십시오.',
+        en: 'Thank you for your cooperation. Have a safe journey.',
+        ja: 'ご協力ありがとうございました。よいご旅行を。',
+        zh: '感谢您的配合，祝您旅途愉快。',
+        de: 'Vielen Dank für Ihre Mitwirkung. Gute Reise.',
+        fr: 'Merci pour votre coopération. Bon voyage.'
+      }
+    ]
+  }
+];
+
+// ===== 상태 =====
+let currentLang = 'en';
+let currentMsg = null;
+let availableVoices = [];
+
+const langMap = { en: 'en-US', ja: 'ja-JP', zh: 'zh-CN', de: 'de-DE', fr: 'fr-FR' };
+const playLabels = { en: 'Play Audio', ja: '音声再生', zh: '播放语音', de: 'Audio abspielen', fr: 'Lire l\'audio' };
+const playingLabels = { en: 'Playing...', ja: '再生中...', zh: '播放中...', de: 'Wird abgespielt...', fr: 'Lecture...' };
+
+// ===== 음성 로딩 (브라우저 호환성: 삼성 인터넷 등에서 명시적 voice 할당 필요) =====
+function loadVoices() {
+  if (!('speechSynthesis' in window)) return;
+  availableVoices = window.speechSynthesis.getVoices();
+}
+
+if ('speechSynthesis' in window) {
+  loadVoices();
+  // voice 목록은 비동기 로드되므로 이벤트 핸들러 등록
+  if (typeof window.speechSynthesis.onvoiceschanged !== 'undefined') {
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+  }
+  // 일부 브라우저(Safari, 삼성 인터넷 등)는 onvoiceschanged가 안 발화됨
+  // 페이지 로드 직후 여러 시점에서 재시도
+  setTimeout(loadVoices, 100);
+  setTimeout(loadVoices, 500);
+  setTimeout(loadVoices, 1500);
+}
+
+function findBestVoice(langCode) {
+  if (availableVoices.length === 0) loadVoices();
+  if (availableVoices.length === 0) return null;
+
+  // 1. 정확 일치
+  let voice = availableVoices.find(v =>
+    v.lang === langCode || v.lang.replace('_', '-') === langCode
+  );
+  if (voice) return voice;
+
+  // 2. 언어 prefix 일치 (예: ja-JP -> ja)
+  const prefix = langCode.split('-')[0].toLowerCase();
+  voice = availableVoices.find(v => v.lang.toLowerCase().startsWith(prefix));
+  return voice;
+}
+
+// ===== UI 빌드 =====
+function buildButtons() {
+  const panel = document.getElementById('buttonPanel');
+  groups.forEach((group, gi) => {
+    const groupEl = document.createElement('div');
+    groupEl.className = 'group' + (group.warning ? ' warning' : '');
+    groupEl.innerHTML = `
+      <div class="group-header">
+        <div class="group-title">${group.title}</div>
+        <div class="group-title-en">${group.titleEn}</div>
+      </div>
+      <div class="group-buttons" id="grp-${group.id}"></div>
+    `;
+    panel.appendChild(groupEl);
+    const grpBtns = groupEl.querySelector(`#grp-${group.id}`);
+    group.items.forEach((item, ii) => {
+      const btn = document.createElement('button');
+      btn.className = 'msg-btn';
+      btn.dataset.msgId = item.id;
+      const badges = [];
+      if (item.restricted) badges.push('<span class="restricted-badge">특사경 한정</span>');
+      if (item.conditional) badges.push('<span class="conditional-badge">특사경 부재 시</span>');
+      btn.innerHTML = `
+        <span class="msg-num">${gi + 1}.${ii + 1}</span>
+        <span>${item.label}${badges.join('')}</span>
+      `;
+      btn.addEventListener('click', () => selectMessage(item, group, gi + 1, ii + 1));
+      grpBtns.appendChild(btn);
+    });
+  });
+}
+
+function selectMessage(item, group, gi, ii) {
+  stopAudio();
+  currentMsg = { item, group, gi, ii };
+  document.querySelectorAll('.msg-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.msg-btn[data-msg-id="${item.id}"]`).classList.add('active');
+
+  document.getElementById('displayEmpty').style.display = 'none';
+  document.getElementById('displayContent').style.display = 'flex';
+
+  document.getElementById('catNum').textContent = `${gi}.${ii}`;
+  document.getElementById('catName').textContent = group.titleEn;
+  document.getElementById('msgLabel').textContent = item.label;
+
+  // 새 메시지 선택 시 voice notice 초기화
+  const noticeEl = document.getElementById('voiceNotice');
+  if (noticeEl) noticeEl.classList.remove('show');
+
+  updateDisplayLanguage();
+
+  // 모바일에서는 메시지 선택 시 디스플레이 패널로 자동 스크롤
+  if (window.innerWidth < 880) {
+    setTimeout(() => {
+      document.querySelector('.display-panel').scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }, 50);
+  }
+}
+
+function updateDisplayLanguage() {
+  if (!currentMsg) return;
+  const foreignEl = document.getElementById('foreignText');
+  foreignEl.dataset.lang = currentLang;
+  foreignEl.textContent = currentMsg.item[currentLang];
+  document.getElementById('koreanText').textContent = currentMsg.item.ko;
+  document.getElementById('playLabel').textContent = playLabels[currentLang];
+}
+
+document.getElementById('langToggle').addEventListener('click', e => {
+  if (!e.target.classList.contains('lang-btn')) return;
+  currentLang = e.target.dataset.lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === currentLang));
+  updateDisplayLanguage();
+  stopAudio();
+  // 언어 변경 시 voice notice 숨김 (다음 재생 시도 시 다시 판단)
+  const noticeEl = document.getElementById('voiceNotice');
+  if (noticeEl) noticeEl.classList.remove('show');
+});
+
+function playAudio() {
+  if (!currentMsg) return;
+  stopAudio();
+  if (!('speechSynthesis' in window)) {
+    alert('이 브라우저는 음성 출력을 지원하지 않습니다. Chrome, Edge, Safari 사용을 권장합니다.');
+    return;
+  }
+  const text = currentMsg.item[currentLang];
+  const targetLang = langMap[currentLang];
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = targetLang;
+  u.rate = 0.9;
+  u.pitch = 1.0;
+  u.volume = 1.0;
+
+  // 명시적 voice 할당 — 브라우저 자동 선택 우회 (삼성 인터넷 등 호환)
+  const voice = findBestVoice(targetLang);
+  const noticeEl = document.getElementById('voiceNotice');
+  if (voice) {
+    u.voice = voice;
+    if (noticeEl) noticeEl.classList.remove('show');
+  } else {
+    if (noticeEl) noticeEl.classList.add('show');
+    console.warn('[TTS] No voice found for', targetLang,
+      '— available:', availableVoices.map(v => v.lang).join(', ') || '(none)');
+  }
+
+  u.onstart = () => {
+    const btn = document.getElementById('playBtn');
+    btn.classList.add('playing');
+    document.getElementById('playLabel').textContent = playingLabels[currentLang];
+  };
+  u.onend = () => {
+    document.getElementById('playBtn').classList.remove('playing');
+    document.getElementById('playLabel').textContent = playLabels[currentLang];
+  };
+  u.onerror = u.onend;
+  window.speechSynthesis.speak(u);
+}
+
+function stopAudio() {
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+  const btn = document.getElementById('playBtn');
+  if (btn) {
+    btn.classList.remove('playing');
+    document.getElementById('playLabel').textContent = playLabels[currentLang];
+  }
+}
+
+document.getElementById('playBtn').addEventListener('click', playAudio);
+document.getElementById('stopBtn').addEventListener('click', stopAudio);
+window.addEventListener('beforeunload', stopAudio);
+
+// 페이지가 백그라운드로 가면 음성 정지 (앱 전환·화면 잠금 시)
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) stopAudio();
+});
+
+buildButtons();
+</script>
+
+</body>
+</html>
