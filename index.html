@@ -576,7 +576,7 @@
   <div class="footer-divider"></div>
   <div>
     <strong>국가유산청 문화유산감정관실</strong> · 감정 현장 다국어 안내 도구<br>
-    근거: 문화유산의 보존 및 활용에 관한 법률 제60조·제90조 / 형사소송법 제212조·제211조 / 경찰범죄수사규칙 제23조<br>
+    근거: 문화유산의 보존 및 활용에 관한 법률 제60조·제90조 / 형사소송법 제129조·제211조·제212조·제216조 / 경찰범죄수사규칙 제23조<br>
     <span style="font-size:0.75rem;opacity:0.85;">※ 일본어·중국어는 현지 자국 용어(文化財·文物)를 사용하되, 한국 법령 인용 시에는 정식 직역(文化遺産·文化遗产)을 유지함</span>
   </div>
 </footer>
@@ -642,8 +642,45 @@ const groups = [
     ]
   },
   {
+    id: 'refused_submission',
+    title: '③ 신청서 거부 응대',
+    titleEn: 'Refusal Response',
+    items: [
+      {
+        id: 'refusal_retry',
+        label: '재시도 — 처벌이 아닌 확인 절차',
+        ko: '이 신청서는 귀하를 처벌하기 위한 서류가 아닙니다. 귀하가 가지고 계신 물품이 한국의 문화유산에 해당하지 않는다는 사실을 확인하는 행정 절차일 뿐입니다. 작성에 협조해 주시면 절차가 빠르게 마무리되고 곧 출국하실 수 있습니다.',
+        en: 'This application form is not a punitive document. It is simply an administrative procedure to confirm that your item does not qualify as Korean cultural heritage. With your cooperation, the procedure will be completed quickly and you may proceed to your departure.',
+        ja: 'この申請書は、お客様を処罰するための書類ではございません。お持ちの物品が韓国の文化財に該当しないことを確認するための行政手続きにすぎません。ご協力いただければ、手続きは速やかに完了し、すぐにご出国いただけます。',
+        zh: '此申请书并非用于处罚您的文件，仅是确认您所持物品不属于韩国文物的行政程序。请您配合，程序将很快完成，您即可顺利出境。',
+        de: 'Dieses Antragsformular ist kein Strafdokument. Es handelt sich lediglich um ein Verwaltungsverfahren zur Bestätigung, dass Ihr Gegenstand kein koreanisches Kulturgut darstellt. Mit Ihrer Mitwirkung wird das Verfahren zügig abgeschlossen und Sie können Ihre Ausreise fortsetzen.',
+        fr: 'Ce formulaire n\'est pas un document punitif. Il s\'agit simplement d\'une procédure administrative visant à confirmer que votre objet n\'est pas un bien culturel coréen. Avec votre coopération, la procédure sera rapidement conclue et vous pourrez poursuivre votre départ.'
+      },
+      {
+        id: 'ex_officio_notice',
+        label: '거부 시 직권 감정 통보',
+        ko: '신청서 작성을 거부하시더라도 본 위원은 직권으로 외관 감정을 진행합니다. 그 결과 본 물품이 한국 문화유산으로 확인되면, 한국 법률(문화유산법 제60조 및 제90조)에 따라 무허가 반출로 처벌받을 수 있으며 물품은 몰수될 수 있습니다.',
+        en: 'Even if you refuse to fill out the form, I will proceed with an ex officio visual appraisal. If the item is confirmed as Korean cultural heritage, you may face criminal penalties under Korean law (Cultural Heritage Act, Articles 60 and 90) for unauthorized export, and the item may be confiscated.',
+        ja: '申請書の作成を拒否されましても、本委員は職権で外観鑑定を行います。その結果、本物品が韓国の文化財と確認された場合、韓国法(文化遺産法第60条および第90条)に基づき無許可搬出として処罰される可能性があり、物品は没収されることがあります。',
+        zh: '即使您拒绝填写申请书，本委员仍将依职权进行外观鉴定。若该物品被确认为韩国文物，您可能依据韩国法律(《文化遗产法》第60条及第90条)以无许可出境而受到处罚，物品也可能被没收。',
+        de: 'Auch bei Ihrer Weigerung wird eine amtliche äußerliche Begutachtung durchgeführt. Wird der Gegenstand als koreanisches Kulturgut bestätigt, drohen nach koreanischem Recht (Kulturgutgesetz Art. 60 und 90) strafrechtliche Sanktionen wegen unerlaubter Ausfuhr, und der Gegenstand kann eingezogen werden.',
+        fr: 'Même en cas de refus de votre part, je procéderai à une expertise visuelle d\'office. Si l\'objet est confirmé comme bien culturel coréen, vous pourriez encourir des sanctions pénales en vertu de la loi coréenne (Loi sur le patrimoine culturel, articles 60 et 90) pour exportation non autorisée, et l\'objet pourra être confisqué.'
+      },
+      {
+        id: 'ex_officio_result_heritage',
+        label: '직권 감정 결과 — 일반동산 확정',
+        ko: '본 위원의 직권 감정 결과, 본 물품은 한국의 일반동산문화유산에 해당합니다. 따라서 본 절차는 후속 처분 단계로 이행됩니다. 지금부터의 절차는 한국 법률에 따라 진행됨을 알려드립니다.',
+        en: 'Based on my ex officio appraisal, this item qualifies as General Movable Cultural Heritage of Korea. The procedure will therefore proceed to the subsequent enforcement stage. Please be advised that all further steps will be conducted in accordance with Korean law.',
+        ja: '本委員の職権鑑定の結果、本物品は韓国の一般動産文化遺産に該当します。したがいまして、本手続きは後続の処分段階へ移行いたします。これ以降の手続きは韓国法に基づき進められますことをお知らせいたします。',
+        zh: '经本委员依职权鉴定，本物品属于韩国一般动产文化遗产。因此，本程序将进入后续处分阶段。请您知悉，之后的所有程序将依照韩国法律进行。',
+        de: 'Nach meiner amtlichen Begutachtung handelt es sich bei diesem Gegenstand um allgemeines bewegliches Kulturgut Koreas. Das Verfahren geht daher in die nachfolgende Vollzugsphase über. Bitte beachten Sie, dass alle weiteren Schritte nach koreanischem Recht erfolgen.',
+        fr: 'Selon mon expertise d\'office, cet objet constitue un bien culturel mobilier général de Corée. La procédure passe donc à la phase de traitement subséquent. Veuillez noter que toutes les étapes suivantes seront effectuées conformément à la loi coréenne.'
+      }
+    ]
+  },
+  {
     id: 'appraisal',
-    title: '③ 감정 진행 / 대기',
+    title: '④ 감정 진행 / 대기',
     titleEn: 'Appraisal / Standby',
     items: [
       {
@@ -680,7 +717,7 @@ const groups = [
   },
   {
     id: 'result',
-    title: '④ 감정 결과 통지',
+    title: '⑤ 감정 결과 통지',
     titleEn: 'Appraisal Result',
     items: [
       {
@@ -727,7 +764,7 @@ const groups = [
   },
   {
     id: 'submission',
-    title: '⑤ 임의제출 절차 (검색대)',
+    title: '⑥ 임의제출 절차 (검색대)',
     titleEn: 'Voluntary Submission (Checkpoint)',
     items: [
       {
@@ -773,6 +810,26 @@ const groups = [
         fr: 'Veuillez remplir le formulaire de remise volontaire. Indiquez votre nom, profession, coordonnées et adresse ; précisez l\'objet remis et votre intention de disposition ; puis signez.'
       },
       {
+        id: 'submission_receipt',
+        label: '임의제출 목록 사본 교부',
+        ko: '임의제출서는 2부 작성되며, 그중 한 부를 귀하의 보관용으로 교부해 드립니다. 한국 형사소송법 제129조에 따른 압수목록 교부 의무에 따른 것입니다.',
+        en: 'The Voluntary Submission form is prepared in two copies, one of which will be provided to you for your records. This is in accordance with the obligation to deliver a seizure list under Article 129 of the Korean Criminal Procedure Act.',
+        ja: '任意提出書は2部作成され、うち1部をお客様の保管用としてお渡しいたします。韓国刑事訴訟法第129条に基づく押収目録交付義務によるものでございます。',
+        zh: '随意提交书一式两份，其中一份将交予您留存。这是依据韩国《刑事诉讼法》第129条规定的扣押目录交付义务而进行的。',
+        de: 'Das Formular zur freiwilligen Übergabe wird in zwei Ausfertigungen erstellt, von denen Ihnen eine für Ihre Unterlagen ausgehändigt wird. Dies erfolgt gemäß der Pflicht zur Aushändigung eines Beschlagnahmeverzeichnisses nach Artikel 129 der koreanischen Strafprozessordnung.',
+        fr: 'Le formulaire de remise volontaire est établi en deux exemplaires, dont un vous sera remis pour vos archives. Ceci est conforme à l\'obligation de remise d\'une liste de saisie en vertu de l\'article 129 du Code de procédure pénale coréen.'
+      },
+      {
+        id: 'seizure_216_notice',
+        label: '임의제출 거부 — 제216조② 압수 통보',
+        ko: '귀하께서 임의제출을 거부하시는 경우, 본 물품에 대해서는 한국 형사소송법 제216조 제2항에 따라 영장 없이 압수 처분이 진행됩니다. 본 압수에 대해서는 한국 법원에 사후 영장이 청구됩니다. 신원·연락처를 확인해 주시면 귀하의 출국은 허용됩니다.',
+        en: 'If you refuse voluntary submission, the item will be seized without a warrant under Article 216(2) of the Korean Criminal Procedure Act. A post-seizure warrant will subsequently be requested from a Korean court. Once your identity and contact information are confirmed, your departure will be permitted.',
+        ja: '任意提出をお断りになる場合、本物品については韓国刑事訴訟法第216条第2項に基づき、令状なしで押収処分が行われます。本押収については韓国の裁判所に事後令状が請求されます。ご本人確認および連絡先のご提供をいただければ、ご出国は許可されます。',
+        zh: '若您拒绝随意提交，本物品将依据韩国《刑事诉讼法》第216条第2项规定，无需令状予以扣押。该扣押将事后向韩国法院申请令状。在确认您的身份及联系方式后，将允许您出境。',
+        de: 'Bei Verweigerung der freiwilligen Übergabe wird der Gegenstand nach Artikel 216 Absatz 2 der koreanischen Strafprozessordnung ohne Haftbefehl beschlagnahmt. Für diese Beschlagnahme wird nachträglich ein gerichtlicher Beschluss bei einem koreanischen Gericht beantragt. Nach Bestätigung Ihrer Identität und Kontaktdaten ist Ihre Ausreise gestattet.',
+        fr: 'En cas de refus de remise volontaire, l\'objet sera saisi sans mandat en vertu de l\'article 216 alinéa 2 du Code de procédure pénale coréen. Un mandat postérieur sera ensuite demandé auprès d\'un tribunal coréen. Une fois votre identité et vos coordonnées confirmées, votre départ sera autorisé.'
+      },
+      {
         id: 'additional_docs',
         label: '추가 자료 협조',
         ko: '사건 처리를 위해 추가로 다음 자료를 협조해 주시기 바랍니다. 여권 사본, 연락처, 전자우편 주소, 거주지 주소, 그리고 물품 구입 영수증이 있다면 함께 제출 부탁드립니다.',
@@ -816,7 +873,7 @@ const groups = [
   },
   {
     id: 'noncoop',
-    title: '⑥ 비협조 시 대응',
+    title: '⑦ 비협조 시 대응',
     titleEn: 'Non-Cooperation Response',
     warning: true,
     items: [
@@ -844,7 +901,7 @@ const groups = [
   },
   {
     id: 'return',
-    title: '⑦ 감정관실 방문 — 반환·임시보관',
+    title: '⑧ 감정관실 방문 — 반환·임시보관',
     titleEn: 'Office Visit / Return',
     items: [
       {
@@ -881,7 +938,7 @@ const groups = [
   },
   {
     id: 'pending',
-    title: '⑧ 판정 보류',
+    title: '⑨ 판정 보류',
     titleEn: 'Appraisal Pending',
     items: [
       {
@@ -908,7 +965,7 @@ const groups = [
   },
   {
     id: 'classification',
-    title: '⑨ 분류 설명',
+    title: '⑩ 분류 설명',
     titleEn: 'Classification Notes',
     items: [
       {
@@ -965,7 +1022,7 @@ const groups = [
   },
   {
     id: 'auxiliary',
-    title: '⑩ 보조 멘트',
+    title: '⑪ 보조 멘트',
     titleEn: 'Auxiliary Phrases',
     items: [
       {
