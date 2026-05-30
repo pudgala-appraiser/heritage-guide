@@ -509,6 +509,12 @@
     margin: 0 auto 0.75rem;
   }
   .footer strong { color: var(--primary); }
+  .app-version {
+    margin-top: 0.6rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+    color: var(--line);
+  }
 
   ::-webkit-scrollbar { width: 8px; height: 8px; }
   ::-webkit-scrollbar-track { background: var(--bg-alt); }
@@ -548,7 +554,7 @@
         <div class="display-cat"><strong id="catNum">A1</strong><span id="catName"></span></div>
         <div class="display-label" id="msgLabel"></div>
       </div>
-      <div class="display-foreign" id="foreignText" data-lang="en"></div>
+      <div class="display-foreign" id="foreignText" data-lang="en" lang="en" aria-live="polite" aria-atomic="true"></div>
       <div class="display-korean">
         <span class="display-korean-label">한국어 원문 (감정위원 참고용)</span>
         <span id="koreanText"></span>
@@ -578,10 +584,20 @@
     <strong>국가유산청 문화유산감정관실</strong> · 감정 현장 다국어 안내 도구<br>
     근거: 문화유산의 보존 및 활용에 관한 법률 제60조·제90조 / 형사소송법 제129조·제211조·제212조·제216조 / 경찰범죄수사규칙 제23조<br>
     <span style="font-size:0.75rem;opacity:0.85;">※ 일본어·중국어는 현지 자국 용어(文化財·文物)를 사용하되, 한국 법령 인용 시에는 정식 직역(文化遺産·文化遗产)을 유지함</span>
+    <div class="app-version" id="appVersion"></div>
   </div>
 </footer>
 
 <script>
+// ────────────────────────────────────────────────
+//  ▼ 배포할 때마다 이 한 줄만 바꾸세요. 화면 맨 아래에 그대로 표시됩니다.
+const APP_VERSION = 'v1.1 · 2026-05-29';
+// ────────────────────────────────────────────────
+(function () {
+  const v = document.getElementById('appVersion');
+  if (v) v.textContent = APP_VERSION;
+})();
+
 // ===== 멘트 데이터 =====
 // 일본어: 일반 안내는 「文化財」(현지 표준), 한국 법령 인용은 「文化遺産」 직역 유지
 // 중국어: 일반 안내는 「文物」(현지 표준), 한국 법령 인용은 「文化遗产」 직역 유지
@@ -1104,6 +1120,7 @@ const groups = [
 let currentLang = 'en';
 let currentMsg = null;
 let availableVoices = [];
+let ttsTimer = null;   // Chrome long-utterance 중단 버그 우회용 keep-alive
 
 const langMap = { en: 'en-US', ja: 'ja-JP', zh: 'zh-CN', de: 'de-DE', fr: 'fr-FR' };
 const playLabels = { en: 'Play Audio', ja: '音声再生', zh: '播放语音', de: 'Audio abspielen', fr: 'Lire l\'audio' };
@@ -1210,6 +1227,7 @@ function updateDisplayLanguage() {
   if (!currentMsg) return;
   const foreignEl = document.getElementById('foreignText');
   foreignEl.dataset.lang = currentLang;
+  foreignEl.lang = currentLang;   // 실제 lang 속성: 폰트·하이픈·SR 발음 보정
   foreignEl.textContent = currentMsg.item[currentLang];
   document.getElementById('koreanText').textContent = currentMsg.item.ko;
   document.getElementById('playLabel').textContent = playLabels[currentLang];
@@ -1247,18 +1265,35 @@ function playAudio() {
   if (voice) {
     u.voice = voice;
     if (noticeEl) noticeEl.classList.remove('show');
+  } else if (availableVoices.length === 0) {
+    // 음성 목록을 아직 받지 못함(일부 안드로이드 WebView 등): 엔진이 내부적으로
+    // 처리할 수 있으므로 일단 시도한다.
+    if (noticeEl) noticeEl.classList.remove('show');
   } else {
+    // 음성 목록은 있으나 해당 언어 음성이 없음 → 다른 언어 음성으로 읽으면
+    // 외국인에게 알아들을 수 없는 소리가 된다. 발화하지 않고 안내만 표시.
+    // (외국어 텍스트는 화면에 그대로 보이므로 전달 자체는 유지됨)
     if (noticeEl) noticeEl.classList.add('show');
-    console.warn('[TTS] No voice found for', targetLang,
+    console.warn('[TTS] No voice for', targetLang,
       '— available:', availableVoices.map(v => v.lang).join(', ') || '(none)');
+    return;
   }
 
   u.onstart = () => {
     const btn = document.getElementById('playBtn');
     btn.classList.add('playing');
     document.getElementById('playLabel').textContent = playingLabels[currentLang];
+    // Chrome 계열 long-utterance 중단 버그 우회: ~15초/200자 부근에서 발화가
+    // 끊기므로 주기적 pause+resume로 이어붙인다. (EN·DE·FR 멘트 다수가 200자 초과)
+    clearInterval(ttsTimer);
+    ttsTimer = setInterval(() => {
+      if (!window.speechSynthesis.speaking) { clearInterval(ttsTimer); return; }
+      window.speechSynthesis.pause();
+      window.speechSynthesis.resume();
+    }, 10000);
   };
   u.onend = () => {
+    clearInterval(ttsTimer);
     document.getElementById('playBtn').classList.remove('playing');
     document.getElementById('playLabel').textContent = playLabels[currentLang];
   };
@@ -1267,6 +1302,7 @@ function playAudio() {
 }
 
 function stopAudio() {
+  clearInterval(ttsTimer);
   if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   const btn = document.getElementById('playBtn');
   if (btn) {
