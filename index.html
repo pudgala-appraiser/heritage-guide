@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='32' fill='%231f3354'/><text x='90' y='128' font-size='108' fill='%23a8843a' text-anchor='middle' font-family='serif' font-weight='600'>鑑</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;500;700&family=Noto+Serif+SC:wght@400;500;700&family=Cormorant+Garamond:wght@400;500;600&family=EB+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;500;700&family=Noto+Serif+SC:wght@400;500;700&family=Noto+Serif+TC:wght@400;500;700&family=Cormorant+Garamond:wght@400;500;600&family=EB+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #fbf8f1;
@@ -35,6 +35,7 @@
     --font-body: 'Noto Sans KR', system-ui, -apple-system, sans-serif;
     --font-jp: 'Noto Serif JP', 'Noto Serif KR', serif;
     --font-zh: 'Noto Serif SC', 'Noto Serif KR', serif;
+    --font-tc: 'Noto Serif TC', 'Noto Serif KR', serif;
     --font-en: 'Cormorant Garamond', 'Noto Serif KR', serif;
     --font-eu: 'EB Garamond', 'Cormorant Garamond', serif;
   }
@@ -243,9 +244,11 @@
   }
   .display-foreign[data-lang="ja"] { font-family: var(--font-jp); }
   .display-foreign[data-lang="zh"] { font-family: var(--font-zh); }
+  .display-foreign[data-lang="zhTW"] { font-family: var(--font-tc); }
   .display-foreign[data-lang="en"] { font-family: var(--font-en); font-size: 1.6rem; line-height: 1.5; font-weight: 500; }
   .display-foreign[data-lang="de"] { font-family: var(--font-eu); font-size: 1.55rem; line-height: 1.5; font-weight: 500; }
   .display-foreign[data-lang="fr"] { font-family: var(--font-eu); font-size: 1.55rem; line-height: 1.5; font-weight: 500; font-style: italic; }
+  .display-foreign[data-lang="es"] { font-family: var(--font-eu); font-size: 1.55rem; line-height: 1.5; font-weight: 500; }
 
   .display-korean {
     background: var(--bg-alt);
@@ -313,16 +316,16 @@
 
   /* BUTTON PANEL */
   .button-panel {
-    column-count: 2;
-    -webkit-column-count: 2;
+    column-count: 1;            /* 휴대폰: 1열 — 버튼이 넓어 읽기 편하고 탭 영역이 큼 */
+    -webkit-column-count: 1;
     column-gap: 0.75rem;
     -webkit-column-gap: 0.75rem;
     column-fill: balance;
   }
-  @media (max-width: 360px) {
+  @media (min-width: 768px) {   /* 태블릿·데스크톱처럼 넓을 때만 2열 */
     .button-panel {
-      column-count: 1;
-      -webkit-column-count: 1;
+      column-count: 2;
+      -webkit-column-count: 2;
     }
   }
   .group {
@@ -541,9 +544,11 @@
       <div class="lang-toggle" id="langToggle">
         <button class="lang-btn active" data-lang="en">EN</button>
         <button class="lang-btn" data-lang="ja">日</button>
-        <button class="lang-btn" data-lang="zh">中</button>
+        <button class="lang-btn" data-lang="zh">简</button>
+        <button class="lang-btn" data-lang="zhTW">繁</button>
         <button class="lang-btn" data-lang="de">DE</button>
         <button class="lang-btn" data-lang="fr">FR</button>
+        <button class="lang-btn" data-lang="es">ES</button>
       </div>
     </div>
   </div>
@@ -598,7 +603,7 @@
 <script>
 // ────────────────────────────────────────────────
 //  ▼ 배포할 때마다 이 한 줄만 바꾸세요. 화면 맨 아래에 그대로 표시됩니다.
-const APP_VERSION = 'v3.0 · 2026-05-30';
+const APP_VERSION = 'v3.2 · 2026-05-30';
 // ────────────────────────────────────────────────
 (function () {
   const v = document.getElementById('appVersion');
@@ -622,6 +627,8 @@ const groups = [
         en: 'I am a Cultural Heritage Appraiser from the Korea Heritage Service.',
         ja: '私は韓国・国家遺産庁の文化財鑑定委員です。',
         zh: '我是韩国国家遗产厅文物鉴定委员。',
+        zhTW: '我是韓國國家遺產廳文物鑑定委員。',
+        es: 'Soy perito en bienes culturales del Servicio del Patrimonio de Corea.',
         de: 'Ich bin Kulturgut-Sachverständiger des koreanischen Korea Heritage Service.',
         fr: 'Je suis expert en biens culturels du Service du Patrimoine Coréen.'
       },
@@ -632,6 +639,8 @@ const groups = [
         en: 'There is no issue with this item — it is not a cultural heritage object. You only need to fill out a simple application form confirming it is not cultural heritage.',
         ja: 'この物品は文化財ではありませんので、問題ございません。非文化財であることを確認する申請書をご記入いただくだけで結構です。',
         zh: '此物品并非文物，没有问题。您只需填写一份确认其为非文物的申请书即可。',
+        zhTW: '此物品並非文物，沒有問題。您只需填寫一份確認其為非文物的申請書即可。',
+        es: 'No hay ningún problema con este objeto, ya que no es un bien cultural. Solo necesita completar un formulario que confirma que no se trata de un bien cultural.',
         de: 'Mit diesem Gegenstand gibt es kein Problem — er ist kein Kulturgut. Sie müssen lediglich ein einfaches Antragsformular zur Bestätigung ausfüllen.',
         fr: 'Il n\'y a aucun problème avec cet objet — il ne s\'agit pas d\'un bien culturel. Vous n\'avez qu\'à remplir un simple formulaire de confirmation.'
       }
@@ -649,6 +658,8 @@ const groups = [
         en: 'This is a verification procedure under the Cultural Heritage Act of the Republic of Korea. Your cooperation is appreciated.',
         ja: '大韓民国の法律に基づき、文化財該当性を確認する手続きでございます。ご協力をお願いいたします。',
         zh: '根据大韩民国法律，我们正在进行文物确认手续，请您配合。',
+        zhTW: '根據大韓民國法律，我們正在進行文物確認手續，請您配合。',
+        es: 'Este es un procedimiento de verificación conforme a la Ley de Patrimonio Cultural de la República de Corea. Le agradecemos su cooperación.',
         de: 'Dies ist ein Überprüfungsverfahren gemäß dem Kulturgutschutzgesetz der Republik Korea. Wir bitten um Ihre Mitwirkung.',
         fr: 'Il s\'agit d\'une procédure de vérification conformément à la loi sur le patrimoine culturel de la République de Corée. Nous vous remercions de votre coopération.'
       },
@@ -659,6 +670,8 @@ const groups = [
         en: 'Please fill out the Application for Confirmation of Non-Cultural Heritage Export by hand. Please complete the highlighted fields: name, date of birth, address, phone number, nationality, destination country, and signature.',
         ja: '非文化財国外搬出確認申請書に個人情報をご記入ください。蛍光ペンで印を付けた箇所(氏名、生年月日、住所、電話番号、国籍、到着国、署名)を手書きでお願いいたします。',
         zh: '请填写非文物出境确认申请书。请用手书写荧光笔标注的部分(姓名、出生日期、地址、电话号码、国籍、到达国、签名)。',
+        zhTW: '請填寫非文物出境確認申請書。請用手書寫熒光筆標註的部分(姓名、出生日期、地址、電話號碼、國籍、到達國、簽名)。',
+        es: 'Por favor, complete a mano la Solicitud de Confirmación de Exportación de Objeto No Catalogado como Bien Cultural. Rellene los campos resaltados: nombre, fecha de nacimiento, domicilio, número de teléfono, nacionalidad, país de destino y firma.',
         de: 'Bitte füllen Sie den Antrag auf Bestätigung der Ausfuhr von Nicht-Kulturgut handschriftlich aus. Tragen Sie die markierten Felder ein: Name, Geburtsdatum, Adresse, Telefonnummer, Staatsangehörigkeit, Zielland und Unterschrift.',
         fr: 'Veuillez remplir à la main le formulaire de demande de confirmation d\'exportation de bien non culturel. Veuillez compléter les champs surlignés : nom, date de naissance, adresse, numéro de téléphone, nationalité, pays de destination et signature.'
       }
@@ -676,6 +689,8 @@ const groups = [
         en: 'This application form is not a punitive document. It is simply an administrative procedure to confirm that your item does not qualify as Korean cultural heritage. With your cooperation, the procedure will be completed quickly and you may proceed to your departure.',
         ja: 'この申請書は、お客様を処罰するための書類ではございません。お持ちの物品が韓国の文化財に該当しないことを確認するための行政手続きにすぎません。ご協力いただければ、手続きは速やかに完了し、すぐにご出国いただけます。',
         zh: '此申请书并非用于处罚您的文件，仅是确认您所持物品不属于韩国文物的行政程序。请您配合，程序将很快完成，您即可顺利出境。',
+        zhTW: '此申請書並非用於處罰您的文件，僅是確認您所持物品不屬於韓國文物的行政程序。請您配合，程序將很快完成，您即可順利出境。',
+        es: 'Este formulario no es un documento sancionador. Se trata únicamente de un trámite administrativo para confirmar que su objeto no constituye un bien cultural coreano. Con su cooperación, el procedimiento concluirá rápidamente y podrá continuar con su salida.',
         de: 'Dieses Antragsformular ist kein Strafdokument. Es handelt sich lediglich um ein Verwaltungsverfahren zur Bestätigung, dass Ihr Gegenstand kein koreanisches Kulturgut darstellt. Mit Ihrer Mitwirkung wird das Verfahren zügig abgeschlossen und Sie können Ihre Ausreise fortsetzen.',
         fr: 'Ce formulaire n\'est pas un document punitif. Il s\'agit simplement d\'une procédure administrative visant à confirmer que votre objet n\'est pas un bien culturel coréen. Avec votre coopération, la procédure sera rapidement conclue et vous pourrez poursuivre votre départ.'
       },
@@ -686,6 +701,8 @@ const groups = [
         en: 'Even if you refuse to fill out the form, I will proceed with an ex officio visual appraisal. If the item is confirmed as Korean cultural heritage, you may face criminal penalties under Korean law (Cultural Heritage Act, Articles 60 and 90) for unauthorized export, and the item may be confiscated.',
         ja: '申請書の作成を拒否されましても、本委員は職権で外観鑑定を行います。その結果、本物品が韓国の文化財と確認された場合、韓国法(文化遺産法第60条および第90条)に基づき無許可搬出として処罰される可能性があり、物品は没収されることがあります。',
         zh: '即使您拒绝填写申请书，本委员仍将依职权进行外观鉴定。若该物品被确认为韩国文物，您可能依据韩国法律(《文化遗产法》第60条及第90条)以无许可出境而受到处罚，物品也可能被没收。',
+        zhTW: '即使您拒絕填寫申請書，本委員仍將依職權進行外觀鑑定。若該物品被確認為韓國文物，您可能依據韓國法律(《文化遺產法》第60條及第90條)以無許可出境而受到處罰，物品也可能被沒收。',
+        es: 'Aunque usted se niegue a completar el formulario, procederé a realizar un peritaje visual de oficio. Si se confirma que el objeto es un bien cultural coreano, podría enfrentar sanciones penales conforme a la ley coreana (Ley de Patrimonio Cultural, artículos 60 y 90) por exportación no autorizada, y el objeto podría ser decomisado.',
         de: 'Auch bei Ihrer Weigerung wird eine amtliche äußerliche Begutachtung durchgeführt. Wird der Gegenstand als koreanisches Kulturgut bestätigt, drohen nach koreanischem Recht (Kulturgutgesetz Art. 60 und 90) strafrechtliche Sanktionen wegen unerlaubter Ausfuhr, und der Gegenstand kann eingezogen werden.',
         fr: 'Même en cas de refus de votre part, je procéderai à une expertise visuelle d\'office. Si l\'objet est confirmé comme bien culturel coréen, vous pourriez encourir des sanctions pénales en vertu de la loi coréenne (Loi sur le patrimoine culturel, articles 60 et 90) pour exportation non autorisée, et l\'objet pourra être confisqué.'
       },
@@ -696,6 +713,8 @@ const groups = [
         en: 'Based on my ex officio appraisal, this item qualifies as General Movable Cultural Heritage of Korea. The procedure will therefore proceed to the subsequent enforcement stage. Please be advised that all further steps will be conducted in accordance with Korean law.',
         ja: '本委員の職権鑑定の結果、本物品は韓国の一般動産文化遺産に該当します。したがいまして、本手続きは後続の処分段階へ移行いたします。これ以降の手続きは韓国法に基づき進められますことをお知らせいたします。',
         zh: '经本委员依职权鉴定，本物品属于韩国一般动产文化遗产。因此，本程序将进入后续处分阶段。请您知悉，之后的所有程序将依照韩国法律进行。',
+        zhTW: '經本委員依職權鑑定，本物品屬於韓國一般動產文化遺產。因此，本程序將進入後續處分階段。請您知悉，之後的所有程序將依照韓國法律進行。',
+        es: 'Según mi peritaje de oficio, este objeto constituye un bien cultural mueble general de Corea. Por lo tanto, el procedimiento pasará a la siguiente etapa de aplicación de la ley. Le informo que todos los pasos posteriores se llevarán a cabo conforme a la ley coreana.',
         de: 'Nach meiner amtlichen Begutachtung handelt es sich bei diesem Gegenstand um allgemeines bewegliches Kulturgut Koreas. Das Verfahren geht daher in die nachfolgende Vollzugsphase über. Bitte beachten Sie, dass alle weiteren Schritte nach koreanischem Recht erfolgen.',
         fr: 'Selon mon expertise d\'office, cet objet constitue un bien culturel mobilier général de Corée. La procédure passe donc à la phase de traitement subséquent. Veuillez noter que toutes les étapes suivantes seront effectuées conformément à la loi coréenne.'
       }
@@ -713,6 +732,8 @@ const groups = [
         en: 'The appraisal is in progress. Please wait a moment.',
         ja: '現在、鑑定を進めております。少々お待ちください。',
         zh: '正在进行鉴定，请稍候。',
+        zhTW: '正在進行鑑定，請稍候。',
+        es: 'El peritaje está en curso. Espere un momento, por favor.',
         de: 'Die Begutachtung läuft. Bitte warten Sie einen Moment.',
         fr: 'L\'expertise est en cours. Veuillez patienter un instant.'
       },
@@ -723,6 +744,8 @@ const groups = [
         en: 'Please wait a moment. We kindly ask for your cooperation in completing the Non-Cultural Heritage Confirmation Application form.',
         ja: '少々お待ちください。非文化財確認申請書の作成にご協力をお願いいたします。',
         zh: '请稍候。请您协助填写非文物确认申请书。',
+        zhTW: '請稍候。請您協助填寫非文物確認申請書。',
+        es: 'Espere un momento, por favor. Le solicitamos su cooperación para completar la Solicitud de Confirmación de Objeto No Catalogado como Bien Cultural.',
         de: 'Einen Moment bitte. Wir bitten um Ihre Mitwirkung beim Ausfüllen des Antrags auf Bestätigung von Nicht-Kulturgut.',
         fr: 'Veuillez patienter un instant. Nous sollicitons votre coopération pour remplir le formulaire de confirmation de bien non culturel.'
       },
@@ -733,6 +756,8 @@ const groups = [
         en: 'We are currently consulting with another appraisal office via video. Please wait a moment.',
         ja: '現在、他の鑑定官室とテレビ会議で協議しております。少々お待ちください。',
         zh: '我们正在与其他鉴定官室进行视频协商。请稍候。',
+        zhTW: '我們正在與其他鑑定官室進行視頻協商。請稍候。',
+        es: 'En este momento estamos consultando con otra oficina de peritaje por videollamada. Espere un momento, por favor.',
         de: 'Wir konsultieren derzeit per Videoschaltung ein anderes Begutachtungsbüro. Bitte warten Sie einen Moment.',
         fr: 'Nous consultons actuellement un autre bureau d\'expertise par visioconférence. Veuillez patienter un instant.'
       }
@@ -750,6 +775,8 @@ const groups = [
         en: 'The item has been confirmed as non-cultural heritage. You may take it abroad without any issue.',
         ja: '非文化財として確認されました。そのままお持ち出しいただいて結構です。',
         zh: '经鉴定，此物品为非文物。您可以正常携带出境，没有问题。',
+        zhTW: '經鑑定，此物品為非文物。您可以正常攜帶出境，沒有問題。',
+        es: 'Se ha confirmado que el objeto no es un bien cultural. Puede llevarlo al extranjero sin ningún problema.',
         de: 'Der Gegenstand wurde als Nicht-Kulturgut bestätigt. Sie können ihn ohne Weiteres mitnehmen.',
         fr: 'L\'objet a été confirmé comme bien non culturel. Vous pouvez tout à fait l\'emporter avec vous.'
       },
@@ -760,6 +787,8 @@ const groups = [
         en: 'The item has been confirmed as non-cultural heritage. A non-cultural heritage confirmation seal will be affixed to the item or its packaging. Please do not remove the seal until your departure.',
         ja: '非文化財として確認されました。物品または包装にこれを示す確認シールを貼付いたします。ご出国までシールを剥がさないでください。',
         zh: '经鉴定，此物品为非文物。我们将在物品或包装上贴附非文物确认标签。出境前请勿撕除标签。',
+        zhTW: '經鑑定，此物品為非文物。我們將在物品或包裝上貼附非文物確認標籤。出境前請勿撕除標籤。',
+        es: 'Se ha confirmado que el objeto no es un bien cultural. Se colocará un sello de confirmación en el objeto o en su embalaje. Por favor, no retire el sello hasta su salida del país.',
         de: 'Der Gegenstand wurde als Nicht-Kulturgut bestätigt. Wir bringen einen Bestätigungsaufkleber auf dem Gegenstand oder dessen Verpackung an. Bitte entfernen Sie den Aufkleber nicht bis zu Ihrer Ausreise.',
         fr: 'L\'objet a été confirmé comme bien non culturel. Une étiquette de confirmation de bien non culturel sera apposée sur l\'objet ou son emballage. Veuillez ne pas retirer l\'étiquette avant votre départ.'
       },
@@ -770,6 +799,8 @@ const groups = [
         en: 'The appraisal result indicates that this item qualifies as General Movable Cultural Heritage of the Republic of Korea. Under Article 60 of the Act on the Protection and Use of Cultural Heritage, its export is prohibited.',
         ja: '鑑定の結果、この物品は大韓民国の一般動産文化遺産(韓国法上の文化財に相当)に該当します。「文化遺産の保存および活用に関する法律」第60条により、国外への搬出は禁止されています。',
         zh: '鉴定结果显示，此物品属于大韩民国一般动产文化遗产(韩国法律所称的文物)。根据《文化遗产的保存与活用相关法律》第60条规定，禁止携带出境。',
+        zhTW: '鑑定結果顯示，此物品屬於大韓民國一般動產文化遺產(韓國法律所稱的文物)。根據《文化遺產的保存與活用相關法律》第60條規定，禁止攜帶出境。',
+        es: 'El resultado del peritaje indica que este objeto constituye un bien cultural mueble general de la República de Corea. Conforme al artículo 60 de la Ley sobre la Protección y el Uso del Patrimonio Cultural, se prohíbe su exportación.',
         de: 'Das Begutachtungsergebnis zeigt, dass dieser Gegenstand als allgemeines bewegliches Kulturgut der Republik Korea einzustufen ist. Gemäß Artikel 60 des Gesetzes über den Schutz und die Nutzung des Kulturguts ist seine Ausfuhr verboten.',
         fr: 'Le résultat de l\'expertise indique que cet objet est qualifié de bien culturel mobilier général de la République de Corée. Conformément à l\'article 60 de la loi sur la protection et l\'utilisation du patrimoine culturel, son exportation est interdite.'
       },
@@ -780,6 +811,8 @@ const groups = [
         en: 'Attempting to export this item without authorization constitutes a violation under the Korean Cultural Heritage Act. Accordingly, a confiscation procedure will be initiated, beginning with the voluntary submission process as its first step. Your cooperation is requested.',
         ja: '許可なくこの物品を国外へ搬出しようとした行為は、韓国の文化遺産関連法令に違反します。よって、物品に対する没収手続きを進めることとなり、その第一段階として任意提出の手続きをご案内いたします。ご協力をお願いいたします。',
         zh: '试图未经许可将此物品携带出境的行为，违反了韩国文化遗产相关法律。因此，将对此物品启动没收程序，并以随意提交程序作为第一步。请您配合。',
+        zhTW: '試圖未經許可將此物品攜帶出境的行為，違反了韓國文化遺產相關法律。因此，將對此物品啟動沒收程序，並以隨意提交程序作為第一步。請您配合。',
+        es: 'Intentar exportar este objeto sin autorización constituye una infracción de la Ley de Patrimonio Cultural de Corea. En consecuencia, se iniciará un procedimiento de decomiso, cuyo primer paso es el proceso de entrega voluntaria. Le solicitamos su cooperación.',
         de: 'Der Versuch, diesen Gegenstand ohne Genehmigung auszuführen, stellt einen Verstoß gegen das koreanische Kulturgutschutzgesetz dar. Daher wird ein Einziehungsverfahren eingeleitet, das mit der freiwilligen Übergabe als ersten Schritt beginnt. Wir bitten um Ihre Mitwirkung.',
         fr: 'La tentative d\'exportation de cet objet sans autorisation constitue une infraction à la loi coréenne sur le patrimoine culturel. Par conséquent, une procédure de confiscation sera engagée, dont la première étape est la remise volontaire. Nous vous demandons votre coopération.'
       }
@@ -798,6 +831,8 @@ const groups = [
         en: 'As this item has been confirmed as General Movable Cultural Heritage, I will now proceed with this matter in my capacity as a Special Judicial Police Officer. Your cooperation is requested.',
         ja: 'この物品が一般動産文化財に該当することが確認されましたので、ここからは特別司法警察官として手続きを進めます。ご協力をお願いいたします。',
         zh: '此物品已确认为一般动产文物，从现在起，我将以特别司法警察官的身份继续进行此程序。请您配合。',
+        zhTW: '此物品已確認為一般動產文物，從現在起，我將以特別司法警察官的身份繼續進行此程序。請您配合。',
+        es: 'Dado que se ha confirmado que este objeto es un bien cultural mueble general, a partir de ahora actuaré en mi calidad de Oficial de Policía Judicial Especial. Le solicitamos su cooperación.',
         de: 'Da dieser Gegenstand als allgemeines bewegliches Kulturgut bestätigt wurde, führe ich das Verfahren ab jetzt in meiner Eigenschaft als Sonderbeamter der Justizpolizei fort. Wir bitten um Ihre Mitwirkung.',
         fr: 'Cet objet ayant été confirmé comme bien culturel mobilier général, je poursuis désormais la procédure en ma qualité d\'officier de police judiciaire spécial. Votre coopération est requise.'
       },
@@ -809,6 +844,8 @@ const groups = [
         en: 'The subsequent procedure will be conducted in the presence of a police officer, as required by law. The officer will arrive shortly. Please wait here for a moment. Your cooperation is requested.',
         ja: '以後の手続きは法的要件により、警察官の立ち会いのもとで進められます。警察官が間もなく到着いたしますので、こちらでしばらくお待ちください。ご協力をお願いいたします。',
         zh: '接下来的程序根据法律规定，将在警察官在场的情况下进行。警察官即将到达，请您在此稍候。请您配合。',
+        zhTW: '接下來的程序根據法律規定，將在警察官在場的情況下進行。警察官即將到達，請您在此稍候。請您配合。',
+        es: 'El procedimiento siguiente se llevará a cabo en presencia de un agente de policía, según lo exige la ley. El agente llegará en breve. Por favor, espere aquí un momento. Le solicitamos su cooperación.',
         de: 'Das weitere Verfahren wird, wie gesetzlich vorgeschrieben, in Anwesenheit eines Polizeibeamten durchgeführt. Der Beamte wird in Kürze eintreffen. Bitte warten Sie einen Moment hier. Wir bitten um Ihre Mitwirkung.',
         fr: 'Conformément à la loi, la procédure suivante se déroulera en présence d\'un agent de police. L\'agent arrivera sous peu. Veuillez patienter ici un instant. Nous vous demandons votre coopération.'
       },
@@ -819,6 +856,8 @@ const groups = [
         en: 'Before voluntary submission, you must be informed of the following: You have the right to refuse submission, and you may specify a limited scope of submission. Please sign to confirm that you have been informed of these rights.',
         ja: '任意提出に先立ち、以下をご案内いたします。お客様には物品の提出を拒否する権利があり、提出の範囲を特定して提出することもできます。これらの権利についてご案内を受けた旨、ご署名をお願いいたします。',
         zh: '在随意提交之前，请您了解以下事项。您有权拒绝提交物品，也可以指定特定范围进行提交。请您签字确认已收到上述权利告知。',
+        zhTW: '在隨意提交之前，請您瞭解以下事項。您有權拒絕提交物品，也可以指定特定範圍進行提交。請您簽字確認已收到上述權利告知。',
+        es: 'Antes de la entrega voluntaria, debe ser informado de lo siguiente: usted tiene derecho a rechazar la entrega y puede limitar el alcance de lo que entrega. Por favor, firme para confirmar que ha sido informado de estos derechos.',
         de: 'Vor der freiwilligen Übergabe sind Sie über Folgendes zu informieren: Sie haben das Recht, die Übergabe zu verweigern, und Sie können einen begrenzten Umfang der Übergabe festlegen. Bitte unterschreiben Sie, um zu bestätigen, dass Sie über diese Rechte informiert wurden.',
         fr: 'Avant la remise volontaire, vous devez être informé de ce qui suit : vous avez le droit de refuser la remise et vous pouvez spécifier un champ limité de remise. Veuillez signer pour confirmer que vous avez été informé de ces droits.'
       },
@@ -829,6 +868,8 @@ const groups = [
         en: 'Please complete the Voluntary Submission form. Fill in your name, occupation, contact, and address; indicate the submitted item and your disposition preference; then sign.',
         ja: '任意提出書をご作成ください。氏名、職業、連絡先、住所をご記入のうえ、提出物品と処分のご意向をご記載いただき、ご署名をお願いいたします。',
         zh: '请填写随意提交书。请填写姓名、职业、联系方式、地址，并标明提交物品及处置意见，然后签字。',
+        zhTW: '請填寫隨意提交書。請填寫姓名、職業、聯繫方式、地址，並標明提交物品及處置意見，然後簽字。',
+        es: 'Por favor, complete el formulario de entrega voluntaria. Indique su nombre, ocupación, datos de contacto y domicilio; señale el objeto entregado y su preferencia sobre la disposición del mismo; luego firme.',
         de: 'Bitte füllen Sie das Formular zur freiwilligen Übergabe aus. Tragen Sie Name, Beruf, Kontakt und Adresse ein, geben Sie den übergebenen Gegenstand und Ihre Verfügungsabsicht an und unterschreiben Sie dann.',
         fr: 'Veuillez remplir le formulaire de remise volontaire. Indiquez votre nom, profession, coordonnées et adresse ; précisez l\'objet remis et votre intention de disposition ; puis signez.'
       },
@@ -839,6 +880,8 @@ const groups = [
         en: 'The Voluntary Submission form is prepared in two copies, one of which will be provided to you for your records. This is in accordance with the obligation to deliver a seizure list under Articles 219 and 129 of the Korean Criminal Procedure Act.',
         ja: '任意提出書は2部作成され、うち1部をお客様の保管用としてお渡しいたします。韓国刑事訴訟法第219条および第129条に基づく押収目録交付義務によるものでございます。',
         zh: '随意提交书一式两份，其中一份将交予您留存。这是依据韩国《刑事诉讼法》第219条及第129条规定的扣押目录交付义务而进行的。',
+        zhTW: '隨意提交書一式兩份，其中一份將交予您留存。這是依據韓國《刑事訴訟法》第219條及第129條規定的扣押目錄交付義務而進行的。',
+        es: 'El formulario de entrega voluntaria se redacta por duplicado, y se le entregará una copia para sus registros. Esto se realiza conforme a la obligación de entregar una lista de bienes incautados, según los artículos 219 y 129 del Código de Procedimiento Penal de Corea.',
         de: 'Das Formular zur freiwilligen Übergabe wird in zwei Ausfertigungen erstellt, von denen Ihnen eine für Ihre Unterlagen ausgehändigt wird. Dies erfolgt gemäß der Pflicht zur Aushändigung eines Beschlagnahmeverzeichnisses nach Artikel 219 und Artikel 129 der koreanischen Strafprozessordnung.',
         fr: 'Le formulaire de remise volontaire est établi en deux exemplaires, dont un vous sera remis pour vos archives. Ceci est conforme à l\'obligation de remise d\'une liste de saisie en vertu des articles 219 et 129 du Code de procédure pénale coréen.'
       },
@@ -849,6 +892,8 @@ const groups = [
         en: 'If you refuse voluntary submission, the item will be seized without a warrant under Article 216(3) of the Korean Criminal Procedure Act. A post-seizure warrant will subsequently be requested from a Korean court. Once your identity and contact information are confirmed, your departure will be permitted.',
         ja: '任意提出をお断りになる場合、本物品については韓国刑事訴訟法第216条第3項に基づき、令状なしで押収処分が行われます。本押収については韓国の裁判所に事後令状が請求されます。ご本人確認および連絡先のご提供をいただければ、ご出国は許可されます。',
         zh: '若您拒绝随意提交，本物品将依据韩国《刑事诉讼法》第216条第3项规定，无需令状予以扣押。该扣押将事后向韩国法院申请令状。在确认您的身份及联系方式后，将允许您出境。',
+        zhTW: '若您拒絕隨意提交，本物品將依據韓國《刑事訴訟法》第216條第3項規定，無需令狀予以扣押。該扣押將事後向韓國法院申請令狀。在確認您的身份及聯繫方式後，將允許您出境。',
+        es: 'Si usted rechaza la entrega voluntaria, el objeto será incautado sin orden judicial conforme al párrafo 3 del artículo 216 del Código de Procedimiento Penal de Corea. Posteriormente se solicitará una orden judicial a un tribunal coreano respecto de esta incautación. Una vez confirmados su identidad y sus datos de contacto, se permitirá su salida.',
         de: 'Bei Verweigerung der freiwilligen Übergabe wird der Gegenstand nach Artikel 216 Absatz 3 der koreanischen Strafprozessordnung ohne Haftbefehl beschlagnahmt. Für diese Beschlagnahme wird nachträglich ein gerichtlicher Beschluss bei einem koreanischen Gericht beantragt. Nach Bestätigung Ihrer Identität und Kontaktdaten ist Ihre Ausreise gestattet.',
         fr: 'En cas de refus de remise volontaire, l\'objet sera saisi sans mandat en vertu de l\'article 216 alinéa 3 du Code de procédure pénale coréen. Un mandat postérieur sera ensuite demandé auprès d\'un tribunal coréen. Une fois votre identité et vos coordonnées confirmées, votre départ sera autorisé.'
       },
@@ -859,6 +904,8 @@ const groups = [
         en: 'For case processing, please cooperate by providing the following: a copy of your passport, contact number, email address, residential address, and the purchase receipt of the item if available.',
         ja: '事件処理のため、追加で以下のご協力をお願いいたします。旅券のコピー、連絡先、電子メールアドレス、ご住所、物品の購入領収書がある場合はあわせてご提出ください。',
         zh: '为案件处理，请您额外配合提供以下资料：护照复印件、联系电话、电子邮箱、居住地址，以及如有物品购买凭证请一并提交。',
+        zhTW: '為案件處理，請您額外配合提供以下資料：護照複印件、聯繫電話、電子郵箱、居住地址，以及如有物品購買憑證請一併提交。',
+        es: 'Para tramitar el caso, le solicitamos los siguientes datos: una copia de su pasaporte, número de contacto, correo electrónico, domicilio y, si dispone de él, el recibo de compra del objeto.',
         de: 'Für die Fallbearbeitung bitten wir Sie um Mitwirkung durch Bereitstellung von Folgendem: einer Passkopie, Telefonnummer, E-Mail-Adresse, Wohnadresse und gegebenenfalls der Kaufquittung des Gegenstands.',
         fr: 'Pour le traitement du dossier, nous vous demandons de coopérer en fournissant les éléments suivants : une copie de votre passeport, votre numéro de contact, adresse e-mail, adresse de résidence et le reçu d\'achat de l\'objet si disponible.'
       },
@@ -869,6 +916,8 @@ const groups = [
         en: 'We will photograph your passport for our records. Please cooperate.',
         ja: '旅券のコピー確保のため、旅券を撮影いたします。ご協力をお願いいたします。',
         zh: '我们需要拍摄您的护照以便存档，请您配合。',
+        zhTW: '我們需要拍攝您的護照以便存檔，請您配合。',
+        es: 'Tomaremos una fotografía de su pasaporte para nuestros registros. Le solicitamos su cooperación.',
         de: 'Wir werden Ihren Pass für unsere Unterlagen fotografieren. Wir bitten um Ihre Mitwirkung.',
         fr: 'Nous allons photographier votre passeport pour nos archives. Nous vous remercions de votre coopération.'
       },
@@ -879,6 +928,8 @@ const groups = [
         en: 'Please be informed that after your return, you may be summoned by judicial authorities for investigation regarding violations of Articles 60 and 90 of the Act on the Protection and Use of Cultural Heritage. Your departure is permitted.',
         ja: 'ご帰国後、「文化遺産の保存および活用に関する法律」第60条および第90条違反として、司法機関への出頭・調査が求められる可能性があることをご案内いたします。出国は許可されます。',
         zh: '请您知悉，回国后您可能因违反《文化遗产的保存与活用相关法律》第60条及第90条规定，被司法机关传唤接受调查。允许您出境。',
+        zhTW: '請您知悉，回國後您可能因違反《文化遺產的保存與活用相關法律》第60條及第90條規定，被司法機關傳喚接受調查。允許您出境。',
+        es: 'Le informamos que, tras su regreso, podría ser citado por las autoridades judiciales para ser investigado por infracción de los artículos 60 y 90 de la Ley sobre la Protección y el Uso del Patrimonio Cultural. Se permite su salida.',
         de: 'Wir möchten Sie darauf hinweisen, dass Sie nach Ihrer Rückkehr wegen Verstößen gegen die Artikel 60 und 90 des Gesetzes über den Schutz und die Nutzung des Kulturguts von Justizbehörden zur Untersuchung vorgeladen werden können. Ihre Ausreise ist gestattet.',
         fr: 'Veuillez noter qu\'après votre retour, vous pourriez être convoqué par les autorités judiciaires pour une enquête concernant les violations des articles 60 et 90 de la loi sur la protection et l\'utilisation du patrimoine culturel. Votre départ est autorisé.'
       },
@@ -889,6 +940,8 @@ const groups = [
         en: 'If you wish to relinquish ownership of this item, please complete the Waiver of Ownership form. This is a decision made by your own free will, and no further procedure is required after completion. Please fill in your name, occupation, contact, and address, then sign.',
         ja: 'この物品の所有権を放棄される場合は、所有権放棄書をご作成ください。ご本人の自由な意思に基づくご決定であり、作成後に追加の手続きは必要ございません。氏名、職業、連絡先、住所をご記入のうえ、ご署名をお願いいたします。',
         zh: '如您愿意放弃此物品的所有权，请填写所有权放弃书。这是您依自由意思作出的决定，填写后无需追加程序。请填写姓名、职业、联系方式、地址，然后签字。',
+        zhTW: '如您願意放棄此物品的所有權，請填寫所有權放棄書。這是您依自由意思作出的決定，填寫後無需追加程序。請填寫姓名、職業、聯繫方式、地址，然後簽字。',
+        es: 'Si desea renunciar a la propiedad de este objeto, complete el formulario de renuncia a la propiedad. Es una decisión tomada por su libre voluntad y, una vez completada, no se requiere ningún otro trámite. Indique su nombre, ocupación, datos de contacto y domicilio, y luego firme.',
         de: 'Wenn Sie auf das Eigentum an diesem Gegenstand verzichten möchten, füllen Sie bitte die Eigentumsverzichtserklärung aus. Dies ist eine Entscheidung aus Ihrem freien Willen, und nach dem Ausfüllen ist kein weiteres Verfahren erforderlich. Bitte tragen Sie Name, Beruf, Kontakt und Adresse ein und unterschreiben Sie.',
         fr: 'Si vous souhaitez renoncer à la propriété de cet objet, veuillez remplir la déclaration de renonciation à la propriété. Il s\'agit d\'une décision prise de votre libre volonté, et aucune procédure supplémentaire n\'est requise après l\'établissement. Veuillez indiquer votre nom, profession, coordonnées et adresse, puis signer.'
       }
@@ -907,6 +960,8 @@ const groups = [
         en: 'Despite repeated notifications of the violation, your continued non-cooperation may result in arrest as a flagrant offender under the Criminal Procedure Act. Your cooperation is requested.',
         ja: '違反事項を繰り返しご案内したにもかかわらずご協力いただけない場合、刑事訴訟法に基づき現行犯として逮捕される可能性があることをお伝えいたします。ご協力をお願いいたします。',
         zh: '在多次告知违法事项后，如您继续不配合，根据《刑事诉讼法》，您可能作为现行犯被逮捕。请您配合。',
+        zhTW: '在多次告知違法事項後，如您繼續不配合，根據《刑事訴訟法》，您可能作為現行犯被逮捕。請您配合。',
+        es: 'A pesar de haberle notificado la infracción en varias ocasiones, si continúa sin cooperar podría ser detenido en flagrancia conforme al Código de Procedimiento Penal. Le solicitamos su cooperación.',
         de: 'Trotz wiederholter Hinweise auf den Verstoß kann Ihre fortgesetzte Verweigerung der Mitwirkung gemäß der Strafprozessordnung zur Festnahme als auf frischer Tat ergriffener Täter führen. Wir bitten um Ihre Mitwirkung.',
         fr: 'Malgré des notifications répétées de l\'infraction, votre refus continu de coopérer peut entraîner votre arrestation en tant que délinquant flagrant en vertu du Code de procédure pénale. Nous vous demandons votre coopération.'
       },
@@ -917,6 +972,8 @@ const groups = [
         en: 'We are reporting this matter to the local police. Please remain here until the police arrive.',
         ja: '管轄警察署に通報いたします。警察が到着するまで、こちらでお待ちください。',
         zh: '我们将向辖区警察局报警。请在此等候警察到达。',
+        zhTW: '我們將向轄區警察局報警。請在此等候警察到達。',
+        es: 'Estamos reportando este asunto a la policía local. Por favor, permanezca aquí hasta que llegue la policía.',
         de: 'Wir melden diese Angelegenheit der örtlichen Polizei. Bitte bleiben Sie hier, bis die Polizei eintrifft.',
         fr: 'Nous signalons cette affaire à la police locale. Veuillez rester ici jusqu\'à l\'arrivée de la police.'
       }
@@ -934,6 +991,8 @@ const groups = [
         en: 'This item qualifies as General Movable Cultural Heritage; export is not permitted. However, the item will be returned to you. Please arrange to leave it with someone in Korea or find another storage solution.',
         ja: 'この物品は韓国法上の文化財(一般動産文化遺産)に該当するため、国外搬出は許可されません。ただし、物品はご返却いたします。韓国内のお知り合いに預けるか、別の保管方法をご検討ください。',
         zh: '此物品属于韩国法律所称的文物(一般动产文化遗产)，不允许出境携带。但物品将退还给您。请您托付给韩国境内的熟人，或自行安排其他保管方式。',
+        zhTW: '此物品屬於韓國法律所稱的文物(一般動產文化遺產)，不允許出境攜帶。但物品將退還給您。請您託付給韓國境內的熟人，或自行安排其他保管方式。',
+        es: 'Este objeto constituye un bien cultural mueble general; no se permite su exportación. No obstante, el objeto le será devuelto. Le rogamos que disponga dejarlo con alguien en Corea o que busque otra forma de custodia.',
         de: 'Dieser Gegenstand gilt als allgemeines bewegliches Kulturgut; die Ausfuhr ist nicht gestattet. Der Gegenstand wird Ihnen jedoch zurückgegeben. Bitte hinterlassen Sie ihn bei jemandem in Korea oder finden Sie eine andere Aufbewahrungslösung.',
         fr: 'Cet objet est qualifié de bien culturel mobilier général ; l\'exportation n\'est pas autorisée. Cependant, l\'objet vous sera restitué. Veuillez le confier à quelqu\'un en Corée ou trouver une autre solution de conservation.'
       },
@@ -944,6 +1003,8 @@ const groups = [
         en: 'If you have no one to leave the item with, our appraisal office can store it temporarily. The maximum storage period is six months, and you must visit in person to retrieve it. A Temporary Storage Certificate will be issued.',
         ja: 'お預け先がない場合、鑑定官室にて一時保管が可能です。保管期間は最大6か月で、その後ご本人が直接お越しいただき受領していただく必要があります。臨時保管証書を発行いたします。',
         zh: '如您无人可托付，鉴定官室可临时为您保管。保管期限最长为6个月，届时您须本人亲自前来领取。我们将为您出具临时保管证。',
+        zhTW: '如您無人可託付，鑑定官室可臨時為您保管。保管期限最長為6個月，屆時您須本人親自前來領取。我們將為您出具臨時保管證。',
+        es: 'Si no tiene con quién dejarlo, nuestra oficina de peritaje puede custodiarlo temporalmente. El período máximo de custodia es de seis meses, y deberá presentarse en persona para recogerlo. Se le expedirá un certificado de depósito temporal.',
         de: 'Wenn Sie niemanden haben, bei dem Sie den Gegenstand hinterlegen können, kann unser Begutachtungsbüro ihn vorübergehend aufbewahren. Die maximale Aufbewahrungsdauer beträgt sechs Monate, und Sie müssen persönlich erscheinen, um ihn abzuholen. Eine Bescheinigung über die vorübergehende Aufbewahrung wird ausgestellt.',
         fr: 'Si vous n\'avez personne à qui confier l\'objet, notre bureau d\'expertise peut le conserver temporairement. La durée maximale de conservation est de six mois et vous devez vous présenter en personne pour le récupérer. Un certificat de conservation temporaire sera délivré.'
       },
@@ -954,6 +1015,8 @@ const groups = [
         en: 'Please note that even if you retrieve the item within the storage period, its export remains prohibited. Furthermore, if the item is not retrieved within the storage period (maximum six months), it may be disposed of at the office\'s discretion after prior notice.',
         ja: '一時保管期間内にご本人が回収されましても、国外搬出は依然として不可能です。また、保管期間(最大6か月)内に回収されない場合は、事前のご通知のうえ、規定により処分される可能性があることをご案内いたします。',
         zh: '请您知悉，即使在临时保管期间内您本人前来领取，物品仍然不得出境。此外，如在保管期间（最长6个月）内未予领取，将在事先通知后按规定处理。',
+        zhTW: '請您知悉，即使在臨時保管期間內您本人前來領取，物品仍然不得出境。此外，如在保管期間（最長6個月）內未予領取，將在事先通知後按規定處理。',
+        es: 'Tenga en cuenta que, aunque recoja el objeto dentro del período de custodia, su exportación seguirá estando prohibida. Además, si el objeto no se recoge dentro del período de custodia (máximo seis meses), podrá disponerse de él, previa notificación.',
         de: 'Bitte beachten Sie, dass auch bei einer Abholung innerhalb der Aufbewahrungsfrist die Ausfuhr weiterhin untersagt bleibt. Wird der Gegenstand nicht innerhalb der Aufbewahrungsfrist (höchstens sechs Monate) abgeholt, kann er nach vorheriger Benachrichtigung nach Ermessen des Büros verwertet werden.',
         fr: 'Veuillez noter que même si vous récupérez l\'objet pendant la période de conservation, son exportation reste interdite. De plus, si l\'objet n\'est pas récupéré dans le délai de conservation (six mois maximum), il pourra être disposé à la discrétion du bureau après notification préalable.'
       }
@@ -971,6 +1034,8 @@ const groups = [
         en: 'This case requires further detailed appraisal. With your consent for temporary storage, we will conduct additional appraisal and notify you of the result.',
         ja: '精密な鑑定が必要な事案でございます。一時保管にご同意いただければ、追加鑑定の上、結果をお知らせいたします。',
         zh: '此案件需要进一步精密鉴定。如您同意临时保管，我们将进行追加鉴定后通知您结果。',
+        zhTW: '此案件需要進一步精密鑑定。如您同意臨時保管，我們將進行追加鑑定後通知您結果。',
+        es: 'Este caso requiere un peritaje detallado adicional. Si da su consentimiento para el depósito temporal, realizaremos un peritaje adicional y le notificaremos el resultado.',
         de: 'Dieser Fall erfordert eine eingehendere Begutachtung. Mit Ihrer Zustimmung zur vorübergehenden Aufbewahrung werden wir eine zusätzliche Begutachtung durchführen und Ihnen das Ergebnis mitteilen.',
         fr: 'Ce cas nécessite une expertise plus approfondie. Avec votre accord pour la conservation temporaire, nous procéderons à une expertise complémentaire et vous notifierons le résultat.'
       },
@@ -981,6 +1046,8 @@ const groups = [
         en: 'This case requires a detailed appraisal by a specialist appraiser in the relevant field. Please either postpone your export, or, if you leave the item in Korea, our office can store it temporarily and notify you of the appraisal result.',
         ja: '専門分野の鑑定委員による精密な鑑定が必要な事案でございます。国外搬出をしばらく見合わせていただくか、韓国にお預けのうえ出国される場合は、鑑定官室にて一時保管後、追加鑑定の結果をお知らせいたします。',
         zh: '此案件需要专业领域鉴定委员进行精密鉴定。请您暂缓出境，或者如选择将物品留在韩国后出境，鉴定官室将临时保管，并在追加鉴定后通知您结果。',
+        zhTW: '此案件需要專業領域鑑定委員進行精密鑑定。請您暫緩出境，或者如選擇將物品留在韓國後出境，鑑定官室將臨時保管，並在追加鑑定後通知您結果。',
+        es: 'Este caso requiere un peritaje detallado por parte de un perito especializado en la materia. Le rogamos que aplace su exportación o, si deja el objeto en Corea, nuestra oficina podrá custodiarlo temporalmente y notificarle el resultado del peritaje.',
         de: 'Dieser Fall erfordert eine eingehende Begutachtung durch einen Sachverständigen des betreffenden Fachgebiets. Bitte verschieben Sie die Ausfuhr, oder wenn Sie den Gegenstand in Korea zurücklassen, kann unser Büro ihn vorübergehend aufbewahren und Sie über das Begutachtungsergebnis informieren.',
         fr: 'Ce cas nécessite une expertise approfondie par un expert spécialiste du domaine concerné. Veuillez soit reporter votre exportation, soit, si vous laissez l\'objet en Corée, notre bureau peut le conserver temporairement et vous notifier le résultat de l\'expertise.'
       }
@@ -998,6 +1065,8 @@ const groups = [
         en: 'General Movable Cultural Heritage refers to items of historical, artistic, or academic value that are well-preserved and made before 1945 — such as paintings, sculptures, ceramics, old books, and folk materials.',
         ja: '一般動産文化財とは、歴史的・芸術的または学術的価値があり、保存状態が良好で、1945年以前に制作された物品をいいます。絵画・彫刻・陶磁器・典籍・民俗資料などが対象です。',
         zh: '一般动产文物是指具有历史、艺术或学术价值，保存状态良好，且制作于1945年以前的物品，如绘画、雕塑、陶瓷、古籍、民俗资料等。',
+        zhTW: '一般動產文物是指具有歷史、藝術或學術價值，保存狀態良好，且製作於1945年以前的物品，如繪畫、雕塑、陶瓷、古籍、民俗資料等。',
+        es: 'Un bien cultural mueble general es un objeto de valor histórico, artístico o académico, en buen estado de conservación y elaborado antes de 1945, como pinturas, esculturas, cerámicas, libros antiguos y materiales etnográficos.',
         de: 'Allgemeines bewegliches Kulturgut bezeichnet gut erhaltene Gegenstände von historischem, künstlerischem oder wissenschaftlichem Wert, die vor 1945 hergestellt wurden — etwa Gemälde, Skulpturen, Keramik, alte Bücher und volkskundliche Objekte.',
         fr: 'Le bien culturel mobilier général désigne des objets bien conservés ayant une valeur historique, artistique ou académique, et fabriqués avant 1945 — peintures, sculptures, céramiques, livres anciens, objets folkloriques, etc.'
       },
@@ -1008,6 +1077,8 @@ const groups = [
         en: 'Age alone does not make an item cultural heritage. It must also carry recognized historical, artistic, or academic value, and each item is assessed individually by an appraiser.',
         ja: '古いというだけで文化財になるわけではありません。歴史的・芸術的または学術的価値が認められる必要があり、該当の可否は鑑定委員が物品ごとに判断します。',
         zh: '物品仅仅年代久远并不足以成为文物。还须被认定具有历史、艺术或学术价值，是否属于文物由鉴定委员逐件判断。',
+        zhTW: '物品僅僅年代久遠並不足以成為文物。還須被認定具有歷史、藝術或學術價值，是否屬於文物由鑑定委員逐件判斷。',
+        es: 'La antigüedad por sí sola no convierte un objeto en bien cultural. Debe además tener un valor histórico, artístico o académico reconocido, y cada objeto es evaluado individualmente por un perito.',
         de: 'Ein hohes Alter allein macht einen Gegenstand noch nicht zu Kulturgut. Er muss zudem einen anerkannten historischen, künstlerischen oder wissenschaftlichen Wert besitzen, und jeder Gegenstand wird einzeln von einem Sachverständigen beurteilt.',
         fr: 'L\'ancienneté seule ne suffit pas à faire d\'un objet un bien culturel. Il doit également présenter une valeur historique, artistique ou académique reconnue, et chaque objet est évalué individuellement par un expert.'
       },
@@ -1018,6 +1089,8 @@ const groups = [
         en: 'Natural history specimens such as fossils, minerals, and meteorites are assessed for General Movable Cultural Heritage status regardless of date of formation, based on their academic or aesthetic value and rarity. This item has been appraised under those criteria.',
         ja: '化石・鉱物・隕石などの自然史標本は、形成年代に関わらず、学術的・観賞的価値や希少性などを基準に一般動産文化財への該当性を判断します。この物品はその基準に基づいて鑑定されました。',
         zh: '化石、矿物、陨石等自然史标本，不论其形成年代，均依据学术或观赏价值及稀有性等标准判断是否属于一般动产文物。此物品已依据上述标准进行鉴定。',
+        zhTW: '化石、礦物、隕石等自然史標本，不論其形成年代，均依據學術或觀賞價值及稀有性等標準判斷是否屬於一般動產文物。此物品已依據上述標準進行鑑定。',
+        es: 'Las muestras de historia natural, como fósiles, minerales y meteoritos, se evalúan como bien cultural mueble general con independencia de su fecha de formación, según su valor académico o estético y su rareza. Este objeto ha sido peritado conforme a esos criterios.',
         de: 'Naturkundliche Objekte wie Fossilien, Mineralien und Meteoriten werden unabhängig vom Entstehungszeitpunkt anhand ihres wissenschaftlichen oder ästhetischen Werts und ihrer Seltenheit auf den Status als bewegliches Kulturgut geprüft. Dieser Gegenstand wurde nach diesen Kriterien begutachtet.',
         fr: 'Les spécimens d\'histoire naturelle tels que fossiles, minéraux et météorites sont évalués au regard du statut de bien culturel mobilier général indépendamment de leur date de formation, sur la base de leur valeur scientifique ou esthétique et de leur rareté. Cet objet a été expertisé selon ces critères.'
       },
@@ -1028,6 +1101,8 @@ const groups = [
         en: 'Works by living artists are not classified as General Movable Cultural Heritage. Since such heritage covers, in principle, items made before 1945, this work may be freely exported.',
         ja: '存命の作家による作品は、一般動産文化財には該当しません。一般動産文化財は原則として1945年以前に制作された物品を対象とするため、この作品は自由に国外へ搬出できます。',
         zh: '在世艺术家的作品不属于一般动产文物。一般动产文物原则上以1945年以前制作的物品为对象，因此该作品可以自由携带出境。',
+        zhTW: '在世藝術家的作品不屬於一般動產文物。一般動產文物原則上以1945年以前製作的物品為對象，因此該作品可以自由攜帶出境。',
+        es: 'Las obras de artistas vivos no se clasifican como bien cultural mueble general. Dado que dicho patrimonio comprende, en principio, objetos elaborados antes de 1945, esta obra puede exportarse libremente.',
         de: 'Werke lebender Künstler gelten nicht als allgemeines bewegliches Kulturgut. Da darunter grundsätzlich vor 1945 entstandene Gegenstände fallen, darf dieses Werk frei ausgeführt werden.',
         fr: 'Les œuvres d\'artistes vivants ne sont pas classées comme biens culturels mobiliers généraux. Comme cette catégorie concerne en principe les objets fabriqués avant 1945, cette œuvre peut être exportée librement.'
       },
@@ -1038,6 +1113,8 @@ const groups = [
         en: 'Under Article 60 of the Korean Cultural Heritage Act, the export of General Movable Cultural Heritage is prohibited in principle. It may be exported only as an exception, when a museum or similar institution obtains prior permission from the Korea Heritage Service for international cultural exchange such as overseas exhibition or research. It cannot be exported as personal property.',
         ja: '一般動産文化遺産(韓国法上の文化財)は、韓国「文化遺産法」第60条により、国外への搬出が原則として禁止されています。博物館などが国外展示や調査・研究といった国際文化交流を目的として国家遺産庁長の事前許可を受けた場合に限り例外的に搬出でき、個人の所蔵品としては搬出できません。',
         zh: '根据韩国《文化遗产法》第60条，一般动产文化遗产(韩国法律所称的文物)原则上禁止出境。仅当博物馆等机构以海外展览、调查研究等国际文化交流为目的，事先取得国家遗产厅长许可时，方可例外携带出境；个人收藏品不可携带出境。',
+        zhTW: '根據韓國《文化遺產法》第60條，一般動產文化遺產(韓國法律所稱的文物)原則上禁止出境。僅當博物館等機構以海外展覽、調查研究等國際文化交流為目的，事先取得國家遺產廳長許可時，方可例外攜帶出境；個人收藏品不可攜帶出境。',
+        es: 'Conforme al artículo 60 de la Ley de Patrimonio Cultural de Corea, la exportación de un bien cultural mueble general está prohibida en principio. Solo puede exportarse de manera excepcional cuando un museo u otra institución obtiene una autorización previa del Servicio del Patrimonio de Corea con fines de intercambio cultural internacional, como exposiciones o investigaciones en el extranjero. No puede exportarse como objeto de propiedad personal.',
         de: 'Gemäß Artikel 60 des koreanischen Kulturgutschutzgesetzes ist die Ausfuhr von allgemeinem beweglichem Kulturgut grundsätzlich verboten. Nur ausnahmsweise darf es ausgeführt werden, wenn ein Museum oder eine ähnliche Einrichtung zuvor eine Genehmigung des Korea Heritage Service für den internationalen Kulturaustausch wie Ausstellungen oder Forschung im Ausland einholt. Als persönliches Eigentum kann es nicht ausgeführt werden.',
         fr: 'En vertu de l\'article 60 de la loi coréenne sur le patrimoine culturel, l\'exportation d\'un bien culturel mobilier général est en principe interdite. Elle n\'est possible qu\'à titre exceptionnel, lorsqu\'un musée ou un établissement similaire obtient au préalable l\'autorisation du Service du Patrimoine Coréen à des fins d\'échange culturel international, telles qu\'une exposition ou une recherche à l\'étranger. Il ne peut être exporté en tant que bien personnel.'
       }
@@ -1055,6 +1132,8 @@ const groups = [
         en: 'Do you have a companion or friend with you who can assist in Korean?',
         ja: '韓国語でお手伝いいただける同行者やお知り合いの方はいらっしゃいますか。',
         zh: '您身边有可以协助进行韩语沟通的同行者或朋友吗？',
+        zhTW: '您身邊有可以協助進行韓語溝通的同行者或朋友嗎？',
+        es: '¿Le acompaña algún acompañante o amigo que pueda ayudar en coreano?',
         de: 'Haben Sie einen Begleiter oder Freund bei sich, der auf Koreanisch helfen kann?',
         fr: 'Avez-vous un accompagnateur ou un ami avec vous qui pourrait nous aider en coréen ?'
       },
@@ -1065,6 +1144,8 @@ const groups = [
         en: 'May we open the package to inspect the item?',
         ja: '包装を開けて中の物品を確認してもよろしいでしょうか。',
         zh: '我们可以打开包装查看物品吗？',
+        zhTW: '我們可以打開包裝查看物品嗎？',
+        es: '¿Nos permite abrir el paquete para inspeccionar el objeto?',
         de: 'Dürfen wir die Verpackung öffnen, um den Gegenstand zu überprüfen?',
         fr: 'Pouvons-nous ouvrir l\'emballage pour examiner l\'objet ?'
       },
@@ -1075,6 +1156,8 @@ const groups = [
         en: 'Could you unwrap it and show us the item?',
         ja: '包装を開けて中の物品をお見せいただけますか。',
         zh: '请您打开包装并展示物品。',
+        zhTW: '請您打開包裝並展示物品。',
+        es: '¿Podría desenvolverlo y mostrarnos el objeto?',
         de: 'Könnten Sie es bitte auspacken und uns den Gegenstand zeigen?',
         fr: 'Pourriez-vous le déballer et nous montrer l\'objet ?'
       },
@@ -1085,6 +1168,8 @@ const groups = [
         en: 'Please sign here.',
         ja: 'こちらにご署名をお願いいたします。',
         zh: '请在这里签字。',
+        zhTW: '請在這裡簽字。',
+        es: 'Por favor, firme aquí.',
         de: 'Bitte unterschreiben Sie hier.',
         fr: 'Veuillez signer ici.'
       },
@@ -1095,6 +1180,8 @@ const groups = [
         en: 'Thank you for your cooperation. This is a small souvenir from the Korea Heritage Service. Please accept it with our appreciation.',
         ja: 'ご協力ありがとうございました。国家遺産庁からのささやかな記念品でございます。どうぞお受け取りください。',
         zh: '感谢您的配合。这是国家遗产厅准备的小礼品，请您收下。',
+        zhTW: '感謝您的配合。這是國家遺產廳準備的小禮品，請您收下。',
+        es: 'Gracias por su cooperación. Este es un pequeño obsequio del Servicio del Patrimonio de Corea. Le rogamos que lo acepte con nuestro agradecimiento.',
         de: 'Vielen Dank für Ihre Mitwirkung. Dies ist ein kleines Geschenk vom Korea Heritage Service. Bitte nehmen Sie es als Zeichen unserer Wertschätzung entgegen.',
         fr: 'Merci pour votre coopération. Voici un petit souvenir offert par le Service du Patrimoine Coréen. Veuillez l\'accepter en signe de notre reconnaissance.'
       },
@@ -1105,6 +1192,8 @@ const groups = [
         en: 'For your reference: items that may be mistaken for cultural heritage, like the present one, are subject to a mandatory pre-export confirmation under Article 60 of the Korean Cultural Heritage Act. For future exports, you may either visit the Appraisal Office on the day of departure with the item and your airline ticket, or apply online for advance appraisal through the Korea Heritage Service website at least 3 days in advance (4 days for cargo or postal shipment).',
         ja: 'ご参考までにご案内いたします。本物品のように文化財と誤認される可能性のある動産は、韓国「文化遺産法」第60条により、国外搬出前に非文化財確認申請が義務付けられています。次回の搬出時には、出国当日に物品とご搭乗券をお持ちのうえ鑑定官室にお越しいただくか、搬出3日前(貨物・郵便の場合は4日前)までに国家遺産庁ホームページから事前予約鑑定をお申し込みいただけます。',
         zh: '仅供参考。如本物品这样可能被误认为文化遗产的动产，根据韩国《文化遗产法》第60条规定，出境前必须申请非文物确认。下次出境时，您可以在出境当天携带物品和机票前往鉴定官室，或在出境3天前（货物·邮寄为4天前）通过国家遗产厅官网申请预约鉴定。',
+        zhTW: '僅供參考。如本物品這樣可能被誤認為文化遺產的動產，根據韓國《文化遺產法》第60條規定，出境前必須申請非文物確認。下次出境時，您可以在出境當天攜帶物品和機票前往鑑定官室，或在出境3天前（貨物·郵寄為4天前）通過國家遺產廳官網申請預約鑑定。',
+        es: 'Para su información: los objetos que pueden confundirse con un bien cultural, como el presente, están sujetos a una confirmación obligatoria antes de su exportación, conforme al artículo 60 de la Ley de Patrimonio Cultural de Corea. Para futuras exportaciones, puede acudir a la Oficina de Peritaje el día de su salida con el objeto y su billete de avión, o solicitar en línea un peritaje anticipado en el sitio web del Servicio del Patrimonio de Corea con al menos 3 días de antelación (4 días para carga o envíos postales).',
         de: 'Zur Information: Gegenstände, die wie der vorliegende mit Kulturgut verwechselt werden könnten, unterliegen gemäß Artikel 60 des koreanischen Kulturgutschutzgesetzes vor der Ausfuhr einer obligatorischen Bestätigung als Nicht-Kulturgut. Für künftige Ausfuhren können Sie entweder am Ausreisetag das Begutachtungsbüro mit dem Gegenstand und Ihrem Flugticket aufsuchen oder spätestens 3 Tage vor der Ausfuhr (bei Fracht und Postsendungen 4 Tage) eine Online-Voranmeldung über die Website des Korea Heritage Service vornehmen.',
         fr: 'Pour votre information : les objets pouvant être confondus avec un bien culturel, comme le présent objet, sont soumis à une confirmation préalable obligatoire avant exportation, conformément à l\'article 60 de la loi coréenne sur le patrimoine culturel. Lors de futures exportations, vous pourrez soit vous rendre au bureau d\'expertise le jour de votre départ avec l\'objet et votre billet d\'avion, soit demander une expertise par réservation préalable sur le site du Service du Patrimoine Coréen au moins 3 jours avant l\'exportation (4 jours pour le fret ou l\'envoi postal).'
       },
@@ -1115,6 +1204,8 @@ const groups = [
         en: 'Thank you for your cooperation. Have a safe journey.',
         ja: 'ご協力ありがとうございました。よいご旅行を。',
         zh: '感谢您的配合，祝您旅途愉快。',
+        zhTW: '感謝您的配合，祝您旅途愉快。',
+        es: 'Gracias por su cooperación. Que tenga un buen viaje.',
         de: 'Vielen Dank für Ihre Mitwirkung. Gute Reise.',
         fr: 'Merci pour votre coopération. Bon voyage.'
       }
@@ -1128,9 +1219,9 @@ let currentLang = 'en';
 let currentMsg = null;
 let availableVoices = [];
 
-const langMap = { en: 'en-US', ja: 'ja-JP', zh: 'zh-CN', de: 'de-DE', fr: 'fr-FR' };
-const playLabels = { en: 'Play Audio', ja: '音声再生', zh: '播放语音', de: 'Audio abspielen', fr: 'Lire l\'audio' };
-const playingLabels = { en: 'Playing...', ja: '再生中...', zh: '播放中...', de: 'Wird abgespielt...', fr: 'Lecture...' };
+const langMap = { en: 'en-US', ja: 'ja-JP', zh: 'zh-CN', zhTW: 'zh-TW', de: 'de-DE', fr: 'fr-FR', es: 'es-MX' };
+const playLabels = { en: 'Play Audio', ja: '音声再生', zh: '播放语音', zhTW: '播放語音', de: 'Audio abspielen', fr: 'Lire l\'audio', es: 'Reproducir audio' };
+const playingLabels = { en: 'Playing...', ja: '再生中...', zh: '播放中...', zhTW: '播放中...', de: 'Wird abgespielt...', fr: 'Lecture...', es: 'Reproduciendo...' };
 
 // ===== 음성 로딩 (브라우저 호환성: 삼성 인터넷 등에서 명시적 voice 할당 필요) =====
 function loadVoices() {
@@ -1316,7 +1407,10 @@ function playAudio() {
     return;
   }
 
-  const chunks = chunkText(text, 130);
+  // CJK(중국어·일본어)는 글자당 발화 시간이 라틴 문자의 약 2배라 더 짧게 끊는다.
+  // (이렇게 하면 기존 일본어·중국어의 잠재적 중단도 함께 방지된다)
+  const cjk = (currentLang === 'ja' || currentLang === 'zh' || currentLang === 'zhTW');
+  const chunks = chunkText(text, cjk ? 65 : 130);
   setPlaying(true);   // onstart가 늦거나 안 오는 기기 대비, 탭 즉시 낙관적 표시
 
   chunks.forEach((chunk, idx) => {
