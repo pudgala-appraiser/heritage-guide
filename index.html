@@ -257,6 +257,68 @@ body.heritage {
 .audio-icon { width: 16px; height: 16px; flex-shrink: 0; }
 .audio-btn .h-dots { display: none; }
 .audio-btn.playing .h-dots { display: inline-flex; }
+#showBtn.audio-btn { flex: 1 0 100%; }
+
+/* 표지 — 8개 언어 인사말 = 언어 선택 (모션 없음, 규칙 6 준수) */
+.greet-label { font-size: 10.5px; font-weight: 800; letter-spacing: 2px; color: var(--text-muted); }
+.greet-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
+  width: 100%; max-width: 380px;
+  background: var(--hairline); border: 1px solid var(--hairline);
+}
+@media (min-width: 560px) and (max-width: 880px) {
+  .greet-grid { grid-template-columns: repeat(4, 1fr); max-width: 640px; }
+}
+.greet-btn {
+  background: var(--surface-canvas); border: none; border-radius: 0; cursor: pointer;
+  padding: 12px 8px 10px; min-height: 64px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  font-family: var(--font-body); color: var(--text-ink);
+}
+.greet-btn:hover { background: var(--surface-soft); }
+.greet-word { font-size: 1.15rem; font-weight: 800; line-height: 1.25; }
+.greet-name { font-size: 10.5px; font-weight: 700; letter-spacing: .5px; color: var(--text-muted); }
+.greet-btn[data-lang="ja"] .greet-word { font-family: var(--font-jp); }
+.greet-btn[data-lang="zh"] .greet-word { font-family: var(--font-zh); }
+.greet-btn[data-lang="zhTW"] .greet-word { font-family: var(--font-tc); }
+.greet-btn.on { background: var(--accent-structure); }
+.greet-btn.on .greet-word, .greet-btn.on .greet-name { color: var(--on-dark); }
+
+/* 전체화면 보기 — 여행객에게 화면을 보여줄 때. 평면·직각, 전환 모션 없음 */
+html.show-open, html.show-open body { overflow: hidden; }
+.show-overlay {
+  position: fixed; inset: 0; z-index: 300;
+  background: var(--surface-canvas); border-top: 4px solid var(--accent-structure);
+  display: flex; flex-direction: column;
+}
+.show-overlay[hidden] { display: none; }
+.show-top {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+  padding: 10px 20px; border-bottom: 1px solid var(--hairline);
+  font-size: 11px; font-weight: 800; letter-spacing: 1.5px; color: var(--text-muted);
+}
+.show-top strong { color: var(--accent-structure); margin-right: 6px; }
+.show-voice { color: var(--accent-warning); letter-spacing: .5px; display: none; }
+.show-voice.show { display: inline; }
+.show-body { flex: 1; overflow-y: auto; padding: 24px 22px; display: flex; flex-direction: column; }
+.show-text {
+  margin: auto 0;   /* 짧으면 세로 중앙, 길면 위에서부터 스크롤 */
+  max-width: 1100px; align-self: center; width: 100%;
+  font-family: var(--font-display); font-weight: 700; line-height: 1.5;
+  color: var(--text-ink); overflow-wrap: anywhere;
+}
+.show-text[data-lang="ja"]   { font-family: var(--font-jp); }
+.show-text[data-lang="zh"]   { font-family: var(--font-zh); }
+.show-text[data-lang="zhTW"] { font-family: var(--font-tc); }
+.show-bar {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--hairline); background: var(--surface-soft);
+}
+.show-bar .h-btn { flex: 1 1 0; min-width: 0; padding: 12px 10px; letter-spacing: 1px; white-space: nowrap; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.show-bar #showPlayBtn { flex-grow: 2; }
+.show-bar .h-dots { display: none; }
+.show-bar .playing .h-dots { display: inline-flex; }
 
 /* BUTTON PANEL */
 .button-panel { column-count: 1; column-gap: 16px; }
@@ -376,7 +438,9 @@ body.heritage {
   <section class="display-panel">
     <div id="displayEmpty" class="display-empty">
       <div class="h-saekdong" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
-      <div class="display-empty-text">해당 버튼을 선택하면<br>이곳에 안내 멘트가 표시됩니다</div>
+      <div class="greet-label">언어 선택 · SELECT YOUR LANGUAGE</div>
+      <div class="greet-grid" id="greetGrid" role="group" aria-label="언어 선택 · Select your language"></div>
+      <div class="display-empty-text">멘트 버튼을 선택하면<br>이곳에 안내 멘트가 표시됩니다</div>
     </div>
     <div id="displayContent" class="display-content" style="display: none;">
       <div class="display-meta">
@@ -401,6 +465,10 @@ body.heritage {
           <svg class="audio-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h12v12H6z"/></svg>
           Stop
         </button>
+        <button class="h-btn h-btn--ghost audio-btn" id="showBtn" aria-label="전체화면으로 보기 · Full Screen">
+          <svg class="audio-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+          Full Screen
+        </button>
       </div>
     </div>
   </section>
@@ -412,15 +480,38 @@ body.heritage {
   <div class="h-saekdong" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
   <div>
     <strong>국가유산청 문화유산감정관실</strong> · 감정 현장 다국어 안내 도구<br>
-    근거: 문화유산의 보존 및 활용에 관한 법률 제60조·제90조 / 형사소송법 제129조·제211조·제212조·제216조 / 경찰범죄수사규칙 제23조
+    근거: 문화유산의 보존 및 활용에 관한 법률 제60조·제90조 / 형사소송법 제129조·제211조·제212조·제216조·제219조 / 경찰범죄수사규칙 제23조
     <div class="app-version" id="appVersion"></div>
   </div>
 </footer>
 
+<!-- 전체화면 보기 — 여행객에게 보여줄 때 (외국어 멘트만 크게) -->
+<div class="show-overlay" id="showOverlay" hidden role="dialog" aria-modal="true" aria-label="전체화면 보기 · Full Screen">
+  <div class="show-top">
+    <div><strong id="showNum"></strong><span id="showLabel"></span></div>
+    <span class="show-voice" id="showVoice">음성 미지원 — 텍스트만 표시</span>
+  </div>
+  <div class="show-body">
+    <div class="show-text" id="showText" data-lang="en" lang="en-US"></div>
+  </div>
+  <div class="show-bar">
+    <button class="h-btn" id="showPlayBtn">
+      <svg class="audio-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      <span id="showPlayLabel">Play Audio</span>
+      <span class="h-dots" aria-hidden="true"><span></span><span></span><span></span></span>
+    </button>
+    <button class="h-btn h-btn--ghost" id="showStopBtn">
+      <svg class="audio-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h12v12H6z"/></svg>
+      Stop
+    </button>
+    <button class="h-btn h-btn--ghost" id="showCloseBtn">✕ Close</button>
+  </div>
+</div>
+
 <script>
 // ────────────────────────────────────────────────
 //  ▼ 배포할 때마다 이 한 줄만 바꾸세요. 화면 맨 아래에 그대로 표시됩니다.
-const APP_VERSION = 'v3.8 · 2026-07-28';
+const APP_VERSION = 'v4.0 · 2026-10-20';
 // ────────────────────────────────────────────────
 (function () {
   const v = document.getElementById('appVersion');
@@ -448,7 +539,7 @@ const groups = [
         zhTW: '我是韓國國家遺產廳文物鑑定委員。',
         es: 'Soy perito en bienes culturales del Servicio del Patrimonio de Corea.',
         pt: 'Sou perito em bens culturais do Serviço do Patrimônio da Coreia.',
-        de: 'Ich bin Kulturgut-Sachverständiger des koreanischen Korea Heritage Service.',
+        de: 'Ich bin Sachverständiger für Kulturgüter beim Korea Heritage Service, der koreanischen Kulturerbebehörde.',
         fr: 'Je suis expert en biens culturels du Service du Patrimoine Coréen.'
       },
       {
@@ -527,7 +618,7 @@ const groups = [
         zhTW: '即使您拒絕填寫申請書，本委員仍將依職權進行外觀鑑定。若該物品被確認為韓國文物，您可能依據韓國法律(《文化遺產法》第60條及第90條)以無許可出境而受到處罰，物品也可能被沒收。',
         es: 'Aunque usted se niegue a completar el formulario, procederé a realizar un peritaje visual de oficio. Si se confirma que el objeto es un bien cultural coreano, podría enfrentar sanciones penales conforme a la ley coreana (Ley de Patrimonio Cultural, artículos 60 y 90) por exportación no autorizada, y el objeto podría ser decomisado.',
         pt: 'Mesmo que você se recuse a preencher o formulário, procederei a uma perícia visual de ofício. Se o objeto for confirmado como bem cultural coreano, você poderá sofrer sanções penais nos termos da legislação coreana (Lei do Patrimônio Cultural, artigos 60 e 90) por exportação não autorizada, e o objeto poderá ser confiscado.',
-        de: 'Auch bei Ihrer Weigerung wird eine amtliche äußerliche Begutachtung durchgeführt. Wird der Gegenstand als koreanisches Kulturgut bestätigt, drohen nach koreanischem Recht (Kulturgutgesetz Art. 60 und 90) strafrechtliche Sanktionen wegen unerlaubter Ausfuhr, und der Gegenstand kann eingezogen werden.',
+        de: 'Auch bei Ihrer Weigerung wird eine amtliche äußerliche Begutachtung durchgeführt. Wird der Gegenstand als koreanisches Kulturgut bestätigt, drohen nach koreanischem Recht (Kulturgutschutzgesetz, Art. 60 und 90) strafrechtliche Sanktionen wegen unerlaubter Ausfuhr, und der Gegenstand kann eingezogen werden.',
         fr: 'Même en cas de refus de votre part, je procéderai à une expertise visuelle d\'office. Si l\'objet est confirmé comme bien culturel coréen, vous pourriez encourir des sanctions pénales en vertu de la loi coréenne (Loi sur le patrimoine culturel, articles 60 et 90) pour exportation non autorisée, et l\'objet pourra être confisqué.'
       },
       {
@@ -623,6 +714,19 @@ const groups = [
         fr: 'L\'objet a été confirmé comme bien non culturel. Une étiquette de confirmation de bien non culturel sera apposée sur l\'objet ou son emballage. Veuillez ne pas retirer l\'étiquette avant votre départ.'
       },
       {
+        id: 'seal_tape_notice',
+        label: '비문화유산 — 확인표지·보안테이프 안내',
+        ko: '물품(수하물)에 붙인 확인표지와 보안테이프는 문화유산 감정을 마쳤다는 표시입니다. 출국장 보안검색을 통과할 때까지는 떼지 말아 주십시오. 이후에 떼셔도 자국은 남지 않습니다.',
+        en: 'The confirmation seal and security tape on your item or luggage show that it has been appraised for cultural heritage status. Please keep them on until you have passed departure security. You can remove them afterwards without leaving any marks.',
+        ja: '物品やお荷物に貼付した確認シールとセキュリティテープは、文化財の鑑定を受けた印です。出国時の保安検査を通過されるまでは剥がさないでください。その後は剥がしていただいても跡は残りません。',
+        zh: '贴在物品或行李上的确认标签和安全胶带，表示该物品已接受文物鉴定。在通过出境安检之前，请勿撕除。之后撕除也不会留下痕迹。',
+        zhTW: '貼在物品或行李上的確認標籤和安全膠帶，表示該物品已接受文物鑑定。在通過出境安檢之前，請勿撕除。之後撕除也不會留下痕跡。',
+        es: 'El sello de confirmación y la cinta de seguridad colocados en su objeto o equipaje indican que ha sido sometido a un peritaje de bienes culturales. Por favor, no los retire hasta haber pasado el control de seguridad de salida. Después podrá retirarlos sin que queden marcas.',
+        pt: 'O selo de confirmação e a fita de segurança afixados no seu objeto ou bagagem indicam que ele passou por perícia de bens culturais. Por favor, não os retire até passar pela inspeção de segurança do embarque. Depois, você poderá removê-los sem deixar marcas.',
+        de: 'Der Bestätigungsaufkleber und das Sicherheitsklebeband an Ihrem Gegenstand bzw. Gepäck zeigen, dass eine Kulturgutbegutachtung durchgeführt wurde. Bitte entfernen Sie sie nicht, bevor Sie die Sicherheitskontrolle bei der Ausreise passiert haben. Danach lassen sie sich rückstandsfrei entfernen.',
+        fr: 'L\'étiquette de confirmation et le ruban de sécurité apposés sur votre objet ou vos bagages indiquent qu\'il a fait l\'objet d\'une expertise de bien culturel. Veuillez ne pas les retirer avant d\'avoir passé le contrôle de sûreté au départ. Vous pourrez ensuite les retirer sans laisser de traces.'
+      },
+      {
         id: 'heritage_confirmed',
         label: '일반동산문화유산 — 반출 불허',
         ko: '감정 결과 이 물품은 대한민국의 일반동산문화유산에 해당합니다. 「문화유산의 보존 및 활용에 관한 법률」 제60조에 따라 국외 반출이 금지됩니다.',
@@ -641,8 +745,8 @@ const groups = [
         ko: '이 물품을 허가 없이 반출하려 한 행위는 「문화유산법」상 위법에 해당합니다. 따라서 물품에 대한 몰수 절차를 진행하게 되며, 그 첫 단계로 임의제출 절차를 안내해 드리겠습니다. 협조 부탁드립니다.',
         en: 'Attempting to export this item without authorization constitutes a violation under the Korean Cultural Heritage Act. Accordingly, a confiscation procedure will be initiated, beginning with the voluntary submission process as its first step. Your cooperation is requested.',
         ja: '許可なくこの物品を国外へ搬出しようとした行為は、韓国の文化遺産関連法令に違反します。よって、物品に対する没収手続きを進めることとなり、その第一段階として任意提出の手続きをご案内いたします。ご協力をお願いいたします。',
-        zh: '试图未经许可将此物品携带出境的行为，违反了韩国文化遗产相关法律。因此，将对此物品启动没收程序，并以随意提交程序作为第一步。请您配合。',
-        zhTW: '試圖未經許可將此物品攜帶出境的行為，違反了韓國文化遺產相關法律。因此，將對此物品啟動沒收程序，並以隨意提交程序作為第一步。請您配合。',
+        zh: '试图未经许可将此物品携带出境的行为，违反了韩国文化遗产相关法律。因此，将对此物品启动没收程序，并以自愿提交程序作为第一步。请您配合。',
+        zhTW: '試圖未經許可將此物品攜帶出境的行為，違反了韓國文化遺產相關法律。因此，將對此物品啟動沒收程序，並以自願提交程序作為第一步。請您配合。',
         es: 'Intentar exportar este objeto sin autorización constituye una infracción de la Ley de Patrimonio Cultural de Corea. En consecuencia, se iniciará un procedimiento de decomiso, cuyo primer paso es el proceso de entrega voluntaria. Le solicitamos su cooperación.',
         pt: 'A tentativa de exportar este objeto sem autorização constitui infração à Lei do Patrimônio Cultural da Coreia. Por conseguinte, será iniciado um procedimento de confisco, cuja primeira etapa é o processo de entrega voluntária. Pedimos a sua cooperação.',
         de: 'Der Versuch, diesen Gegenstand ohne Genehmigung auszuführen, stellt einen Verstoß gegen das koreanische Kulturgutschutzgesetz dar. Daher wird ein Einziehungsverfahren eingeleitet, das mit der freiwilligen Übergabe als ersten Schritt beginnt. Wir bitten um Ihre Mitwirkung.',
@@ -689,8 +793,8 @@ const groups = [
         ko: '임의제출에 앞서 다음 사항을 고지합니다. 귀하는 물품의 제출을 거부할 권리가 있으며, 제출 범위를 특정하여 제출할 수도 있습니다. 이 권리를 고지받았다는 사실에 서명해 주십시오.',
         en: 'Before voluntary submission, you must be informed of the following: You have the right to refuse submission, and you may specify a limited scope of submission. Please sign to confirm that you have been informed of these rights.',
         ja: '任意提出に先立ち、以下をご案内いたします。お客様には物品の提出を拒否する権利があり、提出の範囲を特定して提出することもできます。これらの権利についてご案内を受けた旨、ご署名をお願いいたします。',
-        zh: '在随意提交之前，请您了解以下事项。您有权拒绝提交物品，也可以指定特定范围进行提交。请您签字确认已收到上述权利告知。',
-        zhTW: '在隨意提交之前，請您瞭解以下事項。您有權拒絕提交物品，也可以指定特定範圍進行提交。請您簽字確認已收到上述權利告知。',
+        zh: '在自愿提交之前，请您了解以下事项。您有权拒绝提交物品，也可以指定特定范围进行提交。请您签字确认已收到上述权利告知。',
+        zhTW: '在自願提交之前，請您瞭解以下事項。您有權拒絕提交物品，也可以指定特定範圍進行提交。請您簽字確認已收到上述權利告知。',
         es: 'Antes de la entrega voluntaria, debe ser informado de lo siguiente: usted tiene derecho a rechazar la entrega y puede limitar el alcance de lo que entrega. Por favor, firme para confirmar que ha sido informado de estos derechos.',
         pt: 'Antes da entrega voluntária, informamos o seguinte: você tem o direito de recusar a entrega e pode delimitar o alcance do que será entregue. Por favor, assine para confirmar que foi informado desses direitos.',
         de: 'Vor der freiwilligen Übergabe sind Sie über Folgendes zu informieren: Sie haben das Recht, die Übergabe zu verweigern, und Sie können einen begrenzten Umfang der Übergabe festlegen. Bitte unterschreiben Sie, um zu bestätigen, dass Sie über diese Rechte informiert wurden.',
@@ -702,8 +806,8 @@ const groups = [
         ko: '임의제출서를 작성해 주시기 바랍니다. 성명, 직업, 연락처, 주거 정보를 기재하시고, 제출 물품과 처분 의견을 표시한 후 서명해 주십시오.',
         en: 'Please complete the Voluntary Submission form. Fill in your name, occupation, contact, and address; indicate the submitted item and your disposition preference; then sign.',
         ja: '任意提出書をご作成ください。氏名、職業、連絡先、住所をご記入のうえ、提出物品と処分のご意向をご記載いただき、ご署名をお願いいたします。',
-        zh: '请填写随意提交书。请填写姓名、职业、联系方式、地址，并标明提交物品及处置意见，然后签字。',
-        zhTW: '請填寫隨意提交書。請填寫姓名、職業、聯繫方式、地址，並標明提交物品及處置意見，然後簽字。',
+        zh: '请填写自愿提交书。请填写姓名、职业、联系方式、地址，并标明提交物品及处置意见，然后签字。',
+        zhTW: '請填寫自願提交書。請填寫姓名、職業、聯繫方式、地址，並標明提交物品及處置意見，然後簽字。',
         es: 'Por favor, complete el formulario de entrega voluntaria. Indique su nombre, ocupación, datos de contacto y domicilio; señale el objeto entregado y su preferencia sobre la disposición del mismo; luego firme.',
         pt: 'Por favor, preencha o Termo de Entrega Voluntária. Informe seu nome, profissão, contato e endereço; indique o objeto entregue e sua preferência quanto à destinação; em seguida, assine.',
         de: 'Bitte füllen Sie das Formular zur freiwilligen Übergabe aus. Tragen Sie Name, Beruf, Kontakt und Adresse ein, geben Sie den übergebenen Gegenstand und Ihre Verfügungsabsicht an und unterschreiben Sie dann.',
@@ -715,8 +819,8 @@ const groups = [
         ko: '임의제출서는 2부 작성되며, 그중 한 부를 귀하의 보관용으로 교부해 드립니다. 한국 형사소송법 제219조 및 제129조에 따른 압수목록 교부 의무에 따른 것입니다.',
         en: 'The Voluntary Submission form is prepared in two copies, one of which will be provided to you for your records. This is in accordance with the obligation to deliver a seizure list under Articles 219 and 129 of the Korean Criminal Procedure Act.',
         ja: '任意提出書は2部作成され、うち1部をお客様の保管用としてお渡しいたします。韓国刑事訴訟法第219条および第129条に基づく押収目録交付義務によるものでございます。',
-        zh: '随意提交书一式两份，其中一份将交予您留存。这是依据韩国《刑事诉讼法》第219条及第129条规定的扣押目录交付义务而进行的。',
-        zhTW: '隨意提交書一式兩份，其中一份將交予您留存。這是依據韓國《刑事訴訟法》第219條及第129條規定的扣押目錄交付義務而進行的。',
+        zh: '自愿提交书一式两份，其中一份将交予您留存。这是依据韩国《刑事诉讼法》第219条及第129条规定的扣押目录交付义务而进行的。',
+        zhTW: '自願提交書一式兩份，其中一份將交予您留存。這是依據韓國《刑事訴訟法》第219條及第129條規定的扣押目錄交付義務而進行的。',
         es: 'El formulario de entrega voluntaria se redacta por duplicado, y se le entregará una copia para sus registros. Esto se realiza conforme a la obligación de entregar una lista de bienes incautados, según los artículos 219 y 129 del Código de Procedimiento Penal de Corea.',
         pt: 'O Termo de Entrega Voluntária é lavrado em duas vias, uma das quais será entregue a você para seus registros. Isso atende à obrigação de entrega da lista de apreensão prevista nos artigos 219 e 129 do Código de Processo Penal da Coreia.',
         de: 'Das Formular zur freiwilligen Übergabe wird in zwei Ausfertigungen erstellt, von denen Ihnen eine für Ihre Unterlagen ausgehändigt wird. Dies erfolgt gemäß der Pflicht zur Aushändigung eines Beschlagnahmeverzeichnisses nach Artikel 219 und Artikel 129 der koreanischen Strafprozessordnung.',
@@ -728,11 +832,11 @@ const groups = [
         ko: '귀하께서 임의제출을 거부하시는 경우, 본 물품에 대해서는 한국 형사소송법 제216조 제3항에 따라 영장 없이 압수 처분이 진행됩니다. 본 압수에 대해서는 한국 법원에 사후 영장이 청구됩니다. 신원·연락처를 확인해 주시면 귀하의 출국은 허용됩니다.',
         en: 'If you refuse voluntary submission, the item will be seized without a warrant under Article 216(3) of the Korean Criminal Procedure Act. A post-seizure warrant will subsequently be requested from a Korean court. Once your identity and contact information are confirmed, your departure will be permitted.',
         ja: '任意提出をお断りになる場合、本物品については韓国刑事訴訟法第216条第3項に基づき、令状なしで押収処分が行われます。本押収については韓国の裁判所に事後令状が請求されます。ご本人確認および連絡先のご提供をいただければ、ご出国は許可されます。',
-        zh: '若您拒绝随意提交，本物品将依据韩国《刑事诉讼法》第216条第3项规定，无需令状予以扣押。该扣押将事后向韩国法院申请令状。在确认您的身份及联系方式后，将允许您出境。',
-        zhTW: '若您拒絕隨意提交，本物品將依據韓國《刑事訴訟法》第216條第3項規定，無需令狀予以扣押。該扣押將事後向韓國法院申請令狀。在確認您的身份及聯繫方式後，將允許您出境。',
+        zh: '若您拒绝自愿提交，本物品将依据韩国《刑事诉讼法》第216条第3项规定，无需令状予以扣押。该扣押将事后向韩国法院申请令状。在确认您的身份及联系方式后，将允许您出境。',
+        zhTW: '若您拒絕自願提交，本物品將依據韓國《刑事訴訟法》第216條第3項規定，無需令狀予以扣押。該扣押將事後向韓國法院申請令狀。在確認您的身份及聯繫方式後，將允許您出境。',
         es: 'Si usted rechaza la entrega voluntaria, el objeto será incautado sin orden judicial conforme al párrafo 3 del artículo 216 del Código de Procedimiento Penal de Corea. Posteriormente se solicitará una orden judicial a un tribunal coreano respecto de esta incautación. Una vez confirmados su identidad y sus datos de contacto, se permitirá su salida.',
         pt: 'Se você recusar a entrega voluntária, o objeto será apreendido sem mandado judicial, nos termos do parágrafo 3 do artigo 216 do Código de Processo Penal da Coreia. Um mandado será requerido posteriormente a um tribunal coreano em relação a esta apreensão. Uma vez confirmados sua identidade e seus dados de contato, sua partida será autorizada.',
-        de: 'Bei Verweigerung der freiwilligen Übergabe wird der Gegenstand nach Artikel 216 Absatz 3 der koreanischen Strafprozessordnung ohne Haftbefehl beschlagnahmt. Für diese Beschlagnahme wird nachträglich ein gerichtlicher Beschluss bei einem koreanischen Gericht beantragt. Nach Bestätigung Ihrer Identität und Kontaktdaten ist Ihre Ausreise gestattet.',
+        de: 'Bei Verweigerung der freiwilligen Übergabe wird der Gegenstand nach Artikel 216 Absatz 3 der koreanischen Strafprozessordnung ohne richterliche Anordnung beschlagnahmt. Für diese Beschlagnahme wird nachträglich ein gerichtlicher Beschluss bei einem koreanischen Gericht beantragt. Nach Bestätigung Ihrer Identität und Kontaktdaten ist Ihre Ausreise gestattet.',
         fr: 'En cas de refus de remise volontaire, l\'objet sera saisi sans mandat en vertu de l\'article 216 alinéa 3 du Code de procédure pénale coréen. Un mandat postérieur sera ensuite demandé auprès d\'un tribunal coréen. Une fois votre identité et vos coordonnées confirmées, votre départ sera autorisé.'
       },
       {
@@ -806,7 +910,7 @@ const groups = [
         es: 'A pesar de haberle notificado la infracción en varias ocasiones, si continúa sin cooperar podría ser detenido en flagrancia conforme al Código de Procedimiento Penal. Le solicitamos su cooperación.',
         pt: 'Apesar das repetidas notificações sobre a infração, caso você continue sem cooperar, poderá ser preso em flagrante delito, nos termos do Código de Processo Penal. Pedimos a sua cooperação.',
         de: 'Trotz wiederholter Hinweise auf den Verstoß kann Ihre fortgesetzte Verweigerung der Mitwirkung gemäß der Strafprozessordnung zur Festnahme als auf frischer Tat ergriffener Täter führen. Wir bitten um Ihre Mitwirkung.',
-        fr: 'Malgré des notifications répétées de l\'infraction, votre refus continu de coopérer peut entraîner votre arrestation en tant que délinquant flagrant en vertu du Code de procédure pénale. Nous vous demandons votre coopération.'
+        fr: 'Malgré des notifications répétées de l\'infraction, votre refus continu de coopérer peut entraîner votre arrestation en flagrant délit en vertu du Code de procédure pénale. Nous vous demandons votre coopération.'
       },
       {
         id: 'police_report',
@@ -865,7 +969,7 @@ const groups = [
         es: 'Tenga en cuenta que, aunque recoja el objeto dentro del período de custodia, su exportación seguirá estando prohibida. Además, si el objeto no se recoge dentro del período de custodia (máximo seis meses), podrá disponerse de él, previa notificación.',
         pt: 'Observe que, mesmo que você retire o objeto dentro do prazo de guarda, sua exportação continuará proibida. Além disso, se o objeto não for retirado dentro do prazo de guarda (máximo de seis meses), ele poderá ser destinado conforme as normas, mediante notificação prévia.',
         de: 'Bitte beachten Sie, dass auch bei einer Abholung innerhalb der Aufbewahrungsfrist die Ausfuhr weiterhin untersagt bleibt. Wird der Gegenstand nicht innerhalb der Aufbewahrungsfrist (höchstens sechs Monate) abgeholt, kann er nach vorheriger Benachrichtigung nach Ermessen des Büros verwertet werden.',
-        fr: 'Veuillez noter que même si vous récupérez l\'objet pendant la période de conservation, son exportation reste interdite. De plus, si l\'objet n\'est pas récupéré dans le délai de conservation (six mois maximum), il pourra être disposé à la discrétion du bureau après notification préalable.'
+        fr: 'Veuillez noter que même si vous récupérez l\'objet pendant la période de conservation, son exportation reste interdite. De plus, si l\'objet n\'est pas récupéré dans le délai de conservation (six mois maximum), il pourra en être disposé à la discrétion du bureau, après notification préalable.'
       }
     ]
   },
@@ -949,15 +1053,15 @@ const groups = [
       {
         id: 'living_artist_exempt',
         label: '생존 작가 작품 안내',
-        ko: '생존 작가의 작품은 일반동산문화유산에 해당하지 않습니다. 일반동산문화유산은 원칙적으로 1945년 이전에 제작된 물품을 대상으로 하므로, 이 작품은 자유롭게 국외로 반출하실 수 있습니다.',
-        en: 'Works by living artists are not classified as General Movable Cultural Heritage. Since such heritage covers, in principle, items made before 1945, this work may be freely exported.',
-        ja: '存命の作家による作品は、一般動産文化財には該当しません。一般動産文化財は原則として1945年以前に制作された物品を対象とするため、この作品は自由に国外へ搬出できます。',
-        zh: '在世艺术家的作品不属于一般动产文物。一般动产文物原则上以1945年以前制作的物品为对象，因此该作品可以自由携带出境。',
-        zhTW: '在世藝術家的作品不屬於一般動產文物。一般動產文物原則上以1945年以前製作的物品為對象，因此該作品可以自由攜帶出境。',
-        es: 'Las obras de artistas vivos no se clasifican como bien cultural mueble general. Dado que dicho patrimonio comprende, en principio, objetos elaborados antes de 1945, esta obra puede exportarse libremente.',
-        pt: 'Obras de artistas vivos não são classificadas como bem cultural móvel geral. Como essa categoria abrange, em princípio, objetos produzidos antes de 1945, esta obra pode ser levada livremente para o exterior.',
-        de: 'Werke lebender Künstler gelten nicht als allgemeines bewegliches Kulturgut. Da darunter grundsätzlich vor 1945 entstandene Gegenstände fallen, darf dieses Werk frei ausgeführt werden.',
-        fr: 'Les œuvres d\'artistes vivants ne sont pas classées comme biens culturels mobiliers généraux. Comme cette catégorie concerne en principe les objets fabriqués avant 1945, cette œuvre peut être exportée librement.'
+        ko: '생존 작가의 작품은 한국 법령상 일반동산문화유산의 범위에서 제외됩니다. 따라서 이 작품은 자유롭게 국외로 반출하실 수 있습니다.',
+        en: 'Under Korean law, works by living artists are excluded from General Movable Cultural Heritage. This work may therefore be freely taken abroad.',
+        ja: '存命の作家による作品は、韓国の法令上、一般動産文化財の範囲から除外されています。したがって、この作品は自由に国外へ搬出できます。',
+        zh: '根据韩国法律，在世艺术家的作品不属于一般动产文物的范围。因此，该作品可以自由携带出境。',
+        zhTW: '根據韓國法律，在世藝術家的作品不屬於一般動產文物的範圍。因此，該作品可以自由攜帶出境。',
+        es: 'Conforme a la legislación coreana, las obras de artistas vivos quedan excluidas de la categoría de bien cultural mueble general. Por lo tanto, esta obra puede llevarse libremente al extranjero.',
+        pt: 'Pela legislação coreana, obras de artistas vivos são excluídas da categoria de bem cultural móvel geral. Portanto, esta obra pode ser levada livremente para o exterior.',
+        de: 'Nach koreanischem Recht sind Werke lebender Künstler vom allgemeinen beweglichen Kulturgut ausgenommen. Dieses Werk darf daher frei ausgeführt werden.',
+        fr: 'Selon la législation coréenne, les œuvres d\'artistes vivants sont exclues des biens culturels mobiliers généraux. Cette œuvre peut donc être exportée librement.'
       },
       {
         id: 'heritage_export_method',
@@ -1187,8 +1291,7 @@ function selectMessage(item, group, gi, ii) {
   document.getElementById('msgLabel').textContent = item.label;
 
   // 새 메시지 선택 시 voice notice 초기화
-  const noticeEl = document.getElementById('voiceNotice');
-  if (noticeEl) noticeEl.classList.remove('show');
+  setVoiceNotice(false);
 
   updateDisplayLanguage();
 
@@ -1213,20 +1316,65 @@ function updateDisplayLanguage() {
   document.getElementById('koreanText').textContent = currentMsg.item.ko;
 }
 
-document.getElementById('langToggle').addEventListener('click', e => {
-  if (!e.target.classList.contains('lang-btn')) return;
-  currentLang = e.target.dataset.lang;
-  document.querySelectorAll('.lang-btn').forEach(b => {
+// 음성 미지원 안내 — 패널과 전체화면 양쪽에 동기 표시
+function setVoiceNotice(on) {
+  const a = document.getElementById('voiceNotice');
+  const b = document.getElementById('showVoice');
+  if (a) a.classList.toggle('show', on);
+  if (b) b.classList.toggle('show', on);
+}
+
+// 언어 전환 — 상단 토글과 표지 인사말이 같은 경로를 쓴다
+function setLanguage(lang) {
+  if (!langMap[lang]) return;
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn, .greet-btn').forEach(b => {
     const on = b.dataset.lang === currentLang;
     b.classList.toggle('on', on);   // 디자인 시스템 세그먼트 토글 활성 클래스
     b.setAttribute('aria-pressed', on);
   });
   updateDisplayLanguage();
   stopAudio();
-  // 언어 변경 시 voice notice 숨김 (다음 재생 시도 시 다시 판단)
-  const noticeEl = document.getElementById('voiceNotice');
-  if (noticeEl) noticeEl.classList.remove('show');
+  setVoiceNotice(false);   // 다음 재생 시도 때 다시 판단
+}
+
+document.getElementById('langToggle').addEventListener('click', e => {
+  const btn = e.target.closest('.lang-btn');
+  if (btn) setLanguage(btn.dataset.lang);
 });
+
+// ===== 표지: 8개 언어 인사말 — 여행객이 자기 언어를 가리키거나 눌러 선택 =====
+const GREETINGS = [
+  { lang: 'en',   word: 'Hello',     name: 'English' },
+  { lang: 'ja',   word: 'こんにちは', name: '日本語' },
+  { lang: 'zh',   word: '你好',       name: '简体中文' },
+  { lang: 'zhTW', word: '你好',       name: '繁體中文' },
+  { lang: 'de',   word: 'Guten Tag', name: 'Deutsch' },
+  { lang: 'fr',   word: 'Bonjour',   name: 'Français' },
+  { lang: 'es',   word: 'Hola',      name: 'Español' },
+  { lang: 'pt',   word: 'Olá',       name: 'Português' }
+];
+
+function buildGreetings() {
+  const grid = document.getElementById('greetGrid');
+  if (!grid) return;
+  GREETINGS.forEach(g => {
+    const b = document.createElement('button');
+    b.className = 'greet-btn' + (g.lang === currentLang ? ' on' : '');
+    b.dataset.lang = g.lang;
+    b.setAttribute('aria-pressed', g.lang === currentLang);
+    const w = document.createElement('span');
+    w.className = 'greet-word';
+    w.lang = langMap[g.lang];
+    w.textContent = g.word;
+    const n = document.createElement('span');
+    n.className = 'greet-name';
+    n.textContent = g.name;
+    b.append(w, n);
+    b.addEventListener('click', () => setLanguage(g.lang));
+    grid.appendChild(b);
+  });
+}
 
 // 긴 멘트를 짧은 조각으로 분할 — Chrome 계열 TTS의 ~15초/200자 발화 중단 버그 회피.
 // 각 조각이 컷오프 구간보다 짧으면 끊기지 않는다.
@@ -1261,14 +1409,18 @@ function chunkText(text, maxLen) {
 }
 
 function setPlaying(on) {
-  const btn = document.getElementById('playBtn');
-  if (!btn) return;
-  btn.classList.toggle('playing', on);
-  document.getElementById('playLabel').textContent = on ? PLAYING_LABEL : PLAY_LABEL;
+  // 패널과 전체화면의 재생 버튼을 함께 갱신
+  [['playBtn', 'playLabel'], ['showPlayBtn', 'showPlayLabel']].forEach(([b, l]) => {
+    const btn = document.getElementById(b);
+    const lab = document.getElementById(l);
+    if (btn) btn.classList.toggle('playing', on);
+    if (lab) lab.textContent = on ? PLAYING_LABEL : PLAY_LABEL;
+  });
 }
 
 let utteranceQueue = [];   // 재생 중 utterance 참조 유지 — 크롬의 GC로 인한 중단·onend 미발화 방지
 let speakTimer = null;     // cancel() 직후의 speak()를 무시하는 엔진(iOS 등) 대비 지연 타이머
+let playGen = 0;           // 재생 세대 번호 — 취소된 이전 재생의 늦은 onerror/onend가 새 재생 표시를 끄지 않게 함
 
 function playAudio() {
   if (!currentMsg) return;
@@ -1279,18 +1431,18 @@ function playAudio() {
   }
   const text = currentMsg.item[currentLang] || currentMsg.item.en;
   const targetLang = langMap[currentLang];
+  const gen = ++playGen;
 
   // voice 판정 — 모든 조각에 동일 적용 (브라우저 자동 선택 우회, 삼성 인터넷 등 호환)
   const voice = findBestVoice(currentLang);
-  const noticeEl = document.getElementById('voiceNotice');
   if (voice) {
-    if (noticeEl) noticeEl.classList.remove('show');
+    setVoiceNotice(false);
   } else if (availableVoices.length === 0) {
     // 음성 목록 미수신(일부 안드로이드 WebView): 엔진 내부 처리 가능 → 시도
-    if (noticeEl) noticeEl.classList.remove('show');
+    setVoiceNotice(false);
   } else {
     // 해당 언어 음성 없음 → 엉뚱한 음성으로 읽지 않고 안내만 표시 (텍스트는 화면에 그대로)
-    if (noticeEl) noticeEl.classList.add('show');
+    setVoiceNotice(true);
     console.warn('[TTS] No voice for', targetLang,
       '— available:', availableVoices.map(v => v.lang).join(', ') || '(none)');
     return;
@@ -1313,9 +1465,9 @@ function playAudio() {
       u.volume = 1.0;
       if (voice) u.voice = voice;
       if (idx === chunks.length - 1) {
-        u.onend = () => { utteranceQueue = []; setPlaying(false); };
+        u.onend = () => { if (gen !== playGen) return; utteranceQueue = []; setPlaying(false); };
       }
-      u.onerror = () => setPlaying(false);
+      u.onerror = () => { if (gen === playGen) setPlaying(false); };
       return u;
     });
     // 큐에 순차 적재 — 엔진이 한 조각씩 이어서 재생하므로 onend에 의존하지 않는다
@@ -1324,6 +1476,7 @@ function playAudio() {
 }
 
 function stopAudio() {
+  playGen++;   // 진행 중이던 재생의 늦은 콜백 무효화
   if (speakTimer) { clearTimeout(speakTimer); speakTimer = null; }
   utteranceQueue = [];
   if ('speechSynthesis' in window) window.speechSynthesis.cancel();
@@ -1334,12 +1487,90 @@ document.getElementById('playBtn').addEventListener('click', playAudio);
 document.getElementById('stopBtn').addEventListener('click', stopAudio);
 window.addEventListener('beforeunload', stopAudio);
 
-// 페이지가 백그라운드로 가면 음성 정지 (앱 전환·화면 잠금 시)
+// ===== 전체화면 보기 — 외국어 멘트만 크게, 화면 꺼짐 방지 =====
+const showOverlay = document.getElementById('showOverlay');
+let wakeLock = null;
+
+async function requestWakeLock() {
+  try {
+    if ('wakeLock' in navigator && !wakeLock) {
+      wakeLock = await navigator.wakeLock.request('screen');
+      wakeLock.addEventListener('release', () => { wakeLock = null; });
+    }
+  } catch (e) { wakeLock = null; }   // 미지원·저전력 모드 등 — 기능만 생략
+}
+function releaseWakeLock() {
+  try { if (wakeLock) wakeLock.release(); } catch (e) {}
+  wakeLock = null;
+}
+
+// 글자 수에 맞춰 글씨 크기 결정 (CJK는 글자당 폭이 넓어 2배로 계산)
+function fitShowFont() {
+  const el = document.getElementById('showText');
+  if (!el || showOverlay.hidden) return;
+  const cjk = ['ja', 'zh', 'zhTW'].includes(currentLang);
+  const len = el.textContent.length * (cjk ? 2 : 1);
+  const vw = Math.min(window.innerWidth, 1100);
+  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+  let px;
+  if (len <= 60)       px = clamp(vw * 0.085, 28, 64);
+  else if (len <= 140) px = clamp(vw * 0.07, 24, 48);
+  else if (len <= 260) px = clamp(vw * 0.06, 22, 38);
+  else                 px = clamp(vw * 0.055, 20, 30);
+  el.style.fontSize = Math.round(px) + 'px';
+}
+
+function renderShow() {
+  if (!currentMsg) return;
+  const el = document.getElementById('showText');
+  el.dataset.lang = currentLang;
+  el.lang = langMap[currentLang] || currentLang;
+  el.textContent = currentMsg.item[currentLang] || currentMsg.item.en;
+  document.getElementById('showNum').textContent = `${currentMsg.gi}.${currentMsg.ii}`;
+  document.getElementById('showLabel').textContent = currentMsg.item.label;
+  fitShowFont();
+}
+
+function openShow() {
+  if (!currentMsg || !showOverlay.hidden) return;
+  showOverlay.hidden = false;
+  renderShow();
+  document.documentElement.classList.add('show-open');
+  // 안드로이드 뒤로가기로 앱을 벗어나지 않고 전체화면만 닫히도록 기록 한 칸 추가
+  try { history.pushState({ showMode: true }, ''); } catch (e) {}
+  requestWakeLock();
+  document.getElementById('showCloseBtn').focus();
+}
+
+function closeShow(viaPop) {
+  if (showOverlay.hidden) return;
+  showOverlay.hidden = true;
+  document.documentElement.classList.remove('show-open');
+  releaseWakeLock();
+  if (!viaPop && history.state && history.state.showMode) {
+    try { history.back(); } catch (e) {}
+  }
+  const b = document.getElementById('showBtn');
+  if (b) b.focus();
+}
+
+document.getElementById('showBtn').addEventListener('click', openShow);
+document.getElementById('showCloseBtn').addEventListener('click', () => closeShow(false));
+document.getElementById('showPlayBtn').addEventListener('click', playAudio);
+document.getElementById('showStopBtn').addEventListener('click', stopAudio);
+window.addEventListener('popstate', () => closeShow(true));
+window.addEventListener('resize', fitShowFont);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeShow(false); });
+
+// 페이지가 백그라운드로 가면 음성 정지 (앱 전환·화면 잠금 시),
+// 다시 보이면 전체화면 중일 때 화면 꺼짐 방지 재요청 (백그라운드 전환 시 시스템이 자동 해제)
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) stopAudio();
+  else if (!showOverlay.hidden) requestWakeLock();
 });
 
 buildButtons();
+buildGreetings();
 </script>
 
 </body>
