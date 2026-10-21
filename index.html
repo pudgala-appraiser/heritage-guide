@@ -218,7 +218,9 @@ body.heritage {
 }
 .display-cat { font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); }
 .display-cat strong { color: var(--accent-structure); font-size: 13px; margin-right: 6px; }
-.display-label { font-family: var(--font-display); font-weight: 800; font-size: 16px; color: var(--text-ink); word-break: keep-all; }
+.display-label { font-family: var(--font-display); font-weight: 800; font-size: 16px; color: var(--text-ink); word-break: keep-all; flex: 1 1 100%; }
+/* 표지(언어 선택 화면)로 돌아가기 — 다음 여행객 응대 시작용 */
+.home-btn { margin-left: auto; font-weight: 800; letter-spacing: .5px; }
 
 .display-foreign {
   font-family: var(--font-display); font-weight: 700;
@@ -315,8 +317,8 @@ html.show-open, html.show-open body { overflow: hidden; }
   padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
   border-top: 1px solid var(--hairline); background: var(--surface-soft);
 }
-.show-bar .h-btn { flex: 1 1 0; min-width: 0; padding: 12px 10px; letter-spacing: 1px; white-space: nowrap; display: flex; align-items: center; justify-content: center; gap: 6px; }
-.show-bar #showPlayBtn { flex-grow: 2; }
+.show-bar .h-btn { flex: 0 0 auto; padding: 12px 14px; letter-spacing: 1px; white-space: nowrap; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.show-bar #showPlayBtn { flex: 1 1 auto; min-width: 150px; }
 .show-bar .h-dots { display: none; }
 .show-bar .playing .h-dots { display: inline-flex; }
 
@@ -445,6 +447,7 @@ html.show-open, html.show-open body { overflow: hidden; }
     <div id="displayContent" class="display-content" style="display: none;">
       <div class="display-meta">
         <div class="display-cat"><strong id="catNum">A1</strong><span id="catName"></span></div>
+        <button class="h-btn h-btn--text home-btn" id="homeBtn" type="button" title="언어 선택 화면으로">‹ 언어 선택 화면</button>
         <div class="display-label" id="msgLabel"></div>
       </div>
       <div class="display-foreign" id="foreignText" data-lang="en" lang="en" aria-live="polite" aria-atomic="true"></div>
@@ -511,7 +514,7 @@ html.show-open, html.show-open body { overflow: hidden; }
 <script>
 // ────────────────────────────────────────────────
 //  ▼ 배포할 때마다 이 한 줄만 바꾸세요. 화면 맨 아래에 그대로 표시됩니다.
-const APP_VERSION = 'v4.0 · 2026-10-20';
+const APP_VERSION = 'v4.1 · 2026-10-21';
 // ────────────────────────────────────────────────
 (function () {
   const v = document.getElementById('appVersion');
@@ -1334,6 +1337,7 @@ function setLanguage(lang) {
     b.setAttribute('aria-pressed', on);
   });
   updateDisplayLanguage();
+  if (showOverlay && !showOverlay.hidden) renderShow();
   stopAudio();
   setVoiceNotice(false);   // 다음 재생 시도 때 다시 판단
 }
@@ -1342,6 +1346,21 @@ document.getElementById('langToggle').addEventListener('click', e => {
   const btn = e.target.closest('.lang-btn');
   if (btn) setLanguage(btn.dataset.lang);
 });
+
+// 표지로 돌아가기 — 선택 해제 후 인사말 언어 선택 화면을 다시 보여 준다 (다음 여행객 응대)
+function goHome() {
+  stopAudio();
+  currentMsg = null;
+  document.querySelectorAll('.msg-btn').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-pressed', 'false');
+  });
+  setVoiceNotice(false);
+  document.getElementById('displayContent').style.display = 'none';
+  document.getElementById('displayEmpty').style.display = '';
+  window.scrollTo(0, 0);
+}
+document.getElementById('homeBtn').addEventListener('click', goHome);
 
 // ===== 표지: 8개 언어 인사말 — 여행객이 자기 언어를 가리키거나 눌러 선택 =====
 const GREETINGS = [
@@ -1504,20 +1523,23 @@ function releaseWakeLock() {
   wakeLock = null;
 }
 
-// 글자 수에 맞춰 글씨 크기 결정 (CJK는 글자당 폭이 넓어 2배로 계산)
+// 화면에 스크롤 없이 들어가는 가장 큰 글씨 크기를 실측으로 찾는다 (20~72px, 이진 탐색).
+// 언어별 글자 폭 차이·줄바꿈 결과를 그대로 반영하므로 CJK·라틴 모두 같은 규칙으로 맞는다.
+// 20px에서도 넘치는 긴 멘트는 본문 영역이 스크롤된다.
 function fitShowFont() {
   const el = document.getElementById('showText');
   if (!el || showOverlay.hidden) return;
-  const cjk = ['ja', 'zh', 'zhTW'].includes(currentLang);
-  const len = el.textContent.length * (cjk ? 2 : 1);
-  const vw = Math.min(window.innerWidth, 1100);
-  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
-  let px;
-  if (len <= 60)       px = clamp(vw * 0.085, 28, 64);
-  else if (len <= 140) px = clamp(vw * 0.07, 24, 48);
-  else if (len <= 260) px = clamp(vw * 0.06, 22, 38);
-  else                 px = clamp(vw * 0.055, 20, 30);
-  el.style.fontSize = Math.round(px) + 'px';
+  const body = el.parentElement;
+  const cs = getComputedStyle(body);
+  const avail = body.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+  if (avail <= 0) return;
+  let lo = 20, hi = 72;
+  while (hi - lo > 1) {
+    const mid = (lo + hi) >> 1;
+    el.style.fontSize = mid + 'px';
+    if (el.scrollHeight <= avail) lo = mid; else hi = mid;
+  }
+  el.style.fontSize = lo + 'px';
 }
 
 function renderShow() {
@@ -1531,13 +1553,21 @@ function renderShow() {
   fitShowFont();
 }
 
+let pendingPop = false;    // Close 버튼으로 닫을 때 우리가 유발한 뒤로가기(popstate)가 아직 도착하지 않은 상태
+let pushAfterPop = false;  // 그 사이에 다시 열렸으면, 뒤로가기가 끝난 뒤에 기록을 추가한다
+
+function pushShowState() {
+  try { history.pushState({ showMode: true }, ''); } catch (e) {}
+}
+
 function openShow() {
   if (!currentMsg || !showOverlay.hidden) return;
   showOverlay.hidden = false;
   renderShow();
   document.documentElement.classList.add('show-open');
-  // 안드로이드 뒤로가기로 앱을 벗어나지 않고 전체화면만 닫히도록 기록 한 칸 추가
-  try { history.pushState({ showMode: true }, ''); } catch (e) {}
+  // 안드로이드 뒤로가기로 앱을 벗어나지 않고 전체화면만 닫히도록 기록 한 칸 추가.
+  // 직전 Close의 뒤로가기가 아직 처리 중이면 지금 추가한 기록이 그 뒤로가기에 밀려나므로, 끝난 뒤에 추가한다.
+  if (pendingPop) pushAfterPop = true; else pushShowState();
   requestWakeLock();
   document.getElementById('showCloseBtn').focus();
 }
@@ -1548,7 +1578,8 @@ function closeShow(viaPop) {
   document.documentElement.classList.remove('show-open');
   releaseWakeLock();
   if (!viaPop && history.state && history.state.showMode) {
-    try { history.back(); } catch (e) {}
+    pendingPop = true;
+    try { history.back(); } catch (e) { pendingPop = false; }
   }
   const b = document.getElementById('showBtn');
   if (b) b.focus();
@@ -1558,7 +1589,15 @@ document.getElementById('showBtn').addEventListener('click', openShow);
 document.getElementById('showCloseBtn').addEventListener('click', () => closeShow(false));
 document.getElementById('showPlayBtn').addEventListener('click', playAudio);
 document.getElementById('showStopBtn').addEventListener('click', stopAudio);
-window.addEventListener('popstate', () => closeShow(true));
+window.addEventListener('popstate', () => {
+  // Close 버튼이 유발한 뒤로가기는 무시하고, 그 사이 다시 열렸으면 이제 기록을 추가
+  if (pendingPop) {
+    pendingPop = false;
+    if (pushAfterPop) { pushAfterPop = false; if (!showOverlay.hidden) pushShowState(); }
+    return;
+  }
+  closeShow(true);
+});
 window.addEventListener('resize', fitShowFont);
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeShow(false); });
 
