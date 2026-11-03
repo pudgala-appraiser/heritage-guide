@@ -514,7 +514,7 @@ html.show-open, html.show-open body { overflow: hidden; }
 <script>
 // ────────────────────────────────────────────────
 //  ▼ 배포할 때마다 이 한 줄만 바꾸세요. 화면 맨 아래에 그대로 표시됩니다.
-const APP_VERSION = 'v4.1 · 2026-10-21';
+const APP_VERSION = 'v4.2 · 2026-11-03';
 // ────────────────────────────────────────────────
 (function () {
   const v = document.getElementById('appVersion');
@@ -764,17 +764,31 @@ const groups = [
     items: [
       {
         id: 'sjp_status',
-        label: '특사경 신분 고지',
+        label: '특사경 신분 고지 (지명서 제시)',
         restricted: true,
-        ko: '이 물품이 일반동산문화유산으로 확인되어, 지금부터는 특사경 자격으로 절차를 진행합니다. 협조 부탁드립니다.',
-        en: 'As this item has been confirmed as General Movable Cultural Heritage, I will now proceed with this matter in my capacity as a Special Judicial Police Officer. Your cooperation is requested.',
-        ja: 'この物品が一般動産文化財に該当することが確認されましたので、ここからは特別司法警察官として手続きを進めます。ご協力をお願いいたします。',
-        zh: '此物品已确认为一般动产文物，从现在起，我将以特别司法警察官的身份继续进行此程序。请您配合。',
-        zhTW: '此物品已確認為一般動產文物，從現在起，我將以特別司法警察官的身份繼續進行此程序。請您配合。',
-        es: 'Dado que se ha confirmado que este objeto es un bien cultural mueble general, a partir de ahora actuaré en mi calidad de Oficial de Policía Judicial Especial. Le solicitamos su cooperación.',
-        pt: 'Como este objeto foi confirmado como bem cultural móvel geral, a partir de agora conduzirei o procedimento na qualidade de Agente Especial de Polícia Judiciária. Pedimos a sua cooperação.',
-        de: 'Da dieser Gegenstand als allgemeines bewegliches Kulturgut bestätigt wurde, führe ich das Verfahren ab jetzt in meiner Eigenschaft als Sonderbeamter der Justizpolizei fort. Wir bitten um Ihre Mitwirkung.',
-        fr: 'Cet objet ayant été confirmé comme bien culturel mobilier général, je poursuis désormais la procédure en ma qualité d\'officier de police judiciaire spécial. Votre coopération est requise.'
+        ko: '이 물품이 일반동산문화유산으로 확인되었습니다. 저는 국가유산청 특별사법경찰관이며, 이것이 제 지명서입니다. 지금부터는 수사 절차로 진행되며, 물품의 임의제출 또는 압수와 그에 따른 조사가 이어집니다. 협조 부탁드립니다.',
+        en: 'This item has been confirmed as General Movable Cultural Heritage. I am a Special Judicial Police Officer of the Korea Heritage Service, and this is my certificate of appointment. From this point the matter proceeds as a criminal investigation: the item will be voluntarily submitted or seized, and an inquiry will follow. Your cooperation is requested.',
+        ja: 'この物品が一般動産文化財に該当することが確認されました。私は韓国・国家遺産庁の特別司法警察官であり、これが私の指名書です。ここからは捜査手続きとして進められ、物品の任意提出または押収と、それに伴う取調べが行われます。ご協力をお願いいたします。',
+        zh: '此物品已确认为一般动产文物。我是韩国国家遗产厅的特别司法警察官，这是我的指定证书。从现在起，本案将按侦查程序进行，包括物品的自愿提交或扣押以及随后的调查。请您配合。',
+        zhTW: '此物品已確認為一般動產文物。我是韓國國家遺產廳的特別司法警察官，這是我的指定證書。從現在起，本案將按偵查程序進行，包括物品的自願提交或扣押以及隨後的調查。請您配合。',
+        es: 'Se ha confirmado que este objeto es un bien cultural mueble general. Soy Oficial de Policía Judicial Especial del Servicio del Patrimonio de Corea y este es mi certificado de nombramiento. A partir de ahora el asunto se tramita como una investigación penal: el objeto será entregado voluntariamente o incautado, y después se realizará una indagación. Le solicitamos su cooperación.',
+        pt: 'Este objeto foi confirmado como bem cultural móvel geral. Sou Agente Especial de Polícia Judiciária do Serviço do Patrimônio da Coreia e este é o meu certificado de designação. A partir de agora o caso segue como investigação criminal: o objeto será entregue voluntariamente ou apreendido, e em seguida haverá uma apuração. Pedimos a sua cooperação.',
+        de: 'Dieser Gegenstand wurde als allgemeines bewegliches Kulturgut bestätigt. Ich bin Sonderbeamter der Justizpolizei beim Korea Heritage Service, der koreanischen Kulturerbebehörde, und dies ist meine Ernennungsurkunde. Ab jetzt wird die Sache als strafrechtliche Ermittlung geführt: Der Gegenstand wird freiwillig übergeben oder beschlagnahmt, anschließend folgt eine Befragung. Wir bitten um Ihre Mitwirkung.',
+        fr: 'Cet objet a été confirmé comme bien culturel mobilier général. Je suis officier de police judiciaire spécial du Service du Patrimoine Coréen, et voici ma carte de désignation. À partir de maintenant, l\'affaire se poursuit dans le cadre d\'une enquête pénale : l\'objet sera remis volontairement ou saisi, puis une audition suivra. Votre coopération est requise.'
+      },
+      {
+        id: 'investigation_rights',
+        label: '수사 권리 고지 (경위 질문 전)',
+        restricted: true,
+        ko: '지금부터 이 물품의 입수와 반출 경위를 여쭙겠습니다. 그에 앞서 다음 권리를 알려드립니다. 귀하는 진술을 거부할 수 있으며, 진술하지 않더라도 불이익을 받지 않습니다. 귀하의 진술은 법정에서 증거로 사용될 수 있습니다. 귀하는 변호인의 도움을 받을 수 있습니다. 수사 과정에서 법령 위반이나 인권 침해가 있다고 생각되시면 검사에게 구제를 신청할 수 있습니다. 이해되지 않는 부분이 있으면 질문해 주십시오.',
+        en: 'I will now ask you how you acquired this item and how you came to take it out of the country. Before that, I must inform you of your rights. You have the right to remain silent, and you will suffer no disadvantage for not answering. Anything you say may be used as evidence in court. You have the right to the assistance of a lawyer. If you believe the investigation violates the law or your human rights, you may apply to a prosecutor for relief. If anything is unclear, please ask.',
+        ja: 'これから、この物品の入手経緯と国外へ持ち出そうとした経緯についてお伺いします。その前に、お客様の権利をご説明いたします。お客様には供述を拒否する権利があり、供述しなくても不利益を受けることはありません。お客様の供述は法廷で証拠として用いられることがあります。お客様は弁護人の援助を受けることができます。捜査の過程で法令違反や人権侵害があるとお考えの場合は、検事に救済を申し立てることができます。ご不明な点があればご質問ください。',
+        zh: '现在我将询问您此物品的取得经过以及携带出境的经过。在此之前，先告知您以下权利。您有权拒绝陈述，不陈述也不会因此受到不利对待。您的陈述可能在法庭上作为证据使用。您有权获得律师的帮助。如果您认为侦查过程中存在违法或侵犯人权的情形，可以向检察官申请救济。如有不明之处，请提问。',
+        zhTW: '現在我將詢問您此物品的取得經過以及攜帶出境的經過。在此之前，先告知您以下權利。您有權拒絕陳述，不陳述也不會因此受到不利對待。您的陳述可能在法庭上作為證據使用。您有權獲得律師的協助。如果您認為偵查過程中存在違法或侵犯人權的情形，可以向檢察官申請救濟。如有不明之處，請提問。',
+        es: 'A continuación le preguntaré cómo obtuvo este objeto y cómo llegó a sacarlo del país. Antes de ello, debo informarle de sus derechos. Tiene derecho a guardar silencio y no sufrirá ningún perjuicio por no declarar. Lo que declare podrá ser utilizado como prueba ante un tribunal. Tiene derecho a la asistencia de un abogado. Si considera que en la investigación se infringe la ley o se vulneran sus derechos humanos, puede solicitar amparo a un fiscal. Si algo no le queda claro, por favor pregunte.',
+        pt: 'Agora vou perguntar como você obteve este objeto e como veio a levá-lo para fora do país. Antes disso, devo informá-lo de seus direitos. Você tem o direito de permanecer em silêncio e não sofrerá nenhum prejuízo por não responder. O que você declarar poderá ser usado como prova em juízo. Você tem direito à assistência de um advogado. Se considerar que a investigação viola a lei ou seus direitos humanos, pode requerer providências a um promotor. Se algo não estiver claro, por favor pergunte.',
+        de: 'Ich werde Sie nun fragen, wie Sie diesen Gegenstand erworben haben und wie es dazu kam, dass Sie ihn außer Landes bringen wollten. Zuvor muss ich Sie über Ihre Rechte belehren. Sie haben das Recht, die Aussage zu verweigern, und Ihnen entsteht kein Nachteil, wenn Sie nicht aussagen. Ihre Aussage kann vor Gericht als Beweismittel verwendet werden. Sie haben das Recht auf den Beistand eines Verteidigers. Wenn Sie der Ansicht sind, dass bei der Ermittlung gegen Gesetze oder Ihre Menschenrechte verstoßen wird, können Sie bei einem Staatsanwalt Abhilfe beantragen. Fragen Sie bitte nach, wenn etwas unklar ist.',
+        fr: 'Je vais maintenant vous demander comment vous avez acquis cet objet et comment vous en êtes venu à le sortir du pays. Auparavant, je dois vous informer de vos droits. Vous avez le droit de garder le silence et vous ne subirez aucun préjudice si vous ne répondez pas. Vos déclarations pourront être utilisées comme preuves devant un tribunal. Vous avez le droit à l\'assistance d\'un avocat. Si vous estimez que l\'enquête viole la loi ou vos droits fondamentaux, vous pouvez demander réparation à un procureur. Si quelque chose n\'est pas clair, n\'hésitez pas à poser des questions.'
       },
       {
         id: 'await_police',
@@ -793,15 +807,15 @@ const groups = [
       {
         id: 'submission_rights',
         label: '권리 고지 (필수)',
-        ko: '임의제출에 앞서 다음 사항을 고지합니다. 귀하는 물품의 제출을 거부할 권리가 있으며, 제출 범위를 특정하여 제출할 수도 있습니다. 이 권리를 고지받았다는 사실에 서명해 주십시오.',
-        en: 'Before voluntary submission, you must be informed of the following: You have the right to refuse submission, and you may specify a limited scope of submission. Please sign to confirm that you have been informed of these rights.',
-        ja: '任意提出に先立ち、以下をご案内いたします。お客様には物品の提出を拒否する権利があり、提出の範囲を特定して提出することもできます。これらの権利についてご案内を受けた旨、ご署名をお願いいたします。',
-        zh: '在自愿提交之前，请您了解以下事项。您有权拒绝提交物品，也可以指定特定范围进行提交。请您签字确认已收到上述权利告知。',
-        zhTW: '在自願提交之前，請您瞭解以下事項。您有權拒絕提交物品，也可以指定特定範圍進行提交。請您簽字確認已收到上述權利告知。',
-        es: 'Antes de la entrega voluntaria, debe ser informado de lo siguiente: usted tiene derecho a rechazar la entrega y puede limitar el alcance de lo que entrega. Por favor, firme para confirmar que ha sido informado de estos derechos.',
-        pt: 'Antes da entrega voluntária, informamos o seguinte: você tem o direito de recusar a entrega e pode delimitar o alcance do que será entregue. Por favor, assine para confirmar que foi informado desses direitos.',
-        de: 'Vor der freiwilligen Übergabe sind Sie über Folgendes zu informieren: Sie haben das Recht, die Übergabe zu verweigern, und Sie können einen begrenzten Umfang der Übergabe festlegen. Bitte unterschreiben Sie, um zu bestätigen, dass Sie über diese Rechte informiert wurden.',
-        fr: 'Avant la remise volontaire, vous devez être informé de ce qui suit : vous avez le droit de refuser la remise et vous pouvez spécifier un champ limité de remise. Veuillez signer pour confirmer que vous avez été informé de ces droits.'
+        ko: '임의제출에 앞서 다음 사항을 고지합니다. 귀하는 물품의 제출을 거부할 권리가 있으며, 제출 범위를 특정하여 제출할 수도 있습니다. 이해되지 않는 부분이 있으면 질문해 주십시오. 이 권리를 고지받고 이해하였다는 사실에 서명해 주십시오.',
+        en: 'Before voluntary submission, you must be informed of the following: You have the right to refuse submission, and you may specify a limited scope of submission. If anything is unclear, please ask. Please sign to confirm that you have been informed of these rights and understand them.',
+        ja: '任意提出に先立ち、以下をご案内いたします。お客様には物品の提出を拒否する権利があり、提出の範囲を特定して提出することもできます。ご不明な点があればご質問ください。これらの権利についてご案内を受け、理解された旨、ご署名をお願いいたします。',
+        zh: '在自愿提交之前，请您了解以下事项。您有权拒绝提交物品，也可以指定特定范围进行提交。如有不明之处，请提问。请您签字确认已收到并理解上述权利告知。',
+        zhTW: '在自願提交之前，請您瞭解以下事項。您有權拒絕提交物品，也可以指定特定範圍進行提交。如有不明之處，請提問。請您簽字確認已收到並理解上述權利告知。',
+        es: 'Antes de la entrega voluntaria, debe ser informado de lo siguiente: usted tiene derecho a rechazar la entrega y puede limitar el alcance de lo que entrega. Si algo no le queda claro, por favor pregunte. Por favor, firme para confirmar que ha sido informado de estos derechos y que los ha comprendido.',
+        pt: 'Antes da entrega voluntária, informamos o seguinte: você tem o direito de recusar a entrega e pode delimitar o alcance do que será entregue. Se algo não estiver claro, por favor pergunte. Por favor, assine para confirmar que foi informado desses direitos e que os compreendeu.',
+        de: 'Vor der freiwilligen Übergabe sind Sie über Folgendes zu informieren: Sie haben das Recht, die Übergabe zu verweigern, und Sie können einen begrenzten Umfang der Übergabe festlegen. Fragen Sie bitte nach, wenn etwas unklar ist. Bitte unterschreiben Sie, um zu bestätigen, dass Sie über diese Rechte informiert wurden und sie verstanden haben.',
+        fr: 'Avant la remise volontaire, vous devez être informé de ce qui suit : vous avez le droit de refuser la remise et vous pouvez spécifier un champ limité de remise. Si quelque chose n\'est pas clair, n\'hésitez pas à poser des questions. Veuillez signer pour confirmer que vous avez été informé de ces droits et que vous les avez compris.'
       },
       {
         id: 'submission_form',
@@ -819,6 +833,7 @@ const groups = [
       {
         id: 'submission_receipt',
         label: '임의제출 목록 사본 교부',
+        restricted: true,
         ko: '임의제출서는 2부 작성되며, 그중 한 부를 귀하의 보관용으로 교부해 드립니다. 한국 형사소송법 제219조 및 제129조에 따른 압수목록 교부 의무에 따른 것입니다.',
         en: 'The Voluntary Submission form is prepared in two copies, one of which will be provided to you for your records. This is in accordance with the obligation to deliver a seizure list under Articles 219 and 129 of the Korean Criminal Procedure Act.',
         ja: '任意提出書は2部作成され、うち1部をお客様の保管用としてお渡しいたします。韓国刑事訴訟法第219条および第129条に基づく押収目録交付義務によるものでございます。',
@@ -828,6 +843,20 @@ const groups = [
         pt: 'O Termo de Entrega Voluntária é lavrado em duas vias, uma das quais será entregue a você para seus registros. Isso atende à obrigação de entrega da lista de apreensão prevista nos artigos 219 e 129 do Código de Processo Penal da Coreia.',
         de: 'Das Formular zur freiwilligen Übergabe wird in zwei Ausfertigungen erstellt, von denen Ihnen eine für Ihre Unterlagen ausgehändigt wird. Dies erfolgt gemäß der Pflicht zur Aushändigung eines Beschlagnahmeverzeichnisses nach Artikel 219 und Artikel 129 der koreanischen Strafprozessordnung.',
         fr: 'Le formulaire de remise volontaire est établi en deux exemplaires, dont un vous sera remis pour vos archives. Ceci est conforme à l\'obligation de remise d\'une liste de saisie en vertu des articles 219 et 129 du Code de procédure pénale coréen.'
+      },
+      {
+        id: 'submission_receipt_nonsjp',
+        label: '임의제출서 사본 교부 (압수목록은 수사관 교부)',
+        conditional: true,
+        ko: '임의제출서는 2부 작성되며, 그중 한 부를 귀하의 보관용으로 교부해 드립니다. 물품은 담당 수사관이 도착할 때까지 제가 보관하며, 한국 형사소송법에 따른 압수목록은 담당 수사관이 작성하여 교부합니다. 귀하께서 먼저 출국하시는 경우에는 알려 주신 연락처로 보내 드립니다.',
+        en: 'The Voluntary Submission form is prepared in two copies, one of which will be provided to you for your records. I will keep the item in safe custody until the investigating officer arrives; the seizure list required under the Korean Criminal Procedure Act will be prepared and delivered by that officer. If you depart before then, it will be sent to the contact details you have provided.',
+        ja: '任意提出書は2部作成され、うち1部をお客様の保管用としてお渡しいたします。物品は担当捜査官が到着するまで私が保管し、韓国刑事訴訟法に基づく押収目録は担当捜査官が作成してお渡しします。お客様が先に出国される場合は、お知らせいただいた連絡先へお送りいたします。',
+        zh: '自愿提交书一式两份，其中一份将交予您留存。在负责侦查的警官到达之前，物品由我保管；依据韩国《刑事诉讼法》应交付的扣押目录，将由该警官制作并交付。如您在此之前出境，我们将寄送至您提供的联系地址。',
+        zhTW: '自願提交書一式兩份，其中一份將交予您留存。在負責偵查的警官到達之前，物品由我保管；依據韓國《刑事訴訟法》應交付的扣押目錄，將由該警官製作並交付。如您在此之前出境，我們將寄送至您提供的聯絡地址。',
+        es: 'El formulario de entrega voluntaria se redacta por duplicado, y se le entregará una copia para sus registros. Yo custodiaré el objeto hasta que llegue el agente investigador; la lista de bienes incautados prevista en el Código de Procedimiento Penal de Corea será elaborada y entregada por dicho agente. Si usted sale del país antes, se le enviará a los datos de contacto que nos ha facilitado.',
+        pt: 'O Termo de Entrega Voluntária é lavrado em duas vias, uma das quais será entregue a você para seus registros. Eu manterei o objeto sob guarda até a chegada do agente investigador; a lista de apreensão prevista no Código de Processo Penal da Coreia será lavrada e entregue por esse agente. Se você partir antes disso, ela será enviada para o contato que você informou.',
+        de: 'Das Formular zur freiwilligen Übergabe wird in zwei Ausfertigungen erstellt, von denen Ihnen eine für Ihre Unterlagen ausgehändigt wird. Ich verwahre den Gegenstand, bis der zuständige Ermittlungsbeamte eintrifft; das nach der koreanischen Strafprozessordnung vorgeschriebene Beschlagnahmeverzeichnis wird von diesem Beamten erstellt und ausgehändigt. Sollten Sie vorher ausreisen, wird es Ihnen an die von Ihnen angegebenen Kontaktdaten zugesandt.',
+        fr: 'Le formulaire de remise volontaire est établi en deux exemplaires, dont un vous sera remis pour vos archives. Je conserverai l\'objet jusqu\'à l\'arrivée de l\'enquêteur compétent ; la liste de saisie prévue par le Code de procédure pénale coréen sera établie et remise par cet enquêteur. Si vous quittez le pays avant, elle vous sera envoyée aux coordonnées que vous avez indiquées.'
       },
       {
         id: 'seizure_216_notice',
@@ -914,6 +943,20 @@ const groups = [
         pt: 'Apesar das repetidas notificações sobre a infração, caso você continue sem cooperar, poderá ser preso em flagrante delito, nos termos do Código de Processo Penal. Pedimos a sua cooperação.',
         de: 'Trotz wiederholter Hinweise auf den Verstoß kann Ihre fortgesetzte Verweigerung der Mitwirkung gemäß der Strafprozessordnung zur Festnahme als auf frischer Tat ergriffener Täter führen. Wir bitten um Ihre Mitwirkung.',
         fr: 'Malgré des notifications répétées de l\'infraction, votre refus continu de coopérer peut entraîner votre arrestation en flagrant délit en vertu du Code de procédure pénale. Nous vous demandons votre coopération.'
+      },
+      {
+        id: 'arrest_notice',
+        label: '현행범 체포 고지',
+        restricted: true,
+        ko: '귀하를 「문화유산의 보존 및 활용에 관한 법률」 위반, 즉 일반동산문화유산을 허가 없이 국외로 반출하려 한 혐의로 현행범 체포합니다. 체포 이유는 위반 사실을 여러 차례 알렸음에도 신원 확인과 절차에 협조하지 않으셨기 때문입니다. 귀하는 변호인을 선임할 수 있고, 진술을 거부할 수 있으며, 법원에 체포의 적법 여부에 대한 심사를 청구할 수 있습니다. 이 체포에 대해 하실 말씀이 있으면 지금 말씀해 주십시오.',
+        en: 'You are under arrest as a flagrant offender on suspicion of violating the Act on the Protection and Use of Cultural Heritage, namely attempting to take General Movable Cultural Heritage out of the country without permission. The reason for the arrest is that, despite repeated notice of the violation, you have not cooperated with identification and the required procedure. You have the right to retain a lawyer, the right to remain silent, and the right to ask a court to review the legality of this arrest. If you have anything to say about this arrest, please say it now.',
+        ja: 'お客様を「文化遺産の保存および活用に関する法律」違反、すなわち一般動産文化財を許可なく国外へ持ち出そうとした容疑で、現行犯として逮捕します。逮捕の理由は、違反事実を繰り返しお伝えしたにもかかわらず、身元確認と手続きにご協力いただけなかったためです。お客様には弁護人を選任する権利、供述を拒否する権利、および裁判所に逮捕の適法性の審査を請求する権利があります。この逮捕について申し述べたいことがあれば、今おっしゃってください。',
+        zh: '现以涉嫌违反《文化遗产的保存与活用相关法律》，即未经许可试图将一般动产文物携带出境，对您实施现行犯逮捕。逮捕的理由是，在多次告知违法事实后，您仍不配合身份核实和相关程序。您有权聘请律师，有权拒绝陈述，并有权向法院申请审查本次逮捕是否合法。如您对本次逮捕有任何申辩，请现在陈述。',
+        zhTW: '現以涉嫌違反《文化遺產的保存與活用相關法律》，即未經許可試圖將一般動產文物攜帶出境，對您實施現行犯逮捕。逮捕的理由是，在多次告知違法事實後，您仍不配合身分核實和相關程序。您有權聘請律師，有權拒絕陳述，並有權向法院聲請審查本次逮捕是否合法。如您對本次逮捕有任何申辯，請現在陳述。',
+        es: 'Queda usted detenido en flagrancia por la presunta infracción de la Ley sobre la Protección y el Uso del Patrimonio Cultural, es decir, por intentar sacar del país un bien cultural mueble general sin autorización. El motivo de la detención es que, pese a habérsele notificado la infracción en varias ocasiones, no ha cooperado con la identificación ni con el procedimiento. Tiene derecho a designar un abogado, derecho a guardar silencio y derecho a solicitar a un tribunal que revise la legalidad de esta detención. Si tiene algo que alegar sobre esta detención, dígalo ahora.',
+        pt: 'Você está preso em flagrante delito por suspeita de infração à Lei sobre a Proteção e o Uso do Patrimônio Cultural, isto é, por tentar levar um bem cultural móvel geral para fora do país sem autorização. O motivo da prisão é que, apesar das repetidas notificações sobre a infração, você não cooperou com a identificação nem com o procedimento. Você tem direito a constituir advogado, direito de permanecer em silêncio e direito de requerer ao tribunal a revisão da legalidade desta prisão. Se tiver algo a alegar sobre esta prisão, diga agora.',
+        de: 'Sie werden wegen des Verdachts eines Verstoßes gegen das Gesetz über den Schutz und die Nutzung des Kulturguts, nämlich des Versuchs, allgemeines bewegliches Kulturgut ohne Genehmigung außer Landes zu bringen, auf frischer Tat festgenommen. Grund der Festnahme ist, dass Sie trotz wiederholter Hinweise auf den Verstoß weder bei der Identitätsfeststellung noch beim Verfahren mitgewirkt haben. Sie haben das Recht, einen Verteidiger zu bestellen, das Recht, die Aussage zu verweigern, und das Recht, bei einem Gericht die Überprüfung der Rechtmäßigkeit dieser Festnahme zu beantragen. Wenn Sie zu dieser Festnahme etwas vorbringen möchten, sagen Sie es bitte jetzt.',
+        fr: 'Vous êtes arrêté en flagrant délit, soupçonné d\'avoir enfreint la loi sur la protection et l\'utilisation du patrimoine culturel, à savoir d\'avoir tenté de sortir du pays un bien culturel mobilier général sans autorisation. Le motif de l\'arrestation est que, malgré des notifications répétées de l\'infraction, vous n\'avez coopéré ni à la vérification de votre identité ni à la procédure. Vous avez le droit de désigner un avocat, le droit de garder le silence et le droit de demander à un tribunal de contrôler la légalité de cette arrestation. Si vous avez quelque chose à déclarer au sujet de cette arrestation, dites-le maintenant.'
       },
       {
         id: 'police_report',
