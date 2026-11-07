@@ -335,11 +335,11 @@ html.show-open, html.show-open body { overflow: hidden; }
 .group.warning { border-left-color: var(--accent-warning); }
 .group-header {
   padding: 10px 14px 8px; border-bottom: 1px solid var(--hairline);
-  display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
 }
 .group-title { font-family: var(--font-display); font-weight: 800; font-size: 0.95rem; color: var(--text-ink); flex: 1 1 auto; word-break: keep-all; }
 .group.warning .group-title { color: var(--accent-warning); }
-.group-title-en { font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted-soft); flex: 0 0 auto; text-align: right; }
+.group-title-en { font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted-soft); overflow-wrap: anywhere; }
 
 .group-buttons { padding: 10px; display: flex; flex-direction: column; gap: 6px; }
 .msg-btn {
@@ -514,7 +514,7 @@ html.show-open, html.show-open body { overflow: hidden; }
 <script>
 // ────────────────────────────────────────────────
 //  ▼ 배포할 때마다 이 한 줄만 바꾸세요. 화면 맨 아래에 그대로 표시됩니다.
-const APP_VERSION = 'v4.2 · 2026-11-03';
+const APP_VERSION = 'v4.3 · 2026-11-07';
 // ────────────────────────────────────────────────
 (function () {
   const v = document.getElementById('appVersion');
