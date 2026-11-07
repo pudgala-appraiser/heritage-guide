@@ -179,9 +179,15 @@ body.heritage {
 #langToggle { flex-wrap: nowrap; gap: 1px; background: var(--accent-structure); }
 .h-mode.lang-btn { min-width: 44px; }
 /* 좁은 화면: 8개가 한 줄에 안 들어가면 어중간한 줄바꿈 대신 4×2 격자로 정렬 */
+/* 휴대폰: 8개를 한 줄에 — 고정 상단바 높이를 줄여 멘트 영역 확보 */
 @media (max-width: 520px) {
-  #langToggle { display: grid; grid-template-columns: repeat(4, 1fr); width: 100%; }
-  #langToggle .h-mode { padding: 11px 0; text-align: center; min-width: 0; }
+  .lang-label { display: none; }
+  #langToggle { display: grid; grid-template-columns: repeat(8, 1fr); width: 100%; }
+  #langToggle .h-mode { padding: 10px 0; text-align: center; min-width: 0; }
+  /* 재생·정지를 한 줄에 */
+  .audio-controls .audio-btn { min-width: 0; }
+  .audio-controls #playBtn.audio-btn { flex: 2 1 0; }
+  .audio-controls #stopBtn.audio-btn { flex: 1 1 0; min-width: 0; }
 }
 
 /* LAYOUT */
@@ -216,7 +222,7 @@ body.heritage {
   gap: 8px; flex-wrap: wrap;
   padding-bottom: 10px; border-bottom: 1px solid var(--hairline); margin-bottom: 18px;
 }
-.display-cat { font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); }
+.display-cat { font-size: 12.5px; font-weight: 800; letter-spacing: .5px; color: var(--text-muted); }
 .display-cat strong { color: var(--accent-structure); font-size: 13px; margin-right: 6px; }
 .display-label { font-family: var(--font-display); font-weight: 800; font-size: 16px; color: var(--text-ink); word-break: keep-all; flex: 1 1 100%; }
 /* 표지(언어 선택 화면)로 돌아가기 — 다음 여행객 응대 시작용 */
@@ -258,6 +264,12 @@ body.heritage {
 #stopBtn.audio-btn { flex: 0 1 auto; min-width: 110px; padding: 10px 18px; }
 .audio-icon { width: 16px; height: 16px; flex-shrink: 0; }
 .audio-btn .h-dots { display: none; }
+/* 멘트 이동 */
+.msg-nav { display: flex; gap: 10px; margin-top: 10px; }
+.msg-nav .h-btn { flex: 1 1 0; padding: 10px 12px; white-space: nowrap; letter-spacing: .5px; }
+.msg-nav .h-btn:disabled { opacity: .45; cursor: default; }
+#nextNum { font-weight: 800; }
+#toListBtn { display: none; }   /* PC는 목록이 옆에 있으므로 휴대폰에서만 */
 .audio-btn.playing .h-dots { display: inline-flex; }
 #showBtn.audio-btn { flex: 1 0 100%; }
 
@@ -385,6 +397,7 @@ html.show-open, html.show-open body { overflow: hidden; }
   .h-header .h-sub { display: none; }
   .lang-bar { padding: 8px 12px; gap: 8px; }
   .h-mode.lang-btn { padding: 8px 12px; }
+  #toListBtn { display: block; }
 }
 
 /* 터치 기기 — hover 잔상 제거 (hover는 포인터 기기 전용 색 심화) */
@@ -461,17 +474,22 @@ html.show-open, html.show-open body { overflow: hidden; }
       <div class="audio-controls">
         <button class="h-btn audio-btn" id="playBtn">
           <svg class="audio-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-          <span id="playLabel">Play Audio</span>
+          <span id="playLabel">음성 재생</span>
           <span class="h-dots" aria-hidden="true"><span></span><span></span><span></span></span>
         </button>
         <button class="h-btn h-btn--ghost audio-btn" id="stopBtn">
           <svg class="audio-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h12v12H6z"/></svg>
-          Stop
+          정지
         </button>
-        <button class="h-btn h-btn--ghost audio-btn" id="showBtn" aria-label="전체화면으로 보기 · Full Screen">
+        <button class="h-btn h-btn--ghost audio-btn" id="showBtn" aria-label="전체화면으로 보기">
           <svg class="audio-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
-          Full Screen
+          전체화면
         </button>
+      </div>
+      <!-- 멘트 이동 — 휴대폰에서 목록까지 오르내리지 않고 다음 멘트로 넘기기 -->
+      <div class="msg-nav">
+        <button class="h-btn h-btn--ghost" id="toListBtn" type="button">‹ 목록으로</button>
+        <button class="h-btn h-btn--ghost" id="nextBtn" type="button">다음 멘트 <span id="nextNum"></span> ›</button>
       </div>
     </div>
   </section>
@@ -514,7 +532,7 @@ html.show-open, html.show-open body { overflow: hidden; }
 <script>
 // ────────────────────────────────────────────────
 //  ▼ 배포할 때마다 이 한 줄만 바꾸세요. 화면 맨 아래에 그대로 표시됩니다.
-const APP_VERSION = 'v4.3 · 2026-11-07';
+const APP_VERSION = 'v4.4 · 2026-11-07';
 // ────────────────────────────────────────────────
 (function () {
   const v = document.getElementById('appVersion');
@@ -1333,13 +1351,15 @@ function selectMessage(item, group, gi, ii) {
   document.getElementById('displayContent').style.display = 'flex';
 
   document.getElementById('catNum').textContent = `${gi}.${ii}`;
-  document.getElementById('catName').textContent = group.titleEn;
+  // 위원이 보는 분류명은 한국어로 (번호는 catNum이 표시하므로 원문자 번호는 뺀다)
+  document.getElementById('catName').textContent = group.title.replace(/^[①-⑳]\s*/, '');
   document.getElementById('msgLabel').textContent = item.label;
 
   // 새 메시지 선택 시 voice notice 초기화
   setVoiceNotice(false);
 
   updateDisplayLanguage();
+  updateMsgNav();
 
   // 모바일에서는 메시지 선택 시 디스플레이 패널로 자동 스크롤
   // (고정 상단바 높이를 빼고 즉시 이동 — 규칙 6에 따라 부드러운 스크롤 없음)
@@ -1404,6 +1424,33 @@ function goHome() {
   window.scrollTo(0, 0);
 }
 document.getElementById('homeBtn').addEventListener('click', goHome);
+
+// ===== 멘트 이동: 목록으로 돌아가기 · 다음 멘트 =====
+function flatItems() {
+  const out = [];
+  groups.forEach((group, gi) => group.items.forEach((item, ii) => out.push({ item, group, gi: gi + 1, ii: ii + 1 })));
+  return out;
+}
+function nextOf(msg) {
+  const all = flatItems();
+  const k = all.findIndex(m => m.item.id === msg.item.id);
+  return k >= 0 && k + 1 < all.length ? all[k + 1] : null;
+}
+function updateMsgNav() {
+  const btn = document.getElementById('nextBtn');
+  const nx = currentMsg ? nextOf(currentMsg) : null;
+  btn.disabled = !nx;
+  document.getElementById('nextNum').textContent = nx ? `${nx.gi}.${nx.ii}` : '';
+}
+document.getElementById('nextBtn').addEventListener('click', () => {
+  const nx = currentMsg && nextOf(currentMsg);
+  if (nx) selectMessage(nx.item, nx.group, nx.gi, nx.ii);
+});
+document.getElementById('toListBtn').addEventListener('click', () => {
+  // 방금 고른 멘트 버튼이 화면 가운데 오도록 즉시 이동 (규칙 6: 부드러운 스크롤 없음)
+  const b = document.querySelector('.msg-btn.active');
+  if (b) b.scrollIntoView({ block: 'center' });
+});
 
 // ===== 표지: 8개 언어 인사말 — 여행객이 자기 언어를 가리키거나 눌러 선택 =====
 const GREETINGS = [
@@ -1476,7 +1523,8 @@ function setPlaying(on) {
     const btn = document.getElementById(b);
     const lab = document.getElementById(l);
     if (btn) btn.classList.toggle('playing', on);
-    if (lab) lab.textContent = on ? PLAYING_LABEL : PLAY_LABEL;
+    const ko = l === 'playLabel';   // 패널(위원 조작부)은 한국어, 전체화면은 영어 유지
+    if (lab) lab.textContent = on ? (ko ? '재생 중…' : PLAYING_LABEL) : (ko ? '음성 재생' : PLAY_LABEL);
   });
 }
 
