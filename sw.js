@@ -2,8 +2,9 @@
 // 온라인: 항상 서버의 최신본을 먼저 받는다 (배포 갱신이 곧바로 반영됨).
 // 오프라인·응답 지연(3초): 기기에 보관해 둔 마지막 판을 쓴다.
 // 앱 파일 구성이 바뀌면 아래 CACHE 이름의 숫자를 하나 올린다.
-const CACHE = 'heritage-guide-1';
-const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
+const CACHE = 'heritage-guide-2';
+const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png',
+  './fonts/dasot-serif-300.woff2', './fonts/dasot-serif-500.woff2'];   // 제목용 본명조 (잘라 넣은 파일)
 
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting()));

@@ -1,471 +1,348 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" data-theme="cheong">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#1F4E79">
+<meta name="theme-color" content="#8fcbf7">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="감정 안내">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="description" content="국가유산청 문화유산 감정 현장용 다국어 안내 도구 — 8개 언어 안내문과 음성 재생(TTS)을 제공합니다.">
 <title>문화유산 감정 현장 다국어 안내</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%231F4E79'/><text x='32' y='46' font-size='38' fill='%23D9A43B' text-anchor='middle' font-family='serif' font-weight='600'>鑑</text></svg>">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%238fcbf7'/><text x='32' y='46' font-size='38' fill='%230e2233' text-anchor='middle' font-family='serif' font-weight='500'>鑑</text></svg>">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
 <style>
 /* =====================================================================
-   heritage-design.css — 한재원 문화유산 교육·학술 디자인 시스템 (오방색)
-   단일 HTML 배포 원칙에 따라 원본 CSS 전문을 이 블록에 내장함.
-   시스템이 갱신되면 '── 앱 화면 스타일 ──' 이전 부분을 통째로 교체할 것.
-   (서체 예외: 미설치 기기·오프라인 대응을 위해 웹폰트 대신
-    기기 기본 글꼴 스택을 사용함 — 2026-07-28 사용자 결정.
-    일·중 원문은 자형 변형 보정을 위해 해당 언어 우선 스택 적용)
+   감정 현장 다국어 안내 — 화면 스타일 (v5.0, 「다섯 벌」)
+   색·글자·면 처리는 다섯 벌 디자인 시스템(tokens.json)을 따른다.
+   슬라이드용 수치(1920×1080)는 앱 크기로 줄이고 역할만 지킨다.
+
+   규칙
+   1. 벌 하나에 색 하나. 평소는 청 벌(하늘빛), 경고 묶음(⑦)의 멘트를 고르면 적 벌(인주)로 바뀐다.
+      한 화면에 두 색을 함께 두지 않는다.
+   2. 바탕은 흰색. 모든 면은 직각. 그림자·그라데이션·둥근 모서리 없음.
+   3. 띠 상자(왼쪽 색 띠)와 색동은 쓰지 않는다. 가는 선(seam)과 굵은 먹 선으로만 나눈다.
+   4. 제목은 명조(앱에 넣은 본명조 300·500), 본문과 외국어 멘트는 기기 고딕.
+      글꼴 파일이 없으면(HTML 파일 하나만 열 때) 기기 명조로 바뀌어 보인다.
+   5. 모션은 재생 중 점 3개뿐이다.
    ===================================================================== */
 
-/* ── 토큰 ── */
+@font-face { font-family: 'Dasot Serif'; font-weight: 300; font-style: normal; font-display: swap; src: url('fonts/dasot-serif-300.woff2') format('woff2'); }
+@font-face { font-family: 'Dasot Serif'; font-weight: 500; font-style: normal; font-display: swap; src: url('fonts/dasot-serif-500.woff2') format('woff2'); }
+
+/* ── 벌(색) — 값은 다섯 벌 tokens.json 그대로 ── */
+:root, [data-theme="cheong"] {
+  --bg: #ffffff;        /* 바탕 */
+  --plane: #8fcbf7;     /* 색면 — 하늘빛 */
+  --ink: #0e2233;       /* 제목 */
+  --ink-2: #2f4252;     /* 본문 */
+  --mute: #5b6b78;      /* 덧붙이는 말. 색면 위에는 쓰지 않는다 */
+  --seam: #c9d5dd;      /* 가는 선 */
+  --on-plane: #0e2233;  /* 색면 위 글자 */
+  --on-plane-2: #24394a;
+}
+[data-theme="jeok"] {
+  --bg: #ffffff;
+  --plane: #d4311e;     /* 색면 — 인주 */
+  --ink: #141414;
+  --ink-2: #3b3b3b;
+  --mute: #6e6e6e;
+  --seam: #d2d2d2;
+  --on-plane: #ffffff;
+  --on-plane-2: #ffffff; /* 토큰 값 #ffe3dd는 인주 위에서 대비가 4.06:1이라 작은 글자에는 흰색을 쓴다 */
+}
+
 :root {
-  /* 오방 기본색 */
-  --obang-cheong: #1F4E79; /* 청(쪽빛) — 구조·질서 */
-  --obang-jeok: #A63C32;   /* 적(석간주) — 경계·금지 */
-  --obang-hwang: #D9A43B;  /* 황(치자) — 중심·핵심 */
-  --obang-baek: #FAF7F0;   /* 백(소색 한지) — 바탕 */
-  --obang-heuk: #221E1A;   /* 흑(먹) — 텍스트 */
-  --obang-nok: #3F6B51;    /* 뇌록 — 긍정·확인 */
-
-  /* 표면 */
-  --surface-canvas: #FAF7F0; /* 페이지 바탕 — 순백 #FFF 금지 */
-  --surface-soft: #F3EEE3;   /* 카드·박스 채움 */
-  --surface-card: #ECE5D6;   /* 가라앉은 카드 */
-  --hairline: #E3DBC9;       /* 1px 경계선 */
-
-  /* 텍스트 */
-  --text-ink: #221E1A;
-  --text-body: #3D3831;
-  --text-muted: #6F675B;
-  --text-muted-soft: #948B7D;
-  --on-dark: #FAF7F0;       /* 어두운 면 위 주 텍스트 */
-  --on-dark-soft: #B9C9D8;  /* 어두운 면 위 보조(회청) */
-  --on-hwang: #221E1A;      /* 황 면 위 텍스트 */
-
-  /* 의미 별칭 */
-  --accent-structure: var(--obang-cheong); /* 구조: 헤더·주 버튼·기본 띠 */
-  --accent-center: var(--obang-hwang);     /* 핵심: 화면당 채움 1회 */
-  --accent-warning: var(--obang-jeok);     /* 주의·오류 전용 */
-  --accent-positive: var(--obang-nok);     /* 확인·긍정 전용 */
-
-  /* 서체 — 기기 기본 글꼴 스택 (웹폰트 미사용: 미설치 기기·오프라인 대응) */
-  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', 'Noto Sans KR', sans-serif; /* 본문·UI·숫자 */
-  --font-display: var(--font-body); /* 제목·인용 — 굵기로만 위계 구분 */
-
-  /* 앱 보강 토큰 — 일·중 원문은 해당 언어 글꼴 우선 (자형 변형 보정) */
+  /* 제목 — 본명조. 앱에 넣은 파일이 먼저, 없으면 기기 명조 */
+  --serif: 'Dasot Serif', 'Noto Serif KR', 'Noto Serif CJK KR', 'AppleMyungjo', 'Batang', serif;
+  /* 본문·조작부 — 기기 고딕 (웹폰트 없음: 오프라인·미설치 기기 대응) */
+  --sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', 'Noto Sans KR', sans-serif;
+  /* 일·중 원문은 해당 언어 글꼴 우선 (자형 차이 보정) */
   --font-jp: 'Hiragino Kaku Gothic ProN', 'Yu Gothic', Meiryo, 'Noto Sans JP', system-ui, sans-serif;
   --font-zh: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', system-ui, sans-serif;
   --font-tc: 'PingFang TC', 'Microsoft JhengHei', 'Noto Sans TC', system-ui, sans-serif;
 
-  /* 여백·형태 */
-  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px;
-  --sp-5: 24px; --sp-6: 32px; --sp-7: 48px; --sp-8: 64px;
-  --radius: 0; /* 모든 모서리 직각 — 원형은 번호 배지만 예외 */
-}
-
-/* ── 베이스 ── */
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 16px; }
-body.heritage {
-  margin: 0; background: var(--surface-canvas); color: var(--text-body);
-  font-family: var(--font-body); font-size: 14px; line-height: 1.65;
-  min-height: 100vh;
-}
-.heritage h1, .heritage h2, .heritage h3 {
-  font-family: var(--font-display); font-weight: 800; color: var(--text-ink);
-  letter-spacing: -0.02em; line-height: 1.3; margin: 0;
-}
-.heritage a { color: var(--accent-structure); }
-.heritage a:hover { color: var(--obang-cheong); text-decoration: underline; text-underline-offset: 3px; }
-.heritage :focus-visible { outline: 2px solid var(--accent-structure); outline-offset: 2px; }
-
-/* ── 헤더 바 (쪽빛 단일 평면 — 그라데이션 금지) ── */
-.h-header {
-  background: var(--accent-structure); color: var(--on-dark);
-  display: flex; align-items: baseline; gap: 12px; padding: 13px 20px;
-}
-.h-header .h-brand { font-family: var(--font-display); font-weight: 800; font-size: 21px; letter-spacing: 4px; }
-.h-header .h-sub { font-size: 11px; font-weight: 800; letter-spacing: 2px; color: var(--on-dark-soft); }
-
-/* ── 카드/박스: 한지 채움 + 1px 경계 + 좌측 4px 의미색 띠. 그림자 없음 ── */
-.h-box { background: var(--surface-soft); border: 1px solid var(--hairline); border-left: 4px solid var(--accent-structure); padding: 16px 18px; }
-.h-box--warning { border-left-color: var(--accent-warning); }
-.h-box--positive { border-left-color: var(--accent-positive); }
-.h-box--center { border-left-color: var(--accent-center); }
-
-/* ── 버튼 ── */
-.h-btn {
-  font-family: inherit; cursor: pointer; border: none; border-radius: 0;
-  background: var(--accent-structure); color: var(--on-dark);
-  padding: 10px 30px; font-size: 14px; font-weight: 700; letter-spacing: 3px;
-}
-.h-btn:hover { background: #1A4066; }
-.h-btn:disabled { opacity: 0.45; cursor: default; }
-.h-btn--ghost { background: var(--surface-canvas); border: 1px solid var(--accent-structure); color: var(--accent-structure); }
-.h-btn--ghost:hover { background: var(--surface-soft); }
-.h-btn--text { background: none; padding: 2px 0; color: var(--accent-structure); font-size: 12.5px; letter-spacing: 0.5px; }
-
-/* ── 세그먼트 토글 (직각) ── */
-.h-modes { display: inline-flex; border: 1px solid var(--accent-structure); }
-.h-mode { padding: 8px 18px; font-size: 13px; font-weight: 700; background: var(--surface-canvas); color: var(--accent-structure); border: none; cursor: pointer; letter-spacing: 0.5px; }
-.h-mode.on { background: var(--accent-structure); color: var(--on-dark); }
-
-/* ── 입력 ── */
-.h-input {
-  width: 100%; font-family: inherit; font-size: 16px; padding: 11px 12px;
-  background: var(--surface-canvas); border: 1px solid var(--hairline); color: var(--text-ink); border-radius: 0;
-}
-.h-input::placeholder { color: var(--text-muted-soft); }
-
-/* ── 태그·칩 (1px 테두리, 직각) ── */
-.h-tag { font-size: 10px; border: 1px solid var(--hairline); color: var(--text-muted); padding: 1.5px 6px; background: var(--surface-canvas); letter-spacing: 1px; }
-.h-tag--primary { border-color: var(--accent-structure); color: var(--accent-structure); }
-
-/* ── 번호 배지 (원형 예외) ── */
-.h-badge {
-  width: 44px; height: 44px; border-radius: 999px; background: var(--accent-structure);
-  color: var(--on-dark); display: inline-flex; align-items: center; justify-content: center;
-  font-size: 18px; font-weight: 800;
-}
-
-/* ── 색동 구분선 — 표지·마무리 화면에만 ── */
-.h-saekdong { display: flex; gap: 8px; }
-.h-saekdong span { width: 34px; height: 5px; }
-.h-saekdong span:nth-child(1) { background: var(--obang-cheong); }
-.h-saekdong span:nth-child(2) { background: var(--obang-jeok); }
-.h-saekdong span:nth-child(3) { background: var(--obang-hwang); }
-.h-saekdong span:nth-child(4) { background: var(--obang-heuk); }
-
-/* ── 토스트 ── */
-.h-toast {
-  position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%);
-  background: var(--surface-soft); border: 1px solid var(--hairline); border-left: 4px solid var(--accent-positive);
-  padding: 9px 16px; font-size: 12.5px; color: var(--text-body); z-index: 40;
-}
-
-/* ── 로딩: 황 점 3개 깜빡임 (허용된 유일한 모션) ── */
-.h-dots { display: inline-flex; gap: 7px; }
-.h-dots span { width: 7px; height: 7px; background: var(--accent-center); animation: h-blink 1.05s infinite; }
-.h-dots span:nth-child(2) { animation-delay: 0.18s; }
-.h-dots span:nth-child(3) { animation-delay: 0.36s; }
-@keyframes h-blink { 0%, 70%, 100% { opacity: 0.25; } 35% { opacity: 1; } }
-@media (prefers-reduced-motion: reduce) { .h-dots span { animation: none; opacity: 0.8; } }
-
-/* =====================================================================
-   ── 앱 화면 스타일 — 위 시스템의 토큰·클래스만 사용 ──
-   규칙 준수 메모:
-   · 황 채움은 화면당 1회 → 본 화면은 선택된 멘트 버튼(.msg-btn.active),
-     전체화면은 '아래 계속' 띠(.show-more)에만 사용
-   · 적은 경계·금지 전용 → ⑦ 비협조 그룹·특사경 태그·음성 미지원 알림
-   · 색동 구분선은 표지(빈 상태)와 푸터에만
-   · 그림자·그라데이션·둥근 모서리·전환 모션 없음
-   ===================================================================== */
-
-/* 기기 안전 영역 — 홈 화면 앱(상태 표시줄 겹침)·가로 화면(노치) 대응. 해당 없는 기기에서는 0 */
-:root {
+  /* 기기 안전 영역 — 홈 화면 앱·가로 화면(노치) 대응. 해당 없는 기기에서는 0 */
   --safe-t: env(safe-area-inset-top, 0px);  --safe-b: env(safe-area-inset-bottom, 0px);
   --safe-l: env(safe-area-inset-left, 0px); --safe-r: env(safe-area-inset-right, 0px);
   --gutter-l: max(20px, var(--safe-l), calc((100% - 1500px) / 2));
   --gutter-r: max(20px, var(--safe-r), calc((100% - 1500px) / 2));
+  --lang-h: 47px;   /* 언어 줄 높이 — 절반이 색면에 걸친다 */
 }
 
-/* TOPBAR — 쪽빛 헤더 + 언어 선택 바 (고정) */
-.topbar { position: sticky; top: 0; z-index: 100; }
-.h-header { flex-wrap: wrap; padding: calc(13px + var(--safe-t)) var(--gutter-r) 13px var(--gutter-l); }
-.lang-bar {
-  background: var(--surface-canvas);
-  border-bottom: 1px solid var(--hairline);
-  padding: 10px var(--gutter-r) 10px var(--gutter-l);
-  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+/* ── 바탕 ── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body.heritage {
+  background: var(--bg); color: var(--ink-2);
+  font-family: var(--sans); font-size: 15px; line-height: 1.6;
+  min-height: 100vh;
 }
-.lang-label { font-size: 11px; font-weight: 800; letter-spacing: 2px; color: var(--text-muted); }
-/* 언어 토글 — 버튼 사이 1px 청 구분선(세그먼트). 한 덩어리로만 움직이고 내부 줄바꿈 없음 */
-#langToggle { flex-wrap: nowrap; gap: 1px; background: var(--accent-structure); }
-.h-mode.lang-btn { min-width: 44px; min-height: 44px; }   /* 터치 대상 44px */
-/* 휴대폰: 8개를 한 줄에 — 고정 상단바 높이를 줄여 멘트 영역 확보 */
+.heritage button { font-family: inherit; }
+.heritage :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* ── 단추 — 먹색 채움 / 먹 테두리 / 글자만 ── */
+.h-btn {
+  cursor: pointer; border: 1.5px solid var(--ink); border-radius: 0;
+  background: var(--ink); color: var(--bg);
+  min-height: 44px; padding: 10px 14px; font-size: 15px; font-weight: 500; line-height: 1.3;
+}
+.h-btn:hover { background: var(--ink-2); border-color: var(--ink-2); }
+.h-btn:disabled { opacity: .4; cursor: default; }
+.h-btn--ghost { background: var(--bg); color: var(--ink); }
+.h-btn--ghost:hover { background: var(--bg); border-color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.h-btn--text { background: none; border: none; min-height: 0; padding: 4px 0; color: var(--ink); font-size: 14px; text-decoration: underline; text-underline-offset: 3px; }
+.h-btn--text:hover { background: none; color: var(--ink-2); }
+
+/* ── 재생 중: 점 3개 깜빡임 (유일한 모션) ── */
+.h-dots { display: inline-flex; gap: 6px; }
+.h-dots span { width: 6px; height: 6px; background: currentColor; animation: h-blink 1.05s infinite; }
+.h-dots span:nth-child(2) { animation-delay: .18s; }
+.h-dots span:nth-child(3) { animation-delay: .36s; }
+@keyframes h-blink { 0%, 70%, 100% { opacity: .25; } 35% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .h-dots span { animation: none; opacity: .8; } }
+
+/* ── 머리 — 색면 + 언어 줄. 언어 줄은 색면 아랫변에 걸친다 (화면 위에 고정) ── */
+.topbar { position: sticky; top: 0; z-index: 100; background: var(--bg); padding-bottom: 10px; border-bottom: 1px solid var(--seam); }
+.topbar::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0;
+  bottom: calc(var(--lang-h) / 2 + 11px);   /* 아래 여백 10px + 선 1px + 언어 줄 절반 */
+  background: var(--plane);
+}
+.h-header {
+  position: relative; color: var(--on-plane);
+  display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+  padding: calc(14px + var(--safe-t)) var(--gutter-r) 12px var(--gutter-l);
+}
+.h-brand { font-family: var(--serif); font-weight: 500; font-size: 22px; line-height: 1.3; letter-spacing: -.01em; word-break: keep-all; }
+.h-sub { font-size: 13px; color: var(--on-plane-2); }
+.lang-bar { position: relative; padding: 0 var(--gutter-r) 0 var(--gutter-l); display: flex; }
+/* 언어 고르기 — 한 덩어리 칸. 고른 칸은 먹색 채움 */
+.h-modes { display: inline-flex; flex-wrap: nowrap; background: var(--bg); border: 1.5px solid var(--ink); }
+.h-mode {
+  min-width: 54px; min-height: 44px; padding: 0 14px;
+  background: var(--bg); color: var(--ink); border: none; border-left: 1px solid var(--ink); border-radius: 0;
+  font-size: 15px; font-weight: 500; cursor: pointer;
+}
+.h-mode:first-child { border-left: none; }
+.h-mode.on { background: var(--ink); color: var(--bg); }
+/* 휴대폰: 8칸을 한 줄에 */
 @media (max-width: 520px) {
-  .lang-label { display: none; }
-  #langToggle { display: grid; grid-template-columns: repeat(8, 1fr); width: 100%; }
-  #langToggle .h-mode { padding: 0; text-align: center; min-width: 0; }
+  .h-modes { display: grid; grid-template-columns: repeat(8, 1fr); width: 100%; }
+  .h-mode { min-width: 0; padding: 0; text-align: center; }
 }
 
-/* LAYOUT */
+/* ── 배치 ── */
 .container {
-  max-width: 1500px; margin: 0 auto; padding: 24px max(20px, var(--safe-r)) 24px max(20px, var(--safe-l));
-  display: grid; grid-template-columns: minmax(380px, 42%) 1fr; gap: 24px;
+  max-width: 1500px; margin: 0 auto; padding: 28px max(20px, var(--safe-r)) 32px max(20px, var(--safe-l));
+  display: grid; grid-template-columns: minmax(380px, 42%) 1fr; gap: 40px;
 }
 
-/* DISPLAY PANEL — h-box 문법 (한지 채움 + 1px 경계 + 좌측 청 띠) */
+/* ── 표시 영역 — 상자 없이 흰 바탕 위에 그대로 ── */
 .display-panel {
-  background: var(--surface-soft); border: 1px solid var(--hairline);
-  border-left: 4px solid var(--accent-structure);
-  padding: 24px; min-height: min(420px, calc(100vh - var(--topbar-h, 118px) - 24px));
+  background: var(--bg);
+  min-height: min(420px, calc(100vh - var(--topbar-h, 118px) - 32px));
   display: flex; flex-direction: column;
-  /* PC: 상단바 바로 아래에 붙고, 화면 높이를 넘지 않는다 — 긴 멘트는 본문만 안에서 스크롤 */
-  position: sticky; top: calc(var(--topbar-h, 118px) + 12px); align-self: start;
-  max-height: calc(100vh - var(--topbar-h, 118px) - 24px);
-  max-height: calc(100dvh - var(--topbar-h, 118px) - 24px);
-  overflow-y: auto;   /* 화면이 아주 낮아 원문·이동 버튼까지 다 못 담을 때의 안전망 */
+  /* PC: 머리 바로 아래에 붙고, 화면 높이를 넘지 않는다 — 긴 멘트는 본문만 안에서 스크롤 */
+  position: sticky; top: calc(var(--topbar-h, 118px) + 16px); align-self: start;
+  max-height: calc(100vh - var(--topbar-h, 118px) - 32px);
+  max-height: calc(100dvh - var(--topbar-h, 118px) - 32px);
+  overflow-y: auto;   /* 화면이 아주 낮아 원문·이동 단추까지 다 못 담을 때의 안전망 */
 }
 
-.display-empty {
-  flex: 1; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 18px;
-  text-align: center; padding: 32px 16px;
+/* 표지 — 8개 언어 인사말 = 언어 고르기. 가는 명조로 크게 */
+.display-empty { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+.greet-label { font-size: 13.5px; color: var(--mute); }
+.greet-grid { display: grid; grid-template-columns: repeat(2, 1fr); border-top: 2px solid var(--ink); }
+@media (min-width: 560px) and (max-width: 880px) { .greet-grid { grid-template-columns: repeat(4, 1fr); } .greet-word { font-size: 30px; } }
+.greet-btn {
+  background: var(--bg); color: var(--ink); border: none; border-bottom: 1px solid var(--seam); border-radius: 0; cursor: pointer;
+  padding: 14px 12px 12px; min-height: 92px; text-align: left;
+  display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px;
 }
-.display-empty-text {
-  font-family: var(--font-display); font-weight: 700;
-  font-size: 15px; color: var(--text-muted); line-height: 1.75;
-}
+.greet-word { font-family: var(--serif); font-weight: 300; font-size: 40px; line-height: 1.2; letter-spacing: -.02em; white-space: nowrap; }
+.greet-name { font-size: 13.5px; color: var(--mute); }
+.greet-btn:hover .greet-word { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; }
+.greet-btn.on { background: var(--plane); color: var(--on-plane); }
+.greet-btn.on .greet-name { color: var(--on-plane-2); }
+.display-empty-text { font-size: 14px; line-height: 1.7; color: var(--mute); word-break: keep-all; }
 
 .display-content { flex: 1; display: flex; flex-direction: column; min-height: 0; }
 
-.display-meta {
-  display: flex; align-items: baseline; justify-content: space-between;
-  gap: 8px; flex-wrap: wrap;
-  padding-bottom: 10px; border-bottom: 1px solid var(--hairline); margin-bottom: 18px;
-}
-.display-cat { font-size: 12.5px; font-weight: 800; letter-spacing: .5px; color: var(--text-muted); }
-.display-cat strong { color: var(--accent-structure); font-size: 13px; margin-right: 6px; }
-.display-label { font-family: var(--font-display); font-weight: 800; font-size: 16px; color: var(--text-ink); word-break: keep-all; flex: 1 1 100%; }
-/* 표지(언어 선택 화면)로 돌아가기 — 다음 여행객 응대 시작용 */
-.home-btn { margin-left: auto; font-weight: 800; letter-spacing: .5px; }
-
-.display-foreign {
-  font-family: var(--font-display); font-weight: 700;
-  font-size: 1.5rem; line-height: 1.7; color: var(--text-ink);
-  flex: 1 0 auto; margin-bottom: 18px;
-}
-/* 멘트와 한국어 원문을 한 묶음으로 — PC에서 패널이 화면보다 길어지면 이 묶음만 안에서 스크롤된다
-   (조작부는 위, 멘트 이동은 아래에 늘 남는다) */
-.display-scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; margin-bottom: 14px; }
-/* 독일어 긴 합성어(10자 이상)만 음절에서 나눠 줄 끝 낭비를 줄인다 (lang 속성 기준) */
-.display-foreign[lang^="de"], .show-text[lang^="de"] { -webkit-hyphens: auto; hyphens: auto; hyphenate-limit-chars: 10 4 4; }
-.display-foreign[data-lang="ja"]   { font-family: var(--font-jp); }
-.display-foreign[data-lang="zh"]   { font-family: var(--font-zh); }
-.display-foreign[data-lang="zhTW"] { font-family: var(--font-tc); }
-
-.display-korean {
-  background: var(--surface-card); border: 1px solid var(--hairline);
-  border-left: 4px solid var(--accent-center);
-  padding: 12px 14px; flex-shrink: 0;
-  font-family: var(--font-display); font-size: 0.95rem; line-height: 1.65; color: var(--text-body);
-}
-.display-korean-label {
-  display: block; font-family: var(--font-body);
-  font-size: 10px; font-weight: 800; letter-spacing: 2px;
-  color: var(--text-muted); margin-bottom: 5px;
-}
-
-.voice-notice {
-  display: none;
-  background: var(--surface-soft); border: 1px solid var(--hairline);
-  border-left: 4px solid var(--accent-warning);
-  padding: 10px 14px; margin-bottom: 16px;
-  font-size: 0.82rem; line-height: 1.55; color: var(--text-body);
-}
-.voice-notice.show { display: block; }
-.voice-notice strong { color: var(--accent-warning); }
+.display-meta { display: flex; align-items: baseline; justify-content: space-between; gap: 4px 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.display-cat { display: flex; align-items: baseline; gap: 12px; font-size: 14px; color: var(--mute); word-break: keep-all; }
+.display-cat strong { font-family: var(--serif); font-weight: 300; font-size: 44px; line-height: 1; letter-spacing: -.02em; color: var(--ink); }
+.display-label { flex: 1 1 100%; font-family: var(--serif); font-weight: 500; font-size: 22px; line-height: 1.4; letter-spacing: -.01em; color: var(--ink); word-break: keep-all; }
+/* 표지(언어 고르기 화면)로 돌아가기 — 다음 여행객 응대 시작용 */
+.home-btn { margin-left: auto; }
 
 /* 조작부 — 멘트 바로 위 한 줄. 멘트 길이와 상관없이 고른 직후 손이 닿는 자리 */
-.audio-controls { display: flex; gap: 8px; margin-bottom: 16px; flex-shrink: 0; }
-.audio-btn { flex: 1 1 auto; min-width: 0; min-height: 44px; padding: 10px; letter-spacing: .5px; white-space: nowrap; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.audio-controls { display: flex; gap: 8px; margin-bottom: 18px; flex-shrink: 0; }
+.audio-btn { flex: 1 1 auto; min-width: 0; padding: 10px; white-space: nowrap; display: flex; align-items: center; justify-content: center; gap: 6px; }
 #playBtn.audio-btn { flex-grow: 2; }
 .audio-icon { width: 16px; height: 16px; flex-shrink: 0; }
 .audio-btn .h-dots { display: none; }
 .audio-btn.playing .h-dots { display: inline-flex; }
 @media (max-width: 400px) { #stopBtn .audio-icon, #showBtn .audio-icon { display: none; } }
+
+/* 알림 — 위쪽 굵은 선 하나 */
+.voice-notice { display: none; border-top: 3px solid var(--ink); padding-top: 10px; margin-bottom: 18px; font-size: 13.5px; line-height: 1.6; color: var(--ink-2); word-break: keep-all; }
+.voice-notice.show { display: block; }
+.voice-notice strong { color: var(--ink); font-weight: 700; }
+
+/* 멘트와 한국어 원문을 한 묶음으로 — PC에서 영역이 화면보다 길어지면 이 묶음만 안에서 스크롤된다 */
+.display-scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; margin-bottom: 16px; }
+.display-foreign {
+  font-weight: 500; font-size: 24px; line-height: 1.6; color: var(--ink);
+  flex: 1 0 auto; margin-bottom: 20px; overflow-wrap: break-word;
+}
+/* 독일어 긴 합성어(10자 이상)만 음절에서 나눠 줄 끝 낭비를 줄인다 (lang 속성 기준) */
+.display-foreign[lang^="de"], .show-text[lang^="de"] { -webkit-hyphens: auto; hyphens: auto; hyphenate-limit-chars: 10 4 4; }
+.display-foreign[data-lang="ja"],   .show-text[data-lang="ja"]   { font-family: var(--font-jp); }
+.display-foreign[data-lang="zh"],   .show-text[data-lang="zh"]   { font-family: var(--font-zh); }
+.display-foreign[data-lang="zhTW"], .show-text[data-lang="zhTW"] { font-family: var(--font-tc); }
+
+/* 한국어 원문 — 가는 선 하나로만 나눈다 */
+.display-korean { border-top: 1px solid var(--seam); padding-top: 12px; flex-shrink: 0; font-size: 15px; line-height: 1.65; color: var(--ink-2); word-break: keep-all; }
+.display-korean-label { display: block; font-size: 12.5px; color: var(--mute); margin-bottom: 4px; }
+
 /* 멘트 이동 */
 .msg-nav { display: flex; gap: 8px; flex-shrink: 0; }
-.msg-nav .h-btn { flex: 1 1 0; min-height: 44px; padding: 10px 12px; white-space: nowrap; letter-spacing: .5px; }
-.msg-nav .h-btn:disabled { opacity: .45; cursor: default; }
-#nextNum { font-weight: 800; }
+.msg-nav .h-btn { flex: 1 1 0; padding: 10px 12px; white-space: nowrap; }
+#nextNum { font-weight: 700; }
 #toListBtn { display: none; }   /* PC는 목록이 옆에 있으므로 휴대폰에서만 */
 
-/* 표지 — 8개 언어 인사말 = 언어 선택 (모션 없음, 규칙 6 준수) */
-.greet-label { font-size: 10.5px; font-weight: 800; letter-spacing: 2px; color: var(--text-muted); }
-.greet-grid {
-  display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
-  width: 100%; max-width: 380px;
-  background: var(--hairline); border: 1px solid var(--hairline);
-}
-@media (min-width: 560px) and (max-width: 880px) {
-  .greet-grid { grid-template-columns: repeat(4, 1fr); max-width: 640px; }
-}
-.greet-btn {
-  background: var(--surface-canvas); border: none; border-radius: 0; cursor: pointer;
-  padding: 12px 8px 10px; min-height: 64px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
-  font-family: var(--font-body); color: var(--text-ink);
-}
-.greet-btn:hover { background: var(--surface-soft); }
-.greet-word { font-size: 1.15rem; font-weight: 800; line-height: 1.25; }
-.greet-name { font-size: 10.5px; font-weight: 700; letter-spacing: .5px; color: var(--text-muted); }
-.greet-btn[data-lang="ja"] .greet-word { font-family: var(--font-jp); }
-.greet-btn[data-lang="zh"] .greet-word { font-family: var(--font-zh); }
-.greet-btn[data-lang="zhTW"] .greet-word { font-family: var(--font-tc); }
-.greet-btn.on { background: var(--accent-structure); }
-.greet-btn.on .greet-word, .greet-btn.on .greet-name { color: var(--on-dark); }
-
-/* 전체화면 보기 — 여행객에게 화면을 보여줄 때. 평면·직각, 전환 모션 없음 */
+/* ── 전체화면 — 여행객에게 화면을 보여 줄 때. 위쪽이 색면 ── */
 html.show-open, html.show-open body { overflow: hidden; }
-.show-overlay {
-  position: fixed; inset: 0; z-index: 300;
-  background: var(--surface-canvas); border-top: 4px solid var(--accent-structure);
-  display: flex; flex-direction: column;
-}
+.show-overlay { position: fixed; inset: 0; z-index: 300; background: var(--bg); display: flex; flex-direction: column; }
 .show-overlay[hidden] { display: none; }
 .show-top {
   display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap;
-  padding: calc(10px + var(--safe-t)) max(20px, var(--safe-r)) 10px max(20px, var(--safe-l));
-  border-bottom: 1px solid var(--hairline);
-  font-size: 12px; font-weight: 800; letter-spacing: 1px; color: var(--text-muted);
+  padding: calc(12px + var(--safe-t)) max(22px, var(--safe-r)) 10px max(22px, var(--safe-l));
+  background: var(--plane); color: var(--on-plane); font-size: 14px;
 }
-.show-top strong { color: var(--accent-structure); }
-.show-voice { color: var(--accent-warning); letter-spacing: .5px; display: none; }
+.show-top strong { font-family: var(--serif); font-weight: 300; font-size: 40px; line-height: 1.05; letter-spacing: -.02em; }
+.show-voice { display: none; font-weight: 500; word-break: keep-all; }
 .show-voice.show { display: inline; }
 .show-stage { flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column; }
 .show-body { flex: 1; overflow-y: auto; padding: 24px max(22px, var(--safe-r)) 24px max(22px, var(--safe-l)); display: flex; flex-direction: column; }
-/* 아래 계속 — 최소 글씨로도 넘치는 긴 멘트에서만 나타난다. 누르면 한 화면 아래로.
-   전체화면의 황 채움은 이 띠 하나 (화면당 1회 규칙) */
+/* 아래 계속 — 가장 작은 글씨로도 넘치는 긴 멘트에서만 나타난다. 누르면 한 화면 아래로 */
 .show-more {
-  position: absolute; left: 0; right: 0; bottom: 0; height: 40px;
-  background: var(--accent-center); color: var(--on-hwang);
-  border: none; border-radius: 0; cursor: pointer;
-  font-family: var(--font-body); font-size: 15px; font-weight: 800; line-height: 1;
+  position: absolute; left: 0; right: 0; bottom: 0; height: 44px;
+  background: var(--ink); color: var(--bg);
+  border: none; border-radius: 0; cursor: pointer; font-size: 15px; font-weight: 700; line-height: 1;
 }
 .show-more[hidden] { display: none; }
 .show-text {
-  margin: auto 0;   /* 짧으면 세로 중앙, 길면 위에서부터 스크롤 */
+  margin: auto 0;   /* 짧으면 세로 가운데, 길면 위에서부터 스크롤 */
   max-width: 1100px; align-self: center; width: 100%;
-  font-family: var(--font-display); font-weight: 700; line-height: 1.5;
-  color: var(--text-ink); overflow-wrap: anywhere;
+  font-weight: 500; line-height: 1.5; color: var(--ink); overflow-wrap: anywhere;
 }
-.show-text[data-lang="ja"]   { font-family: var(--font-jp); }
-.show-text[data-lang="zh"]   { font-family: var(--font-zh); }
-.show-text[data-lang="zhTW"] { font-family: var(--font-tc); }
 .show-bar {
   display: flex; gap: 8px;
   padding: 12px max(16px, var(--safe-r)) calc(12px + var(--safe-b)) max(16px, var(--safe-l));
-  border-top: 1px solid var(--hairline); background: var(--surface-soft);
+  border-top: 1px solid var(--seam); background: var(--bg);
 }
-.show-bar .h-btn { flex: 0 0 auto; min-width: 48px; min-height: 48px; padding: 12px 14px; letter-spacing: .5px; white-space: nowrap; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.show-bar .h-btn { flex: 0 0 auto; min-width: 48px; min-height: 48px; padding: 12px 14px; white-space: nowrap; display: flex; align-items: center; justify-content: center; gap: 6px; }
 .show-bar #showPlayBtn { flex: 1 1 auto; min-width: 0; }
-.show-bar .h-btn:disabled { opacity: .45; cursor: default; }
-#showNextNum { font-weight: 800; }
+#showNextNum { font-weight: 700; }
 @media (max-width: 340px) { .show-bar #showPlayBtn .audio-icon { display: none; } }
 .show-bar .h-dots { display: none; }
 .show-bar .playing .h-dots { display: inline-flex; }
 
-/* BUTTON PANEL */
-.button-panel { column-count: 1; column-gap: 16px; }
+/* ── 멘트 목록 — 분류는 굵은 먹 선과 명조 제목, 멘트는 가는 선으로만 나눈다 ── */
+.button-panel { column-count: 1; column-gap: 40px; }
 @media (min-width: 768px) { .button-panel { column-count: 2; } }
+@media (min-width: 881px) { .button-panel { border-left: 1px solid var(--seam); padding-left: 40px; } }
 
 .group {
-  background: var(--surface-soft); border: 1px solid var(--hairline);
-  border-left: 4px solid var(--accent-structure);
+  border-top: 2px solid var(--ink);
   break-inside: avoid; -webkit-column-break-inside: avoid; page-break-inside: avoid;
-  margin-bottom: 16px; display: inline-block; width: 100%;
+  margin-bottom: 28px; display: inline-block; width: 100%;
 }
-.group.warning { border-left-color: var(--accent-warning); }
-.group-header {
-  padding: 10px 14px 8px; border-bottom: 1px solid var(--hairline);
-  display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
-}
-.group-title { font-family: var(--font-display); font-weight: 800; font-size: 0.95rem; color: var(--text-ink); flex: 1 1 auto; word-break: keep-all; }
-.group.warning .group-title { color: var(--accent-warning); }
-.group-title-en { font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); overflow-wrap: anywhere; }
+/* 경고 묶음 — 색 대신 굵은 선. 이 묶음의 멘트를 고르면 화면이 적 벌로 바뀐다 */
+.group.warning { border-top-width: 6px; }
+.group-header { padding: 10px 0 9px; display: flex; flex-direction: column; align-items: flex-start; gap: 1px; }
+.group-title { font-family: var(--serif); font-weight: 500; font-size: 19px; line-height: 1.4; letter-spacing: -.01em; color: var(--ink); word-break: keep-all; }
+.group-title-en { font-size: 12.5px; color: var(--mute); overflow-wrap: anywhere; }
 
-.group-buttons { padding: 10px; display: flex; flex-direction: column; gap: 6px; }
+.group-buttons { display: flex; flex-direction: column; }
 .msg-btn {
-  text-align: left; background: var(--surface-canvas);
-  border: 1px solid var(--hairline); border-radius: 0;
-  padding: 10px 12px; min-height: 44px; cursor: pointer;
-  font-family: var(--font-body); font-size: 0.86rem; line-height: 1.5; color: var(--text-body);
-  display: flex; align-items: flex-start; gap: 8px; word-break: keep-all;
+  width: 100%; text-align: left; background: var(--bg); color: var(--ink-2);
+  border: none; border-top: 1px solid var(--seam); border-radius: 0;
+  padding: 11px 8px; min-height: 48px; cursor: pointer;
+  font-size: 15px; line-height: 1.5;
+  display: flex; align-items: baseline; gap: 10px; word-break: keep-all;
 }
-.msg-btn:hover { border-color: var(--accent-structure); color: var(--text-ink); }
-.msg-num { font-weight: 800; color: var(--accent-structure); flex-shrink: 0; font-size: 0.82rem; min-width: 2em; }
+.msg-btn:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.msg-num { font-weight: 500; color: var(--ink); flex-shrink: 0; min-width: 2.4em; font-variant-numeric: tabular-nums; }
+/* 고른 멘트 — 그 벌의 색으로 밑칠 */
+.msg-btn.active { background: var(--plane); color: var(--on-plane); font-weight: 500; text-decoration: none; }
+.msg-btn.active .msg-num { color: var(--on-plane); }
 
-/* 선택된 멘트 = 화면의 '중심' — 황 채움 (화면당 1회 규칙의 그 1회) */
-.msg-btn.active { background: var(--accent-center); border-color: var(--accent-center); color: var(--on-hwang); font-weight: 700; }
-.msg-btn.active .msg-num { color: var(--on-hwang); }
-.group.warning .msg-btn:hover { border-color: var(--accent-warning); }
-.group.warning .msg-btn.active { background: var(--accent-warning); border-color: var(--accent-warning); color: var(--on-dark); }
-.group.warning .msg-btn.active .msg-num { color: var(--on-dark); }
+/* 사용 조건 — 테두리 네모. '특사경 한정'은 놓치면 안 되므로 굵은 테두리(판정 인 방식) */
+.h-tag { display: inline-block; margin-left: 8px; padding: 0 6px; font-size: 12px; line-height: 1.6; white-space: nowrap; vertical-align: 1px; border: 1px solid var(--mute); color: var(--mute); text-decoration: none; }
+.tag-restricted { border: 2px solid var(--ink); color: var(--ink); font-weight: 700; }
+.msg-btn.active .h-tag { border-color: currentColor; color: inherit; }
 
-/* 사용 조건 태그 */
-.h-tag { margin-left: 6px; white-space: nowrap; vertical-align: middle; font-size: 11px; }   /* 사용 조건은 놓치면 안 되므로 시스템 기본(10px)보다 한 단계 크게 */
-.tag-restricted { border-color: var(--accent-warning); color: var(--accent-warning); }
-.msg-btn.active .h-tag { background: transparent; border-color: var(--on-hwang); color: var(--on-hwang); }
-.group.warning .msg-btn.active .h-tag { border-color: var(--on-dark); color: var(--on-dark); }
-
-/* FOOTER — 색동 구분선 (마무리 화면 허용 지점) */
+/* ── 바닥 ── */
 .footer {
-  max-width: 1500px; margin: 0 auto; padding: 8px max(20px, var(--safe-r)) calc(40px + var(--safe-b)) max(20px, var(--safe-l));
-  text-align: center; color: var(--text-muted); font-size: 0.78rem; line-height: 1.7;
+  max-width: 1500px; margin: 0 auto; padding: 0 max(20px, var(--safe-r)) calc(40px + var(--safe-b)) max(20px, var(--safe-l));
+  color: var(--mute); font-size: 12.5px; line-height: 1.7; word-break: keep-all;
 }
-.footer .h-saekdong { justify-content: center; margin: 0 auto 18px; width: max-content; }
-.footer strong { color: var(--text-ink); }
-.footer-author { font-family: var(--font-display); font-weight: 700; margin-top: 8px; }
-.app-version { margin-top: 10px; font-size: 0.68rem; letter-spacing: 1px; color: var(--text-muted); }
+.footer > div { border-top: 1px solid var(--seam); padding-top: 16px; }
+.footer strong { color: var(--ink); font-weight: 500; }
+.app-version { margin-top: 10px; font-variant-numeric: tabular-nums; }
 
-/* MOBILE */
+/* ── 휴대폰 ── */
 @media (max-width: 880px) {
-  .container { grid-template-columns: 1fr; padding: 12px max(12px, var(--safe-r)) 12px max(12px, var(--safe-l)); gap: 12px; }
-  .display-panel { position: static; min-height: 0; max-height: none; overflow-y: visible; padding: 16px; }
-  .display-foreign { font-size: 1.3rem; line-height: 1.6; }
+  .container { grid-template-columns: 1fr; padding: 18px max(16px, var(--safe-r)) 20px max(16px, var(--safe-l)); gap: 28px; }
+  .display-panel { position: static; min-height: 0; max-height: none; overflow-y: visible; }
+  .display-foreign { font-size: 21px; }
   .display-scroll { overflow-y: visible; }
-  .h-header { padding: calc(10px + var(--safe-t)) max(14px, var(--safe-r)) 10px max(14px, var(--safe-l)); }
-  .h-header .h-brand { font-size: 16px; letter-spacing: 2px; }
-  .h-header .h-sub { display: none; }
-  .lang-bar { padding: 8px max(12px, var(--safe-r)) 8px max(12px, var(--safe-l)); gap: 8px; }
-  .h-mode.lang-btn { padding: 8px 12px; }
+  .display-cat strong { font-size: 38px; }
+  .display-label { font-size: 20px; }
+  .h-header { padding: calc(10px + var(--safe-t)) max(16px, var(--safe-r)) 9px max(16px, var(--safe-l)); }
+  .h-brand { font-size: 17px; }
+  .h-sub { display: none; }
+  .lang-bar { padding: 0 max(16px, var(--safe-r)) 0 max(16px, var(--safe-l)); }
+  .greet-word { font-size: clamp(22px, 7.4vw, 30px); }   /* 좁은 화면에서도 인사말이 한 줄에 들어가게 */
+  .greet-btn { min-height: 80px; padding: 12px 10px 10px; }
+  .footer { padding-left: max(16px, var(--safe-l)); padding-right: max(16px, var(--safe-r)); }
   #toListBtn { display: block; }
 }
 
-/* 높이가 낮은 PC 화면(노트북·창 모드) — 상단바와 패널 여백을 줄여 멘트 자리를 넓힌다 */
+/* 높이가 낮은 PC 화면(노트북·창 모드) — 머리와 여백을 줄여 멘트 자리를 넓힌다 */
 @media (min-width: 881px) and (max-height: 760px) {
   .h-header { padding-top: calc(8px + var(--safe-t)); padding-bottom: 8px; }
-  .lang-bar { padding-top: 6px; padding-bottom: 6px; }
-  .container { padding-top: 14px; }
-  .display-panel { padding: 16px 20px; top: calc(var(--topbar-h, 118px) + 8px); max-height: calc(100vh - var(--topbar-h, 118px) - 16px); }
-  .display-meta { padding-bottom: 8px; margin-bottom: 12px; }
+  .h-brand { font-size: 19px; }
+  .container { padding-top: 16px; }
+  .display-panel { top: calc(var(--topbar-h, 118px) + 10px); max-height: calc(100vh - var(--topbar-h, 118px) - 20px); }
+  .display-meta { margin-bottom: 10px; }
+  .display-cat strong { font-size: 36px; }
   .audio-controls { margin-bottom: 12px; }
   .display-scroll { margin-bottom: 10px; }
+  .greet-btn { min-height: 76px; padding-top: 8px; padding-bottom: 8px; }
+  .greet-word { font-size: 34px; }
 }
 
-/* 터치 기기 — hover 잔상 제거 (hover는 포인터 기기 전용 색 심화) */
+/* 터치 기기 — 누른 뒤 남는 hover 표시를 없앤다 */
 @media (hover: none) {
-  .msg-btn:hover { border-color: var(--hairline); color: var(--text-body); }
-  .group.warning .msg-btn:hover { border-color: var(--hairline); }
-  .h-btn:hover { background: var(--accent-structure); }
-  .h-btn--ghost:hover { background: var(--surface-canvas); }
+  .msg-btn:hover, .h-btn--ghost:hover, .greet-btn:hover .greet-word { text-decoration: none; }
+  .msg-btn:hover { color: var(--ink-2); }
+  .msg-btn.active:hover { color: var(--on-plane); }
+  .h-btn:hover { background: var(--ink); border-color: var(--ink); }
+  .h-btn--ghost:hover { background: var(--bg); }
+  .h-btn--text:hover { background: none; color: var(--ink); text-decoration: underline; }
 }
 
-/* 스크롤바 — 직각, 시스템 색 */
+/* 스크롤바 — 직각, 선 색 */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: var(--surface-soft); }
-::-webkit-scrollbar-thumb { background: var(--hairline); }
-::-webkit-scrollbar-thumb:hover { background: var(--text-muted-soft); }
-
-/* =====================================================================
-   규칙 요약 (코드 리뷰용 — heritage-design.css 원문)
-   1. 페이지 배경은 항상 --surface-canvas. 순백 #FFF 금지.
-   2. 모든 모서리 직각. 그라데이션·그림자·블러 금지 — 평면과 1px 선만.
-   3. 황(치자) 채움은 화면당 1회.
-   4. 적(석간주)은 경계·금지·오류에만, 뇌록은 긍정·확인에만.
-   5. 색동 구분선은 표지(빈 상태)·마무리(푸터)에만.
-   6. hover=색 심화·밑줄 / focus=청 2px outline / 로딩=황 점 3개. 그 외 모션 없음.
-   7. 제목=나눔명조 800, 본문·UI=나눔고딕. 본문 행간 1.6~1.75.
-      (7조 서체는 미설치 기기·오프라인 대응을 위해 기기 기본 글꼴로 대체 적용)
-   ===================================================================== */
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--seam); }
+::-webkit-scrollbar-thumb:hover { background: var(--mute); }
 </style>
 </head>
 <body class="heritage">
@@ -473,10 +350,9 @@ html.show-open, html.show-open body { overflow: hidden; }
 <div class="topbar">
   <header class="h-header">
     <div class="h-brand">문화유산 감정 현장 다국어 안내</div>
-    <div class="h-sub">MULTILINGUAL ON-SITE GUIDE · KOREA HERITAGE SERVICE</div>
+    <div class="h-sub" lang="en">Multilingual on-site guide, Korea Heritage Service</div>
   </header>
   <div class="lang-bar">
-    <span class="lang-label">언어 선택 · LANGUAGE</span>
     <div class="h-modes" id="langToggle" role="group" aria-label="언어 선택 · Language">
       <button class="h-mode lang-btn on" data-lang="en" aria-pressed="true">EN</button>
       <button class="h-mode lang-btn" data-lang="ja" aria-pressed="false">日</button>
@@ -493,8 +369,7 @@ html.show-open, html.show-open body { overflow: hidden; }
 <main class="container">
   <section class="display-panel">
     <div id="displayEmpty" class="display-empty">
-      <div class="h-saekdong" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
-      <div class="greet-label">언어 선택 · SELECT YOUR LANGUAGE</div>
+      <div class="greet-label">언어 선택 · Select your language</div>
       <div class="greet-grid" id="greetGrid" role="group" aria-label="언어 선택 · Select your language"></div>
       <div class="display-empty-text">목록에서 멘트를 고르면<br>여기에 표시됩니다</div>
     </div>
@@ -542,7 +417,6 @@ html.show-open, html.show-open body { overflow: hidden; }
 </main>
 
 <footer class="footer">
-  <div class="h-saekdong" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
   <div>
     <strong>국가유산청 문화유산감정관실</strong> · 감정 현장 다국어 안내 도구<br>
     근거: 문화유산의 보존 및 활용에 관한 법률 제60조·제90조 / 형사소송법 제129조·제197조의3·제200조의5·제211조·제212조·제213조의2·제216조·제219조·제244조의3 / 국가유산청 특별사법경찰관리 직무규정 제12조 / 경찰범죄수사규칙 제23조
@@ -579,7 +453,7 @@ html.show-open, html.show-open body { overflow: hidden; }
 <script>
 // ────────────────────────────────────────────────
 //  ▼ 배포할 때마다 이 한 줄만 바꾸세요. 화면 맨 아래에 그대로 표시됩니다.
-const APP_VERSION = 'v4.5 · 2026-11-12';
+const APP_VERSION = 'v5.0 · 2026-11-25';
 // ────────────────────────────────────────────────
 (function () {
   const v = document.getElementById('appVersion');
@@ -1364,6 +1238,17 @@ function findBestVoice(appLang) {
   return pick(availableVoices.filter(v => !cantonese(v))) || pick(availableVoices);
 }
 
+// ===== 벌(화면 색) — 다섯 벌 가운데 청과 적만 쓴다 =====
+// 평소는 청 벌(하늘빛). 경고 묶음(group.warning)의 멘트가 떠 있는 동안만 적 벌(인주)로 바꾼다.
+// 한 화면에 두 색을 함께 두지 않으려고 화면 전체(전체화면 보기 포함)를 한꺼번에 바꾼다. 값: 주소창·상태 표시줄 색
+const THEMES = { cheong: '#8fcbf7', jeok: '#d4311e' };
+function applyTheme(id) {
+  if (!THEMES[id]) id = 'cheong';
+  document.documentElement.setAttribute('data-theme', id);
+  const m = document.querySelector('meta[name="theme-color"]');
+  if (m) m.setAttribute('content', THEMES[id]);
+}
+
 // ===== UI 빌드 =====
 function buildButtons() {
   const panel = document.getElementById('buttonPanel');
@@ -1400,6 +1285,7 @@ function buildButtons() {
 function selectMessage(item, group, gi, ii) {
   stopAudio();
   currentMsg = { item, group, gi, ii };
+  applyTheme(group.warning ? 'jeok' : 'cheong');   // 경고 묶음의 멘트는 적 벌로 보여 준다
   document.querySelectorAll('.msg-btn').forEach(b => {
     b.classList.remove('active');
     b.setAttribute('aria-pressed', 'false');
@@ -1424,7 +1310,7 @@ function selectMessage(item, group, gi, ii) {
   if (showOverlay && !showOverlay.hidden) { renderShow(); return; }   // 전체화면에서 넘긴 경우 뒤 화면은 그대로 둔다
 
   // 모바일에서는 메시지 선택 시 디스플레이 패널로 자동 스크롤
-  // (고정 상단바 높이를 빼고 즉시 이동 — 규칙 6에 따라 부드러운 스크롤 없음)
+  // (고정 상단바 높이를 빼고 즉시 이동 — 모션을 두지 않으므로 부드러운 스크롤 없음)
   if (window.innerWidth < 880) {
     setTimeout(() => {
       const panel = document.querySelector('.display-panel');
@@ -1486,7 +1372,7 @@ function setLanguage(lang) {
   currentLang = lang;
   document.querySelectorAll('.lang-btn, .greet-btn').forEach(b => {
     const on = b.dataset.lang === currentLang;
-    b.classList.toggle('on', on);   // 디자인 시스템 세그먼트 토글 활성 클래스
+    b.classList.toggle('on', on);   // 고른 언어 칸
     b.setAttribute('aria-pressed', on);
   });
   updateDisplayLanguage();
@@ -1504,6 +1390,7 @@ document.getElementById('langToggle').addEventListener('click', e => {
 function goHome() {
   stopAudio();
   currentMsg = null;
+  applyTheme('cheong');
   document.querySelectorAll('.msg-btn').forEach(b => {
     b.classList.remove('active');
     b.setAttribute('aria-pressed', 'false');
@@ -1542,7 +1429,7 @@ function goNext() {
 document.getElementById('nextBtn').addEventListener('click', goNext);
 document.getElementById('showNextBtn').addEventListener('click', goNext);
 document.getElementById('toListBtn').addEventListener('click', () => {
-  // 방금 고른 멘트 버튼이 화면 가운데 오도록 즉시 이동 (규칙 6: 부드러운 스크롤 없음)
+  // 방금 고른 멘트 버튼이 화면 가운데 오도록 즉시 이동 (모션을 두지 않으므로 부드러운 스크롤 없음)
   const b = document.querySelector('.msg-btn.active');
   if (b) b.scrollIntoView({ block: 'center' });
 });
@@ -1864,7 +1751,7 @@ document.getElementById('showPlayBtn').addEventListener('click', playAudio);
 document.getElementById('showStopBtn').addEventListener('click', stopAudio);
 document.getElementById('showBody').addEventListener('scroll', updateShowMore, { passive: true });
 document.getElementById('showMore').addEventListener('click', () => {
-  // 한 화면 아래로 즉시 이동 (규칙 6: 부드러운 스크롤 없음). 읽던 줄이 이어지도록 조금 겹친다
+  // 한 화면 아래로 즉시 이동 (모션을 두지 않으므로 부드러운 스크롤 없음). 읽던 줄이 이어지도록 조금 겹친다
   const body = document.getElementById('showBody');
   body.scrollTop += Math.round(body.clientHeight * 0.8);
   updateShowMore();
